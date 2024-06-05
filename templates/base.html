@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {% comment %} <link rel="shortcut icon" href="{% static 'logo.png' %}" type="image/x-icon" /> {% endcomment %}
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+    <title>Sitename</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="navbar">
+        <div class="nav__logo">
+          <img src="\media\logo.png" alt="" />
+        </div>
+        <div class="nav__links">
+          
+            <dir class="nav__item {% if current_url == 'modules' %}active{% endif %}" >
+              <a href="{% url 'modules' %}"><img src="/media/modules-icon-{% if current_url == 'modules' %}active{% else %}deactive{% endif %}.svg" alt="Modules" />
+              </a><span>Modules</span>
+            </dir>
+            <dir class=" nav__item {% if current_url == 'dictionary' %}active{% endif %}">
+              <a href="{% url 'dictionary' %}"> <img src="/media/dictionary-icon-{% if current_url == 'dictionary' %}active{% else %}deactive{% endif %}.svg" alt="Dictionary"  />
+              </a><span>Dictionary</span>
+            </dir>
+            <dir class="nav__item {% if current_url == 'profile' %}active{% endif %}">
+              <a href="{% url 'profile' %}"> <img src="/media/profile-icon-{% if current_url == 'profile' %}active{% else %}deactive{% endif %}.svg" alt="Profile"  />
+              </a><span>Profile</span>
+            </dir>
+          
+        </div>
+      </div>
+
+      {% block body %}
+
+      {% endblock %}
+    </div>
+  </body>
+</html>
