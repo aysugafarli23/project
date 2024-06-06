@@ -10,7 +10,13 @@ body{
     background-color: #F1F1F5;
 }
 
-/* base.html style */
+:root {
+    --neutral-colors-white: #fff;
+}
+
+/*------base.html style------*/
+
+/* Vertical navbar menu style codes */
 .navbar{
     background-color: #ffff;
     color:#707070;
@@ -47,7 +53,7 @@ body{
 }
 
 .nav__links .active {
-    color:#0d6efd;
+    color: var(--sapphire);
 }
 .nav__item{
     width: 72px;
@@ -62,3 +68,67 @@ body{
     height: 33px;
     margin-bottom: 5px;
 }
+
+/* Nav menu style codes */
+nav{
+    width: 817px;
+    height: 66px;
+    position: fixed;
+    left: calc(50% - 366px);
+    margin-top: 32px;
+    padding: 18px 17px 16px;
+    border-radius: 16px;
+    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, .1);
+    background-color: var(--neutral-colors-white);
+    display: flex;
+    justify-content: flex-start;
+    flex-flow: row nowrap;
+    align-items: center;
+    z-index: 999;
+}
+
+.nav__menu{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "Metropolis", sans-serif;
+    width: 100%;
+    transition: all .3s ease;
+    background: inherit;
+    /* margin-left: 0; */
+}
+
+.nav__menu h2{
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1;
+    color: black;
+}
+
+.nav__menu ul{
+    display:flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 24px;
+    gap: 25px;
+}
+
+.nav__link a span{
+    color: black;
+    text-align: center;
+    font-weight: 500;
+    font-size: 20px;
+    position: inherit;
+    position: absolute;
+    right: 145px;
+    top: 18px;
+}
+
+.nav__link i, .not .logout{
+    color: #484A4D
+}
+
+.nav__link .logout{
+    color: black;
+}
+
