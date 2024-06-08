@@ -34,20 +34,24 @@
       </div>
 
 
-      <nav>
-        <div class="nav__menu">
-          <h2>{% block nav__title %}{% endblock nav__title %}</h2>
-          <ul>
-            <li><div class="nav__link"><a href="#"><span>o</span><img src="/media/icon-human-coach-deactive.svg" alt=""></a></div></li>
-            <li><div class="nav__link"><a href="#"><i class="fa-solid fa-bell"></i></a></div></li>
-            <li><div class="nav__link"><a href="#"><i class="logout fa-solid fa-arrow-right-from-bracket"></i></a></div></li>
-          </ul>
-        </div>
-      </nav>
+     
+      <div class="app__content">
 
-      {% block body %}
+        <nav>
+          <div class="nav__menu">
+            <h2>{% block nav__title %}{% endblock nav__title %}</h2>
+            <ul>
+              <li><div class="nav__link"><a href="#"><span>o</span><img src="/media/icon-human-coach-deactive.svg" alt=""></a></div></li>
+              <li><div class="nav__link"><a href="#"><i class="fa-solid fa-bell"></i></a></div></li>
+              <li><div class="nav__link"><a href="#"><i class="logout fa-solid fa-arrow-right-from-bracket"></i></a></div></li>
+            </ul>
+          </div>
+        </nav>
+  
+        {% block body %}
 
-      {% endblock %}
+        {% endblock %}
+      </div>
     </div>
   </body>
 </html>

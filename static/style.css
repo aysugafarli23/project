@@ -17,10 +17,20 @@ body{
     --sapphire: #0091ff;
 }
 
-/*------base.html style------*/
+/*-------------------------------------base.html style-------------------------------------*/
+.container{
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 0.35fr 3.65fr;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+        "navbar app__content";
+    }
+
 
 /* Vertical navbar menu style codes */
 .navbar{
+    grid-area: navbar;
     background-color: var(--neutral-colors-white);
     color:#707070;
     width: 85px;
@@ -135,10 +145,66 @@ nav{
     color: var(--neutral-colors-black);
 }
 
-.dict{
+.app__content{
+    grid-area: app__content;
+}
+
+
+/*-------------------------------------dict.html style-------------------------------------*/
+.dict__container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 200px);
+    border-radius: 11px;
+    padding: 40px 50px;
+    max-width: 817px;
+    margin: 0 auto;
+}
+
+.dict__header{
+    text-align: center;
+}
+
+.dict__content{
+    margin-top: 5vh;
+}
+
+.dict__searchHolder{
+    display: flex;
+    justify-content: space-between;
+}
+
+#dictInput:focus{
+    outline:2px solid var(--sapphire)
+}
+
+#dictInput::placeholder{
+    transform: translateX(20px);
+}
+
+
+.dict__suggestions{
+    margin-top: 5vh;
+}
+
+.dict__items{
+    margin-top: 5px;
+    display: flex;
+}
+
+.dict__item{
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--neutral-colors-black);
+    font-family: "Metropolis", sans-serif;
+}
+
+
+/*-------------------------------------search.html style-------------------------------------*/
+.search{
     display: flex;
     justify-content: center;
     align-items: center;
     transform: translateY(120px);
 }
-

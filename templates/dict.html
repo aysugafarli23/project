@@ -1,11 +1,35 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
+{% block nav__title %}
+  Dictionary
+{% endblock %}
 
 {% block body %}
-{% block nav__title %}Dictionary{% endblock nav__title %}
-
-<div class="dict">
-     <!-- 1. The widget will replace this <div> tag. -->
-        <div id="widget-1"></div>
- 
-         </div>
-{% endblock body %}
+  <div class="dict__container">
+    <div class="dict__body">
+      <div class="dict__header">
+        <h4>ChatterFox Spoken Dictionary</h4>
+        <p>Learn how words are pronounced by real people and in context</p>
+      </div>
+      <div class="dict__content">
+        <div class="dict__searchHolder">
+          <div class="dict__input">
+            <input id="dictInput" type="text" placeholder="What do you want to pronounce..." autocomplete="on" />
+          </div>
+          <button class="searchBtn">Hear Pronunciation</button>
+        </div>
+        <div class="dict__suggestions">
+          <h4>You may want to try these:</h4>
+          <div class="dict__items">
+            <div class="dict__item">
+              <button class="itemBtn">Hello</button>
+            </div>
+            <div class="dict__item">
+              <button class="itemBtn">World</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
