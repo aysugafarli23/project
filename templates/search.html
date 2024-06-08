@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block nav__title %}{% endblock nav__title %}
+
+{% block body %}
+<div class="dict">
+    <!-- 1. The widget will replace this <div> tag. -->
+    <div id="widget-1"></div>
+</div>
+
+<!-- Include your JavaScript file -->
+<script src="{% static 'search.js' %}"></script>
+{% endblock body %}

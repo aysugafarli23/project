@@ -12,13 +12,16 @@ body{
 
 :root {
     --neutral-colors-white: #fff;
+    --neutral-colors-black: #000;
+    --neutral-colors-gray-75: #484a4d;
+    --sapphire: #0091ff;
 }
 
 /*------base.html style------*/
 
 /* Vertical navbar menu style codes */
 .navbar{
-    background-color: #ffff;
+    background-color: var(--neutral-colors-white);
     color:#707070;
     width: 85px;
     height: 100vh;
@@ -102,7 +105,7 @@ nav{
     font-size: 16px;
     font-weight: 500;
     line-height: 1;
-    color: black;
+    color:var(--neutral-colors-black);
 }
 
 .nav__menu ul{
@@ -114,7 +117,7 @@ nav{
 }
 
 .nav__link a span{
-    color: black;
+    color: var(--neutral-colors-black);
     text-align: center;
     font-weight: 500;
     font-size: 20px;
@@ -125,10 +128,17 @@ nav{
 }
 
 .nav__link i, .not .logout{
-    color: #484A4D
+    color: var(--neutral-colors-gray-75);
 }
 
 .nav__link .logout{
-    color: black;
+    color: var(--neutral-colors-black);
+}
+
+.dict{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(120px);
 }
 

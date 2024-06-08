@@ -3,7 +3,7 @@ from django.urls import resolve
 
 # Create your views here.
 
-def modules__view(request):
+def modulesPage(request):
     current_url = resolve(request.path_info).url_name
     print(f"Current URL: {current_url}")  # Debugging line
     context = {

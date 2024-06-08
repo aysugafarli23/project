@@ -26,10 +26,11 @@ from profiles.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', modules__view, name = "modules"),
-    path('modules/', modules__view, name="modules"),
-    path('dictionary/', dict__view, name="dictionary"),
-    path('profile/', profile__view, name="profile"),
+    path('', modulesPage, name = "modules"),
+    path('modules/', modulesPage, name="modules"),
+    path('dictionary', dictPage, name = "dictionary"),
+    path('dictionary/', include("dictionary.urls")),
+    path('profile/', profilePage, name="profile"),
 ]
 
 if settings.DEBUG:

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import resolve
 
 # Create your views here.
-def profile__view(request):
+def profilePage(request):
     current_url = resolve(request.path_info).url_name
     print(f"Current URL: {current_url}")  # Debugging line
     context = {
