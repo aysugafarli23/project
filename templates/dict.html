@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block nav__title %}
   Dictionary
 {% endblock %}
 
 {% block body %}
+<div id="widget-1"></div>
+
   <div class="dict__container">
     <div class="dict__body">
       <div class="dict__header">
@@ -22,14 +26,17 @@
           <h4>You may want to try these:</h4>
           <div class="dict__items">
             <div class="dict__item">
-              <button class="itemBtn">Hello</button>
+              <button class="itemBtn" id="helloBtn" onclick="fetchQuery('hello')">Hello</button>
             </div>
             <div class="dict__item">
-              <button class="itemBtn">World</button>
+              <button class="itemBtn" id="worldBtn" onclick="fetchQuery('world')">World</button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <script src="https://youglish.com/public/emb/widget.js"></script>
+  <script src="{% static 'search.js' %}"></script>
 {% endblock %}

@@ -33,8 +33,9 @@
         </div>
       </div>
 
-
      
+
+       
       <div class="app__content">
 
         <nav>
@@ -47,10 +48,14 @@
             </ul>
           </div>
         </nav>
-  
+        
+        <div class="contact-container">
+          <a href="{% url "modules" %}"><button class="contactBtn">Contact Us</button></a>
+      </div>
         {% block body %}
 
         {% endblock %}
+        
       </div>
     </div>
   </body>

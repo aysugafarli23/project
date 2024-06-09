@@ -10,15 +10,20 @@ var widget;
 function onYouglishAPIReady(){
   widget = new YG.Widget("widget-1", {
     width: 640,
-    components:9, //search box & caption 
+    components:8265, //search box & caption & All captions
     events: {
       'onFetchDone': onFetchDone,
       'onVideoChange': onVideoChange,
       'onCaptionConsumed': onCaptionConsumed
-    }          
+    },
+    controls: true, 
+    captionColor: '#212529',
+    captionSize:16,
+    keywordColor: 'orange',
+          
   });
   // 4. process the query
-  widget.fetch("courage","english");
+  widget.fetch("hello","english");
 }
 
 
