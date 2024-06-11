@@ -4,7 +4,6 @@ from django.urls import resolve
 # Create your views here.
 def dictPage(request):
     current_url = resolve(request.path_info).url_name
-    print(f"Current URL: {current_url}")  # Debugging line
     context = {
         'current_url': current_url,
     }
@@ -12,7 +11,6 @@ def dictPage(request):
 
 def searchPage(request):
     current_url = resolve(request.path_info).url_name
-    print(f"Current URL: {current_url}")  # Debugging line
     context = {
         'current_url': current_url,
     }

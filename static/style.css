@@ -45,9 +45,6 @@ body {
     position: fixed;
     z-index: 10;
     padding: 42px 6px 24px 7px;
-}
-
-.nav__logo {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -61,16 +58,13 @@ body {
 
 .nav__links {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     flex-direction: column;
-    height: 70vh;
+    height: 60vh;
     text-align: center;
 }
 
-.nav__links a {
-    display: block;
-}
 
 .nav__links .active {
     color: var(--sapphire);
@@ -137,10 +131,9 @@ nav {
     text-align: center;
     font-weight: 500;
     font-size: 20px;
-    position: inherit;
     position: absolute;
     right: 145px;
-    top: 18px;
+    top: 11px;
 }
 
 .nav__link i,
@@ -183,6 +176,30 @@ nav {
     display: flex;
     align-items: flex-start;
     justify-content: center;
+}
+
+.contact-form-container {
+    float: left;
+    width: 40%;
+    height: 60%;
+    text-align: left;
+    background-color: #fff;
+    border-right: 1px solid #d3dbe8;
+    border-radius: 10px;
+    display: none;
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+.btn-info{
+    color: white;
+}
+.close{
+    color:gray
 }
 
 
@@ -324,3 +341,4 @@ nav {
     align-items: center;
     transform: translateY(120px);
 }
+

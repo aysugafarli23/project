@@ -18,15 +18,17 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from dashboard.views import *
 from account.views import *
 from module.views import *
 from dictionary.views import *
 from profiles.views import *
+from contact.views import *
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', modulesPage, name = "modules"),
+    path('', dashboardPage, name = "dashboard"),
     path('modules/', modulesPage, name="modules"),
     path('dictionary', dictPage, name = "dictionary"),
     path('dictionary/', include("dictionary.urls")),
