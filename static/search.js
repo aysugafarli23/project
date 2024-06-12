@@ -10,6 +10,7 @@ var widget;
 function onYouglishAPIReady(){
   widget = new YG.Widget("widget-1", {
     width: 640,
+    border:'none',
     components:8265, //search box & caption & All captions
     events: {
       'onFetchDone': onFetchDone,
@@ -18,8 +19,11 @@ function onYouglishAPIReady(){
     },
     controls: true, 
     captionColor: '#212529',
-    captionSize:16,
-    keywordColor: 'orange',
+    captionSize:20,
+    markerColor:'transparent',
+    linkColor:'white',
+    keywordColor:'orange',
+    
           
   });
   // 4. process the query

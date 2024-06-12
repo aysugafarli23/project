@@ -27,11 +27,12 @@ from contact.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', contact__view, name = "contact"),
+    path('', contact_view, name = "contact"),
     path('modules/', modulesPage, name="modules"),
     path('dictionary', dictPage, name = "dictionary"),
     path('dictionary/', include("dictionary.urls")),
     path('profile/', profilePage, name="profile"),
+    path('contact/', include('contact.urls')),
 ]
 
 if settings.DEBUG:
