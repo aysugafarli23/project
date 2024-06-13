@@ -6,12 +6,21 @@ class ContactForm(forms.ModelForm):
         model = ContactSubmission
         fields = ['name', 'email', 'subject', 'message']
         widgets = {
-            'message': forms.Textarea(attrs={'rows': 4}),
+            'message': forms.Textarea(attrs={'rows': 6}),
         }
         
          
     def __init__(self, *args, **kwargs):
        super().__init__(*args, **kwargs)
-       
-       for field in self.fields.values():
+       placeholders = {
+                        'name': 'Name*',
+                        'email': 'Email*',
+                        'subject': 'Subject',
+                        'message': 'How can we help you?'
+                    }
+  
+       for field_name, field in self.fields.items():
            field.widget.attrs['class'] = 'form-control'
+           field.label = ''
+           if field_name in placeholders:
+               field.widget.attrs['placeholder'] = placeholders[field_name]

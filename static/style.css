@@ -23,7 +23,7 @@ body {
 }
 
 /*-------------------------------------base.html style-------------------------------------*/
-.container {
+.container__general {
     display: grid;
     height: 100vh;
     grid-template-columns: 0.25fr 3.75fr;
@@ -149,7 +149,7 @@ nav {
     grid-area: app__content;
 }
 
-.contact-container {
+.contact {
     position: fixed;
     right: -60px; 
     top: 73%;
@@ -162,7 +162,7 @@ nav {
     border: none;
     padding: 15px;
     background-color: #777777;
-    color: white;
+    color: var(--neutral-colors-white);
     border-radius: 28px;
     text-decoration: none;
     font-size: 18px;
@@ -183,7 +183,7 @@ nav {
     width: 40%;
     height: 60%;
     text-align: left;
-    background-color: #fff;
+    background-color: var(--neutral-colors-white);
     border-right: 1px solid #d3dbe8;
     border-radius: 10px;
     display: none;
@@ -195,14 +195,54 @@ nav {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
 }
-.btn-info{
-    color: white;
-}
-.close{
-    color:gray
+
+.form-group {
+    margin-bottom: 1rem;
 }
 
+.form__title{
+    height: 62px;
+    color: #222;
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 30px;
+    position: relative;
+    box-sizing: border-box;
+}
 
+.btn-info {
+    background-color: #00A3FE;
+    border: none;
+    color: var(--neutral-colors-white);
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+}
+
+.btn-info:hover {
+    color: var(--neutral-colors-white);
+    box-shadow: 0 3px 3px 0 rgba(0, 163, 254, 0.4);;
+}
+
+.btn.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    margin-bottom: 40px;
+    color: #697177;
+    opacity: .4;
+    cursor: pointer;
+
+}
+
+.btn.close:hover {
+    opacity: 1;
+    color: var(--neutral-colors-black);
+}
 
 
 /*-------------------------------------dict.html style-------------------------------------*/

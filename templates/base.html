@@ -12,7 +12,7 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container__general">
       <div class="navbar">
         <div class="nav__logo">
           <a href="{% url "modules" %}"><img src="/static/images/logo.png" alt="Logo" /></a>
@@ -62,17 +62,33 @@
         </nav>
 
         {% comment %}Contact Form{% endcomment %}
-        <div class="contact-container">
+        <div class="contact">
           <button class="contactBtn">Contact Us</button>
         </div>
 
         <div id="contactFormContainer" class="contact-form-container">
           <div class="container mt-3">
-            <h1>ChatterFox</h1>
+            <div class="form__title">ChatterFox</div>
             <form method="post">
               {% csrf_token %}
-              {{ form.as_p }}
-              {{ form.media }}
+              <div class="form-row row">
+                <div class="form-group col-md-6">
+                    {{ form.name }} 
+                </div>
+                <div class="form-group col-md-6">
+                    {{ form.email }}
+
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form.subject }}
+
+            </div>
+            <div class="form-group">
+                {{ form.message }}
+
+            </div>
+            
               <button type="submit" class="btn btn-info">Submit</button>
             </form>
             <button class="btn close" onclick="hideContactForm()"><i class="fa-regular fa-circle-xmark"></i></button>
