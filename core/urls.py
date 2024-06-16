@@ -27,8 +27,9 @@ from contact.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', generate_speech, name = "contact"),
+    path('', modulesPage, name = "contact"),
     path('modules/', modulesPage, name="modules"),
+    path("modules-api/", include("module.api.urls"), name="module"),
     path('dictionary', dictPage, name = "dictionary"),
     path('dictionary/', include("dictionary.urls")),
     path('profile/', profilePage, name="profile"),

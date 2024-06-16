@@ -48,6 +48,12 @@ def generate_speech():
         
 generate_speech()
 
+
+
+
+
+
+#Still not applied for now
 # def calculate_cost(text_string, model_id):
 #     cost_tier = {
 #         'tts-1': 0.015,
