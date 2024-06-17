@@ -1,7 +1,85 @@
 {% extends 'base.html' %}
 
 {% block nav__title %}Modules{% endblock nav__title %}
+
 {% block body %}
 
-  
+<h1 id="module-title"></h1>
+<p id="module-description"></p>
+<div id="sections-container"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Extract the module ID from the URL
+        const moduleId = window.location.pathname.split('/').pop();
+
+        // Fetch module data from the API
+        fetch(`/modules-api/modules/list/${moduleId}/`)
+            .then(response => response.json())
+            .then(module => {
+                // Set the module title and description
+                document.getElementById("module-title").textContent = module.title;
+                document.getElementById("module-description").textContent = module.description;
+
+                // Get the container for the sections
+                const sectionsContainer = document.getElementById("sections-container");
+
+                // Iterate through the sections and create HTML elements for each
+                module.sections.forEach(section => {
+                    const sectionDiv = document.createElement("div");
+                    sectionDiv.classList.add("section");
+
+                    const sectionTitle = document.createElement("h3");
+                    sectionTitle.textContent = section.title;
+                    sectionDiv.appendChild(sectionTitle);
+
+                    // Iterate through the contents of the section and create HTML elements for each
+                    section.contents.forEach(content => {
+                        const contentDiv = document.createElement("div");
+                        contentDiv.classList.add("content");
+
+                        const contentTitle = document.createElement("h4");
+                        contentTitle.textContent = content.title;
+                        contentDiv.appendChild(contentTitle);
+
+                        const contentBody = document.createElement("p");
+                        contentBody.textContent = content.body;
+                        contentDiv.appendChild(contentBody);
+
+                        // Optionally add images, audio, and video
+                        if (content.image) {
+                            const contentImage = document.createElement("img");
+                            contentImage.src = content.image;
+                            contentDiv.appendChild(contentImage);
+                        }
+
+                        if (content.audio) {
+                            const contentAudio = document.createElement("audio");
+                            contentAudio.controls = true;
+                            const audioSource = document.createElement("source");
+                            audioSource.src = content.audio;
+                            audioSource.type = "audio/mp3";
+                            contentAudio.appendChild(audioSource);
+                            contentDiv.appendChild(contentAudio);
+                        }
+
+                        if (content.video) {
+                            const contentVideo = document.createElement("video");
+                            contentVideo.controls = true;
+                            const videoSource = document.createElement("source");
+                            videoSource.src = content.video;
+                            videoSource.type = "video/mp4";
+                            contentVideo.appendChild(videoSource);
+                            contentDiv.appendChild(contentVideo);
+                        }
+
+                        sectionDiv.appendChild(contentDiv);
+                    });
+
+                    sectionsContainer.appendChild(sectionDiv);
+                });
+            });
+    });
+</script>
+
 {% endblock %}

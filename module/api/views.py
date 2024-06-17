@@ -6,15 +6,44 @@ from rest_framework.generics import (
     UpdateAPIView,
     CreateAPIView
 )
-from .serializers import ModuleSerializer, ContentSerializer, ScoreSerializer
-from ..models import Module, Content, Score
+from .serializers import UnitSerializer, ModuleSerializer, SectionSerializer, ContentSerializer, ScoreSerializer
+from ..models import Unit, Module, Section, Content, Score
 from rest_framework.filters import SearchFilter, OrderingFilter
+
+
+class UnitCreateAPIView(CreateAPIView):
+    queryset = Unit.objects.all()
+    serializer_class = UnitSerializer
+    def perform_update(self, serializer):
+        serializer.save(user = self.request.user)
+
+class UnitListAPIView(ListAPIView):
+    queryset = Unit.objects.all()
+    serializer_class = UnitSerializer
+        
+class UnitDetailAPIView(RetrieveAPIView):
+    queryset = Unit.objects.all()
+    serializer_class = UnitSerializer
+    lookup_field = 'pk'
+    
+class UnitDeleteAPIView(DestroyAPIView):
+    queryset =Unit.objects.all()
+    serializer_class =UnitSerializer
+    lookup_field = "pk"
+    
+class UnitUpdateAPIView(UpdateAPIView):
+    queryset =Unit.objects.all()
+    serializer_class =UnitSerializer
+    lookup_field = "pk"
+    def perform_update(self, serializer):
+       serializer.save(user = self.request.user)
+       
 
 class ModuleCreateAPIView(CreateAPIView):
     queryset = Module.objects.all()
     serializer_class = ModuleSerializer
-    def perform_create(self, serializer):
-        serializer.save()
+    def perform_update(self, serializer):
+        serializer.save(user = self.request.user)
 
 class ModuleListAPIView(ListAPIView):
     queryset = Module.objects.all()
@@ -38,11 +67,42 @@ class ModuleUpdateAPIView(UpdateAPIView):
     serializer_class = ModuleSerializer
     lookup_field = "pk"
     def perform_update(self, serializer):
-        serializer.save()
+        serializer.save(user = self.request.user)
+        
+        
+class SectionCreateAPIView(CreateAPIView):
+    queryset = Section.objects.all()
+    serializer_class = SectionSerializer
+    def perform_update(self, serializer):
+        serializer.save(user = self.request.user)
 
+class SectionListAPIView(ListAPIView):
+    queryset = Section.objects.all()
+    serializer_class = SectionSerializer
+        
+class SectionDetailAPIView(RetrieveAPIView):
+    queryset = Section.objects.all()
+    serializer_class = SectionSerializer
+    lookup_field = 'pk'
+    
+class SectionDeleteAPIView(DestroyAPIView):
+    queryset =Section.objects.all()
+    serializer_class =SectionSerializer
+    lookup_field = "pk"
+    
+class SectionUpdateAPIView(UpdateAPIView):
+    queryset =Section.objects.all()
+    serializer_class =SectionSerializer
+    lookup_field = "pk"
+    def perform_update(self, serializer):
+       serializer.save(user = self.request.user)
+    
+    
 class ContentCreateAPIView(CreateAPIView):
     queryset = Content.objects.all()
     serializer_class = ContentSerializer
+    def perform_update(self, serializer):
+        serializer.save(user = self.request.user)
 
 class ContentListAPIView(ListAPIView):
     queryset = Content.objects.all()
@@ -62,6 +122,9 @@ class ContentUpdateAPIView(UpdateAPIView):
     queryset = Content.objects.all()
     serializer_class = ContentSerializer
     lookup_field = "pk"
+    def perform_update(self, serializer):
+        serializer.save(user = self.request.user)
+
 
 class ScoreCreateAPIView(CreateAPIView):
     queryset = Score.objects.all()
