@@ -1,6 +1,5 @@
-# myapp/serializers.py
 from rest_framework import serializers
-from ..models import Unit, Module, Content, Section, Score
+from ..models import Content, Section, Module, Unit, Score
 
 class ContentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,11 +8,10 @@ class ContentSerializer(serializers.ModelSerializer):
 
 class SectionSerializer(serializers.ModelSerializer):
     contents = ContentSerializer(many=True, read_only=True)
-    module = serializers.PrimaryKeyRelatedField(queryset=Module.objects.all())  # Add this line
 
     class Meta:
         model = Section
-        fields = ['id', 'title', 'contents', 'module']
+        fields = ['id', 'title', 'contents']
 
 class ModuleSerializer(serializers.ModelSerializer):
     sections = SectionSerializer(many=True, read_only=True)
@@ -28,8 +26,8 @@ class UnitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Unit
         fields = ['id', 'title', 'modules']
-
+        
 class ScoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Score
-        fields = ['id', 'user', 'content', 'score']
+        fields = '__all__'

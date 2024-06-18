@@ -4,11 +4,11 @@ from .views import *
 app_name = "module"
 
 urlpatterns = [
-    path("unit/create/", UnitCreateAPIView.as_view(), name="unit-create"),
-    path("unit/list/", UnitListAPIView.as_view(), name="unit-list"),
-    path("unit/detail/<pk>/", UnitDetailAPIView.as_view(), name="unit-detail"),
-    path("unit/update/<pk>/", UnitUpdateAPIView.as_view(), name="unit-update"),
-    path("unit/delete/<pk>/", UnitDeleteAPIView.as_view(), name="unit-delete"),
+    path("units/create/", UnitCreateAPIView.as_view(), name="unit-create"),
+    path("units/list/", UnitListAPIView.as_view(), name="unit-list"),
+    path("units/detail/<pk>/", UnitDetailAPIView.as_view(), name="unit-detail"),
+    path("units/update/<pk>/", UnitUpdateAPIView.as_view(), name="unit-update"),
+    path("units/delete/<pk>/", UnitDeleteAPIView.as_view(), name="unit-delete"),
     
     path("modules/create/", ModuleCreateAPIView.as_view(), name="module-create"),
     path("modules/list/", ModuleListAPIView.as_view(), name="module-list"),

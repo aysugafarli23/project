@@ -2,7 +2,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 class Unit(models.Model):
     title = models.CharField(max_length=200)
 
@@ -10,22 +9,23 @@ class Unit(models.Model):
         return f"{self.title}"
     
 class Module(models.Model):
-    unit = models.ForeignKey(Unit, related_name='modules', on_delete=models.CASCADE )
+    unit = models.ForeignKey(Unit, related_name='modules', on_delete=models.CASCADE)
     image = models.ImageField(upload_to="Module Images", blank=True, null=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
+
     def __str__(self):
-        return f"{self.unit.title} -{self.title}"
+        return f"{self.unit.title} - {self.title}"
 
 class Section(models.Model):
-    module = models.ForeignKey(Module, related_name='sections', on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
 
     def __str__(self):
-        return f"{self.module.title} - {self.title}"
+        return f"{self.title}"
 
 class Content(models.Model):
     section = models.ForeignKey(Section, related_name='contents', on_delete=models.CASCADE)
+    module = models.ForeignKey(Module, related_name='contents', on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     body = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='content_images/', blank=True, null=True)

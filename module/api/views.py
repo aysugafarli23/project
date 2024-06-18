@@ -9,6 +9,7 @@ from rest_framework.generics import (
 from .serializers import UnitSerializer, ModuleSerializer, SectionSerializer, ContentSerializer, ScoreSerializer
 from ..models import Unit, Module, Section, Content, Score
 from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class UnitCreateAPIView(CreateAPIView):
@@ -48,9 +49,9 @@ class ModuleCreateAPIView(CreateAPIView):
 class ModuleListAPIView(ListAPIView):
     queryset = Module.objects.all()
     serializer_class = ModuleSerializer
-    filter_backends = [SearchFilter, OrderingFilter]
-    ordering_fields = ["id", "unit"]
-    search_fields = ["title", "description"]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['unit']
+    search_fields = ['unit__title', 'title']
 
 class ModuleDetailAPIView(RetrieveAPIView):
     queryset = Module.objects.all()

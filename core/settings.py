@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #My Apps:
     'rest_framework',
+    'django_filters',
     'account',
     'profiles',
     'module',
