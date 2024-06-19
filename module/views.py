@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import resolve
 from django.contrib import messages
 from contact.forms import ContactForm  
 from openai import OpenAI
 from pathlib import Path
+from .models import *
 
 # Create your views here.
 
@@ -26,6 +27,19 @@ def modulesPage(request):
     return render(request, 'module.html', context)
 
 
+def moduleSectionPage(request, pk):
+    module = get_object_or_404(Module, pk=pk)
+    sections = Section.objects.filter(module=module)
+    contents = Content.objects.filter(section__in=sections)
+    
+    context ={
+        'module':module,
+        'sections':sections,
+        'contents': contents        
+    }
+    
+    return render(request, 'modulesections.html', context)
+
 
 def generate_speech():
     client=OpenAI(api_key = "sk-proj-8tsKt51ax7c9AoOO3RYST3BlbkFJkVGybZPjPoHTxK1LZXIm")
@@ -47,8 +61,6 @@ def generate_speech():
         response.stream_to_file(speech_file_path)
         
 generate_speech()
-
-
 
 
 

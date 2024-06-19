@@ -11,14 +11,14 @@ class SectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Section
-        fields = ['id', 'title', 'contents']
+        fields = ['id', 'title', 'module', 'contents']
 
 class ModuleSerializer(serializers.ModelSerializer):
     sections = SectionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Module
-        fields = ['id', 'unit', 'image', 'title', 'description', 'sections']
+        fields = ['id', 'unit', 'image', 'title', 'description', 'details', 'sections']
         
 class UnitSerializer(serializers.ModelSerializer):
     modules = ModuleSerializer(many=True, read_only=True)

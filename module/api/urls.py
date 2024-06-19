@@ -3,7 +3,7 @@ from .views import *
 
 app_name = "module"
 
-urlpatterns = [
+urlpatterns = [    
     path("units/create/", UnitCreateAPIView.as_view(), name="unit-create"),
     path("units/list/", UnitListAPIView.as_view(), name="unit-list"),
     path("units/detail/<pk>/", UnitDetailAPIView.as_view(), name="unit-detail"),

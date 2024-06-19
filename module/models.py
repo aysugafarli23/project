@@ -13,12 +13,14 @@ class Module(models.Model):
     image = models.ImageField(upload_to="Module Images", blank=True, null=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
+    details = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.unit.title} - {self.title}"
 
 class Section(models.Model):
     title = models.CharField(max_length=200)
+    module = models.ManyToManyField(Module, related_name='sections')
 
     def __str__(self):
         return f"{self.title}"

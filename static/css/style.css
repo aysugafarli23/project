@@ -384,13 +384,12 @@ nav {
 
 
 /*-------------------------------------module.html style ------------------------------------*/
-.module__container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    top: 100px;
+.modules__container{
     width: 80%;
+}
+
+.unit{
+    margin: 150px;
 }
 
 .collapsible {
@@ -404,13 +403,6 @@ nav {
     outline: none;
     font-size: 15px;
   }
-  .collapsible:after {
-    content: '\02795'; /* Unicode character for "plus" sign (+) */
-    font-size: 13px;
-    color: white;
-    float: right;
-    margin-left: 5px;
-  }
   
   .content {
     padding: 0 18px;
@@ -420,3 +412,7 @@ nav {
     background-color: #f1f1f1;
   }
 
+  .module{
+    width:100%;
+
+  }
