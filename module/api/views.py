@@ -94,7 +94,7 @@ class SectionDeleteAPIView(DestroyAPIView):
 class SectionUpdateAPIView(UpdateAPIView):
     queryset =Section.objects.all()
     serializer_class =SectionSerializer
-    lookup_field = "module"
+    lookup_field = "pk"
     def perform_update(self, serializer):
        serializer.save(user = self.request.user)
     

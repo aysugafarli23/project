@@ -23,23 +23,25 @@ def modulesPage(request):
         'current_url': current_url,
         'form': form,
     }
-    
     return render(request, 'module.html', context)
 
 
 def moduleSectionPage(request, pk):
     module = get_object_or_404(Module, pk=pk)
-    sections = Section.objects.filter(module=module)
-    contents = Content.objects.filter(section__in=sections)
-    
-    context ={
-        'module':module,
-        'sections':sections,
-        'contents': contents        
-    }
-    
-    return render(request, 'modulesections.html', context)
+    sections = module.sections.all()
+    section_contents = []
 
+    for section in sections:
+        section_contents.append({
+            'section': section,
+            'contents': section.contents.all()
+        })
+
+    context = {
+        'module': module,
+        'section_contents': section_contents,
+    }
+    return render(request, 'modulesections.html', context)
 
 def generate_speech():
     client=OpenAI(api_key = "sk-proj-8tsKt51ax7c9AoOO3RYST3BlbkFJkVGybZPjPoHTxK1LZXIm")

@@ -1,31 +1,20 @@
 {% extends "base.html" %}
 
-
 {% block nav__title %}
-   {{module.name}}
+    {{ module.title }}
 {% endblock nav__title %}
 
 {% block body %}
-<div class="module__container">
-    <ul>
-        {% for section in sections %}
-            <li><div class="section__container">
-                <h2>{{section.name}}</h2>
-                <ul>
-                        {% for content in contents %}
-                            {% if content.section == section %}
-                                    <li>
-                                        <div class="content__container">
-                                            <img src="{{ content.image.url }}" alt="{{ content.name }}">
-                                            {{ content.name }}
-                                        </div>
-                                    </li>
-                            {% endif %}
-                    {% endfor %}
-                </ul>
-            </div></li>
+    <div class="module__container">
+        {% for section_content in section_contents %}
+        <h2>{{ section_content.section.title }}</h2>
+        <ul>
+            {% for content in section_content.contents %}
+                <li>{{ content.title }}</li>
+            {% empty %}
+                <li>No contents available.</li>
+            {% endfor %}
+        </ul>
     {% endfor %}
-    </ul>
-</div>
+    </div>
 {% endblock body %}
-
