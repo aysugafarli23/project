@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block body %}
+<button id="recordButton" onclick="startRecording()">
+    <i class="fas fa-microphone"></i> Start Recording
+  </button>
+  
+  <button id="stopButton" style="display: none;" onclick="stopRecording()">
+    <i class="fas fa-stop"></i> Stop Recording
+  </button>
+{% endblock body %}

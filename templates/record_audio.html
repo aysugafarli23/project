@@ -1,0 +1,46 @@
+<h1>Audio Recorder</h1>
+<button id="record-btn">Record</button>
+<button id="stop-btn" disabled>Stop</button>
+<script src="https://cdn.jsdelivr.net/npm/recordrtc@5.6.3/dist/RecordRTC.min.js"></script>
+<script>
+    let recorder;
+    let audioBlob;
+
+    document.getElementById('record-btn').addEventListener('click', () => {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                recorder = new RecordRTC.MediaStreamRecorder(stream);
+                recorder.startRecording();
+                document.getElementById('stop-btn').disabled = false;
+                document.getElementById('record-btn').disabled = true;
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+    document.getElementById('stop-btn').addEventListener('click', () => {
+        recorder.stopRecording(() => {
+            audioBlob = recorder.getBlob();
+            uploadAudio(audioBlob);
+            document.getElementById('stop-btn').disabled = true;
+            document.getElementById('record-btn').disabled = false;
+        });
+    });
+
+    function uploadAudio(audioBlob) {
+        console.log('Audio blob:', audioBlob); // Add this line
+        
+        const formData = new FormData();
+        formData.append('audio_file', audioBlob);
+
+        // Specify the URL of the record_audio view here
+        fetch('/module/record_audio/', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
+
+        console.log('Request method:', fetch.request.method); // Add this line
+    }
+</script>

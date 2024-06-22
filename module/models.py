@@ -23,6 +23,7 @@ class Content(models.Model):
     body = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='content_images/', blank=True, null=True)
     audio = models.FileField(upload_to='content_audio/', blank=True, null=True)
+    audio_file = models.FileField(upload_to="recordings/", null=True, blank=True)
     video = models.FileField(upload_to='content_videos/', blank=True, null=True)
 
     def __str__(self):
