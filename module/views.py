@@ -6,6 +6,7 @@ from openai import OpenAI
 from pathlib import Path
 from .models import *
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import FileSystemStorage
 # Create your views here.
 
@@ -80,12 +81,26 @@ def moduleSectionPage(request, pk):
 
 
 def record_audio(request):
-    print(request.FILES)  # Add this line
+    return render(request, 'record_audio.html')
+
+@csrf_exempt
+# @login_required
+def upload_media(request):
     if request.method == 'POST':
-        audio_file = request.FILES['audio_file']
-        fs = FileSystemStorage()
-        filename = fs.save(audio_file.name, audio_file)
-        content = Content(audio_file=filename)
-        content.save()
-        return JsonResponse({"message": "Recording saved successfully"})
-    return JsonResponse({"message": "Invalid request"})
+        if 'media' not in request.FILES:
+            return JsonResponse({'success': False, 'error': 'No media file found'}, status=400)
+        
+        media_file = request.FILES['media']
+        content_type = media_file.content_type
+        content = Content.objects.create(
+            title='Recorded Media',
+            body='This is a recorded media file.',
+            image=None,  # Assuming no image
+            audio=media_file if content_type.startswith('audio/') else None,
+            video=media_file if content_type.startswith('video/') else None
+        )
+        return JsonResponse({'success': True, 'content_id': content.id})
+    
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=400)
+    
+ 

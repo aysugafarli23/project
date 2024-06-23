@@ -1,46 +1,53 @@
-<h1>Audio Recorder</h1>
-<button id="record-btn">Record</button>
-<button id="stop-btn" disabled>Stop</button>
-<script src="https://cdn.jsdelivr.net/npm/recordrtc@5.6.3/dist/RecordRTC.min.js"></script>
-<script>
-    let recorder;
-    let audioBlob;
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MediaRecorder API - Sample</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="WebRTC getUserMedia MediaRecorder API">
+    <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <style>
+      button{
+        margin: 10px 5px;
+      }
+      li{
+        margin: 10px;
+      }
+      body{
+        width: 90%;
+        max-width: 960px;
+        margin: 0px auto;
+      }
+      #btns{
+        display: none;
+      }
+      h1{
+        margin: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1> MediaRecorder API example</h1>
 
-    document.getElementById('record-btn').addEventListener('click', () => {
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(stream => {
-                recorder = new RecordRTC.MediaStreamRecorder(stream);
-                recorder.startRecording();
-                document.getElementById('stop-btn').disabled = false;
-                document.getElementById('record-btn').disabled = true;
-            })
-            .catch(error => console.error('Error:', error));
-    });
-
-    document.getElementById('stop-btn').addEventListener('click', () => {
-        recorder.stopRecording(() => {
-            audioBlob = recorder.getBlob();
-            uploadAudio(audioBlob);
-            document.getElementById('stop-btn').disabled = true;
-            document.getElementById('record-btn').disabled = false;
-        });
-    });
-
-    function uploadAudio(audioBlob) {
-        console.log('Audio blob:', audioBlob); // Add this line
-        
-        const formData = new FormData();
-        formData.append('audio_file', audioBlob);
-
-        // Specify the URL of the record_audio view here
-        fetch('/module/record_audio/', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.error('Error:', error));
-
-        console.log('Request method:', fetch.request.method); // Add this line
-    }
-</script>
+    <p> For now it is supported only in Firefox(v25+) and Chrome(v47+)</p>
+    <div id='gUMArea'>
+      <div>
+      Record:
+        <input type="radio" name="media" value="video" checked id='mediaVideo'>Video
+        <input type="radio" name="media" value="audio">audio
+      </div>
+      <button class="btn btn-default"  id='gUMbtn'>Request Stream</button>
+    </div>
+    <div id='btns'>
+      <button  class="btn btn-default" id='start'>Start</button>
+      <button  class="btn btn-default" id='stop'>Stop</button>
+    </div>
+    <div>
+      <ul  class="list-unstyled" id='ul'></ul>
+    </div>
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/record_audio.js' %}"></script>
+  </body>
+</html>

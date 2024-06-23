@@ -25,6 +25,8 @@ class Content(models.Model):
     audio = models.FileField(upload_to='content_audio/', blank=True, null=True)
     audio_file = models.FileField(upload_to="recordings/", null=True, blank=True)
     video = models.FileField(upload_to='content_videos/', blank=True, null=True)
+    user = models.ForeignKey(User, related_name='contents', on_delete=models.CASCADE, null=True)
+
 
     def __str__(self):
         return f"{self.title}"
