@@ -149,6 +149,10 @@ nav {
     grid-area: app__content;
 }
 
+.main__content{
+    margin-top: 110px;
+}
+
 .contact {
     position: fixed;
     right: -60px; 
@@ -335,11 +339,7 @@ nav {
     color: var(--neutral-colors-white);
 }
 
-.dict__suggestions {
-    transform: translateY(10em);
-}
-
-.div__suggestions h4 {
+#suggest {
     font-size: 13px !important;
     color: var(--neutral-colors-black);
     margin-top: 20vh;
@@ -416,3 +416,8 @@ nav {
     width:100%;
 
   }
+
+  /*-------------------------------------record_audio.html style ------------------------------------*/
+#btns img{
+    height: 30px;
+}

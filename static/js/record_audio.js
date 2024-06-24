@@ -1,52 +1,38 @@
+// MeidaRecorder API
 'use strict';
 
 let log = console.log.bind(console),
     id = val => document.getElementById(val),
     ul = id('ul'),
-    gUMbtn = id('gUMbtn'),
     start = id('start'),
     stop = id('stop'),
     stream,
     recorder,
-    counter=1,
+    counter = 1,
     chunks,
-    media;
+    media = {
+        tag: 'audio',
+        type: 'audio/mp3',
+        ext: '.mp3',
+        gUM: { audio: true }
+    };
 
-gUMbtn.onclick = e => {
-    let mv = id('mediaVideo'),
-        mediaOptions = {
-            video: {
-                tag: 'video',
-                type: 'video/webm',
-                ext: '.mp4',
-                gUM: {video: true, audio: true}
-            },
-            audio: {
-                tag: 'audio',
-                type: 'audio/mp3',
-                ext: '.mp3',
-                gUM: {audio: true}
-            }
-        };
-    media = mv.checked ? mediaOptions.video : mediaOptions.audio;
-    navigator.mediaDevices.getUserMedia(media.gUM).then(_stream => {
-        stream = _stream;
-        id('gUMArea').style.display = 'none';
-        id('btns').style.display = 'inherit';
-        start.removeAttribute('disabled');
-        recorder = new MediaRecorder(stream);
-        recorder.ondataavailable = e => {
-            chunks.push(e.data);
-            if(recorder.state == 'inactive')  makeLink();
-        };
-        log('got media successfully');
-    }).catch(log);
-};
+navigator.mediaDevices.getUserMedia(media.gUM).then(_stream => {
+    stream = _stream;
+    id('btns').style.display = 'inherit';
+    start.removeAttribute('disabled');
+    recorder = new MediaRecorder(stream);
+    recorder.ondataavailable = e => {
+        chunks.push(e.data);
+        if (recorder.state == 'inactive') makeLink();
+    };
+    log('got media successfully');
+}).catch(log);
 
 start.onclick = e => {
     start.disabled = true;
     stop.removeAttribute('disabled');
-    chunks=[];
+    chunks = [];
     recorder.start();
 };
 
@@ -62,7 +48,6 @@ function getCookie(name) {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
             if (cookie.substring(0, name.length + 1) === (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;
@@ -73,12 +58,12 @@ function getCookie(name) {
 }
 
 function makeLink() {
-    let blob = new Blob(chunks, {type: media.type}),
+    let blob = new Blob(chunks, { type: media.type }),
         url = URL.createObjectURL(blob),
         li = document.createElement('li'),
         mt = document.createElement(media.tag),
         hf = document.createElement('a');
-    
+
     mt.controls = true;
     mt.src = url;
     hf.href = url;
@@ -87,8 +72,7 @@ function makeLink() {
     li.appendChild(mt);
     li.appendChild(hf);
     ul.appendChild(li);
-    
-    // Send the blob to the server
+
     let formData = new FormData();
     formData.append('media', blob, `recording${media.ext}`);
 
@@ -96,18 +80,38 @@ function makeLink() {
         method: 'POST',
         body: formData,
         headers: {
-            'X-CSRFToken': getCookie('csrftoken')  // Ensure CSRF token is included
+            'X-CSRFToken': getCookie('csrftoken')
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Media uploaded successfully!');
-        } else {
-            alert('Upload failed.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Media uploaded successfully!');
+            } else {
+                alert('Upload failed.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+// Fetching for content body text
+const cards = document.querySelector(".cards");
+
+fetch("http://127.0.0.1:8000/modules-api/contents/list/")
+  .then((res) => res.json())
+  .then((data) => data.map((content) => createCard(content)));
+
+function createCard(content) {
+  const cardDiv = `
+  <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+    <div class="card" style="width: 100%;">
+        <div class="card-body">
+            // <h5 class="card-title">${content.title}</h5>
+            <p class="card-text">${content.body}</p>
+        </div>
+    </div>
+  </div>`;
+  cards.innerHTML += cardDiv;
 }

@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
 {% block nav__title %}
@@ -22,13 +21,13 @@
           <button class="searchBtn">Hear Pronunciation</button>
         </div>
         <div class="dict__suggestions">
-          <h4>You may want to try these:</h4>
+          <h4 id="suggest">You may want to try these:</h4>
           <div class="dict__items">
             <div class="dict__item">
-              <button class="itemBtn" id="helloBtn" onclick="fetchQuery('hello')">Hello</button>
+              <button class="itemBtn" id="helloBtn">Hello</button>
             </div>
             <div class="dict__item">
-              <button class="itemBtn" id="worldBtn" onclick="fetchQuery('world')">World</button>
+              <button class="itemBtn" id="worldBtn">World</button>
             </div>
           </div>
         </div>

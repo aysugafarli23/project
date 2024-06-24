@@ -1,11 +1,13 @@
 Order:
 
--ContactForum
- --Email sending
- --Recaptcha
 -Modules
+ --Mini quizz game
+ --Score
  --OpenAI
+-Profile
 -RegisterForum
  --Billing System
  --Login Forum
--Profile
+-ContactForum
+ --Email sending
+ --Recaptcha

@@ -28,7 +28,11 @@ def dictPage(request):
 
 def searchPage(request):
     current_url = resolve(request.path_info).url_name
+    query = request.GET.get('word', '')
+
     context = {
         'current_url': current_url,
+        'query': query,
     }
+
     return render(request, 'search.html', context)
