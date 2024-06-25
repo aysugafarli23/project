@@ -1,62 +1,46 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
+  const collapsibleContainer = document.querySelector('.modules__container');
+
   fetch('http://127.0.0.1:8000/modules-api/units/list')
-   .then(res => res.json())
-   .then(units => {
-      const collapsibleContainer = document.querySelector('.modules__container')
+    .then(res => res.json())
+    .then(units => units.map(unit => createUnit(unit)));
 
-      units.forEach(unit => {
-        const unitDiv = document.createElement('div')
-        unitDiv.classList.add('unit')
+  function createUnit(unit) {
+    const unitDiv = `
+      <div class="unit">
+        <button class="collapsible">${unit.title}<i class="fas fa-chevron-up"></i></button>
+        <div class="content" id="unit-${unit.id}-content"></div>
+      </div>`;
+    collapsibleContainer.innerHTML += unitDiv;
 
-        const button = document.createElement('button')
-        button.classList.add('collapsible')
-        button.innerHTML = ` ${unit.title}<i class="fas fa-chevron-up"></i>`
-        unitDiv.append(button)
+    const contentDiv = document.getElementById(`unit-${unit.id}-content`);
+    fetch(`http://127.0.0.1:8000/modules-api/modules/list/?unit=${unit.id}`)
+      .then(res => res.json())
+      .then(modules => modules.map(module => createModule(module, contentDiv)));
 
-        const contentDiv = document.createElement('div')
-        contentDiv.classList.add('content')
-        contentDiv.id = `unit-${unit.id}-content`
-        unitDiv.append(contentDiv)
+    // Add event listener to collapsible button
+    const buttons = collapsibleContainer.querySelectorAll('.collapsible');
+    buttons.forEach(button => {
+      button.addEventListener('click', function() {
+        this.classList.toggle('active');
+        const content = this.nextElementSibling;
+        content.style.maxHeight = content.style.maxHeight ? null : content.scrollHeight + 'px';
+        const icon = this.querySelector('i');
+        icon.classList.toggle('fa-chevron-up');
+        icon.classList.toggle('fa-chevron-down');
+      });
+    });
+  }
 
-        collapsibleContainer.append(unitDiv)
-
-        fetch(`http://127.0.0.1:8000/modules-api/modules/list/?unit=${unit.id}`)
-         .then(res => res.json())
-         .then(modules => {
-            modules.forEach(module => {
-              const moduleDiv = document.createElement('div');
-              moduleDiv.classList.add('module');
-          
-              const moduleLink = document.createElement('a');
-              moduleLink.href = `/modules/module/${module.id}/`;
-              moduleDiv.append(moduleLink);
-          
-              const moduleName = document.createElement('h3');
-              moduleName.textContent = module.title;
-              moduleLink.append(moduleName);
-          
-              const moduleDescription = document.createElement('h2');
-              moduleDescription.textContent = module.description;
-              moduleLink.append(moduleDescription);
-          
-              moduleDiv.append(moduleLink);
-              contentDiv.append(moduleDiv);
-            })
-          })
-
-        // Add event listener to collapsible button
-        button.addEventListener('click', function () {
-          this.classList.toggle('active')
-          var content = this.nextElementSibling
-          if (content.style.maxHeight) {
-            content.style.maxHeight = null
-          } else {
-            content.style.maxHeight = content.scrollHeight + 'px'
-          }
-          const icon = this.querySelector('i')
-          icon.classList.toggle('fa-chevron-up')
-          icon.classList.toggle('fa-chevron-down')
-        })
-      })
-    })
-})
+  function createModule(module, contentDiv) {
+    const moduleDiv = `
+      <div class="module">
+        <a href="/modules/module/${module.id}/">
+          <img src="${module.image}"/>
+          <h3>${module.title}</h3>
+          <h2>${module.description}</h2>
+        </a>
+      </div>`;
+    contentDiv.innerHTML += moduleDiv;
+  }
+});

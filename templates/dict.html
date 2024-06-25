@@ -24,15 +24,15 @@
           <h4 id="suggest">You may want to try these:</h4>
           <div class="dict__items">
             <div class="dict__item">
-              <button class="itemBtn" id="helloBtn">Hello</button>
+              <button onclick="handleSearch('hello')" class="itemBtn" id="helloBtn">Hello</button>
             </div>
             <div class="dict__item">
-              <button class="itemBtn" id="worldBtn">World</button>
-            </div>
+              <button onclick="handleSearch('world')" class="itemBtn" id="worldBtn">World</button>
+           </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
+  <script src="{% static 'js/search.js' %}"></script>
 {% endblock %}
