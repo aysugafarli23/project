@@ -18,7 +18,9 @@
           <div class="dict__input">
             <input id="dictInput" type="text" placeholder="What do you want to pronounce..." autocomplete="on" />
           </div>
-          <button class="searchBtn">Hear Pronunciation</button>
+          <form action="{% url 'dictionary:search' %}" method="get">
+            <button class="searchBtn">Hear Pronunciation</button>
+          </form>
         </div>
         <div class="dict__suggestions">
           <h4 id="suggest">You may want to try these:</h4>

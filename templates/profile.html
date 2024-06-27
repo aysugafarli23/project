@@ -1,7 +1,29 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block nav__title %}Profile{% endblock nav__title %}
 
 {% block body %}
+
+<div class="profile__container">
+    <div class="profile__menuCol">
+        <div class="profile__menu">
+            <div class="profile__menuItem">
+                <img src="{% static 'static/images/logo.jpeg' %}" alt="Profile Picture">
+                <span>{{ user.username }}</span>
+            </div>
+            <div class="profile__menuItem">Coaching Credit: 0</div>
+            <div class="profile__menuItem"><a href="#">Terms & Conditions</a></div>
+        </div>
+    </div>
+    <div class="profile__contentCol">
+        <h1>Profile Page</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+</div>
 
 {% endblock body %}

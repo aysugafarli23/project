@@ -25,13 +25,26 @@ def dictPage(request):
 
 
 
-
 def searchPage(request):
+    # Contact form logic
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Thank you for your message.')
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+    else:
+        form = ContactForm()
+
     current_url = resolve(request.path_info).url_name
-    query = request.GET.get('word', '')
+    query = ''  # Reset the query to an empty string
+
+    if 'q' in request.GET:
+        query = request.GET['q'].strip()
 
     context = {
         'current_url': current_url,
+        'form': form,
         'query': query,
     }
 

@@ -7,9 +7,12 @@
 {% block body %}
 <div class="search">
     <!-- 1. The widget will replace this <div> tag. -->
-        <div id="widget-1"></div>
+        <div id="widget-1">
+            <form id="searchForm" method="GET" action="">
+                <input type="text" class="form-control mb-3" id="exampleFormControlInput1" placeholder="Enter Word Here" value="{{ query }}">
+              </form>
+        </div>
 </div>
 
 <script src="{% static 'js/search.js' %}"></script>
-{% comment %} <script src="https://youglish.com/public/emb/widget.js"></script> {% endcomment %}
 {% endblock body %}
