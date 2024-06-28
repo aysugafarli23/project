@@ -17,12 +17,19 @@
         </div>
     </div>
     <div class="profile__contentCol">
-        <h1>Profile Page</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Save Changes</button>
-        </form>
+   {% block profile__update__content %}
+    <h2>User Profile</h2>
+    <p>Username: {{ profile.user.username }}</p>
+    <p>Email: {{ profile.email }}</p>
+    <p>Country: {{ profile.country }}</p>
+    <p>Gender: {{ profile.gender }}</p>
+    <p>Language: {{ profile.language }}</p>
+    <p>Age: {{ profile.age }}</p>
+    <a href="#">Edit</a>
+   {% endblock profile__update__content %}
+
+
+    
     </div>
 </div>
 

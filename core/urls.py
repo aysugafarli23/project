@@ -18,22 +18,29 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from account.views import *
+from django.contrib.auth import views as auth_views  
+from users.forms import LoginForm
+from users.views import *
 from module.views import *
 from dictionary.views import *
 from profiles.views import *
 from contact.views import *
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', modulesPage, name = "contact"),
+    path('register/', RegisterView.as_view(), name='users-register'),
+    path('login/', CustomLoginView.as_view(redirect_authenticated_user=True, template_name='login.html', authentication_form=LoginForm), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'),
     path('modules/', modulesPage, name="modules"),
     path('modules/', include("module.urls")),
     path('modules-api/', include("module.api.urls"), name="modules-api"),
     path('dictionary/', dictPage, name = "dictionary"),
     path('dictionary/', include("dictionary.urls")),
     path('profile/', profilePage, name="profile"),
+    path('profile/', include('profiles.urls')),
     path('contact/', include('contact.urls')),
 ]
 
