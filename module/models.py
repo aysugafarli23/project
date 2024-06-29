@@ -2,21 +2,21 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Unit(models.Model):
+class Module(models.Model):
     title = models.CharField(max_length=200)
 
     def __str__(self):
         return f"{self.title}"
     
-class Module(models.Model):
-    unit = models.ForeignKey(Unit, related_name='modules', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="Module Images", blank=True, null=True)
+class Lesson(models.Model):
+    module = models.ForeignKey(Module, related_name='lessons', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="Lesson Images", blank=True, null=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
     details = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.unit.title} - {self.title}"
+        return f"{self.module.title} - {self.title}"
 
 class Content(models.Model):
     title = models.CharField(max_length=200)
@@ -33,7 +33,7 @@ class Content(models.Model):
 
 class Section(models.Model):
     title = models.CharField(max_length=200)
-    module = models.ManyToManyField(Module, related_name='sections')
+    lesson = models.ManyToManyField(Module, related_name='sections')
     contents = models.ManyToManyField(Content, related_name='sections')
 
     def __str__(self):

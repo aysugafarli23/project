@@ -4,17 +4,17 @@ from .views import *
 app_name = "module"
 
 urlpatterns = [    
-    path("units/create/", UnitCreateAPIView.as_view(), name="unit-create"),
-    path("units/list/", UnitListAPIView.as_view(), name="unit-list"),
-    path("units/detail/<pk>/", UnitDetailAPIView.as_view(), name="unit-detail"),
-    path("units/update/<pk>/", UnitUpdateAPIView.as_view(), name="unit-update"),
-    path("units/delete/<pk>/", UnitDeleteAPIView.as_view(), name="unit-delete"),
-    
     path("modules/create/", ModuleCreateAPIView.as_view(), name="module-create"),
     path("modules/list/", ModuleListAPIView.as_view(), name="module-list"),
     path("modules/detail/<pk>/", ModuleDetailAPIView.as_view(), name="module-detail"),
     path("modules/update/<pk>/", ModuleUpdateAPIView.as_view(), name="module-update"),
     path("modules/delete/<pk>/", ModuleDeleteAPIView.as_view(), name="module-delete"),
+    
+    path("lessons/create/", LessonCreateAPIView.as_view(), name="lesson-create"),
+    path("lessons/list/", LessonListAPIView.as_view(), name="lesson-list"),
+    path("lessons/detail/<pk>/", LessonDetailAPIView.as_view(), name="lesson-detail"),
+    path("lessons/update/<pk>/", LessonUpdateAPIView.as_view(), name="lesson-update"),
+    path("lessons/delete/<pk>/", LessonDeleteAPIView.as_view(), name="lesson-delete"),
     
     path("sections/create/", SectionCreateAPIView.as_view(), name="section-create"),
     path("sections/list/", SectionListAPIView.as_view(), name="section-list"),

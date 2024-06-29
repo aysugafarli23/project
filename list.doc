@@ -1,11 +1,12 @@
 Order:
 
 -Modules
- --Mini quizz game
+ --Mini matching game via tapping
  --Score
  --OpenAI
+ --RECORDING
 -Profile
--RegisterForum
+ --RegisterForum
  --Billing System
  --Login Forum
 -ContactForum

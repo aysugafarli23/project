@@ -6,39 +6,11 @@ from rest_framework.generics import (
     UpdateAPIView,
     CreateAPIView
 )
-from .serializers import UnitSerializer, ModuleSerializer, SectionSerializer, ContentSerializer, ScoreSerializer
-from ..models import Unit, Module, Section, Content, Score
+from .serializers import ModuleSerializer, LessonSerializer, SectionSerializer, ContentSerializer, ScoreSerializer
+from ..models import Module, Lesson, Section, Content, Score
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
-
-class UnitCreateAPIView(CreateAPIView):
-    queryset = Unit.objects.all()
-    serializer_class = UnitSerializer
-    def perform_update(self, serializer):
-        serializer.save(user = self.request.user)
-
-class UnitListAPIView(ListAPIView):
-    queryset = Unit.objects.all()
-    serializer_class = UnitSerializer
-        
-class UnitDetailAPIView(RetrieveAPIView):
-    queryset = Unit.objects.all()
-    serializer_class = UnitSerializer
-    lookup_field = 'pk'
-    
-class UnitDeleteAPIView(DestroyAPIView):
-    queryset =Unit.objects.all()
-    serializer_class =UnitSerializer
-    lookup_field = "pk"
-    
-class UnitUpdateAPIView(UpdateAPIView):
-    queryset =Unit.objects.all()
-    serializer_class =UnitSerializer
-    lookup_field = "pk"
-    def perform_update(self, serializer):
-       serializer.save(user = self.request.user)
-       
 
 class ModuleCreateAPIView(CreateAPIView):
     queryset = Module.objects.all()
@@ -49,23 +21,51 @@ class ModuleCreateAPIView(CreateAPIView):
 class ModuleListAPIView(ListAPIView):
     queryset = Module.objects.all()
     serializer_class = ModuleSerializer
+        
+class ModuleDetailAPIView(RetrieveAPIView):
+    queryset = Module.objects.all()
+    serializer_class = ModuleSerializer
+    lookup_field = 'pk'
+    
+class ModuleDeleteAPIView(DestroyAPIView):
+    queryset =Module.objects.all()
+    serializer_class =ModuleSerializer
+    lookup_field = "pk"
+    
+class ModuleUpdateAPIView(UpdateAPIView):
+    queryset =Module.objects.all()
+    serializer_class =ModuleSerializer
+    lookup_field = "pk"
+    def perform_update(self, serializer):
+       serializer.save(user = self.request.user)
+       
+
+class LessonCreateAPIView(CreateAPIView):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonSerializer
+    def perform_update(self, serializer):
+        serializer.save(user = self.request.user)
+
+class LessonListAPIView(ListAPIView):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['unit']
     search_fields = ['unit__title', 'title']
 
-class ModuleDetailAPIView(RetrieveAPIView):
-    queryset = Module.objects.all()
-    serializer_class = ModuleSerializer
+class LessonDetailAPIView(RetrieveAPIView):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonSerializer
     lookup_field = "pk"
 
-class ModuleDeleteAPIView(DestroyAPIView):
-    queryset = Module.objects.all()
-    serializer_class = ModuleSerializer
+class LessonDeleteAPIView(DestroyAPIView):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonSerializer
     lookup_field = "pk"
 
-class ModuleUpdateAPIView(UpdateAPIView):
-    queryset = Module.objects.all()
-    serializer_class = ModuleSerializer
+class LessonUpdateAPIView(UpdateAPIView):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonSerializer
     lookup_field = "pk"
     def perform_update(self, serializer):
         serializer.save(user = self.request.user)

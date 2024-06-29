@@ -3,20 +3,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   fetch('http://127.0.0.1:8000/modules-api/units/list')
     .then(res => res.json())
-    .then(units => units.map(unit => createUnit(unit)))
+    .then(modules => modules.map(module => createUnit(module)))
 
-  function createUnit (unit) {
-    const unitDiv = `
-      <div class="unit">
-        <button class="collapsible">${unit.title}<i class="fas fa-chevron-up"></i></button>
-        <div class="content" id="unit-${unit.id}-content"></div>
+  function createUnit (module) {
+    const moduleDiv = `
+      <div class="module">
+        <button class="collapsible">${module.title}<i class="fas fa-chevron-up"></i></button>
+        <div class="content" id="module-${module.id}-content"></div>
       </div>`
-    collapsibleContainer.innerHTML += unitDiv
+    collapsibleContainer.innerHTML += moduleDiv
 
-    const contentDiv = document.getElementById(`unit-${unit.id}-content`)
-    fetch(`http://127.0.0.1:8000/modules-api/modules/list/?unit=${unit.id}`)
+    const contentDiv = document.getElementById(`module-${module.id}-content`)
+    fetch(`http://127.0.0.1:8000/modules-api/modules/list/?module=${module.id}`)
       .then(res => res.json())
-      .then(modules => modules.map(module => createModule(module, contentDiv)))
+      .then(lessons => lessons.map(lesson => createModule(lesson, contentDiv)))
 
     // Add event listener to collapsible button
     const buttons = collapsibleContainer.querySelectorAll('.collapsible')
@@ -34,15 +34,15 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
-  function createModule (module, contentDiv) {
-    const moduleDiv = `
-      <div class="module">
-        <a href="/modules/module/${module.id}/">
-          <img src="${module.image}"/>
-          <h3>${module.title}</h3>
-          <h2>${module.description}</h2>
+  function createModule (lesson, contentDiv) {
+    const lessonDiv = `
+      <div class="lesson">
+        <a href="/lessons/lesson/${lesson.id}/">
+          <img src="${lesson.image}"/>
+          <h3>${lesson.title}</h3>
+          <h2>${lesson.description}</h2>
         </a>
       </div>`
-    contentDiv.innerHTML += moduleDiv
+    contentDiv.innerHTML += lessonDiv
   }
 })

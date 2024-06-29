@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Content, Section, Module, Unit, Score
+from ..models import Content, Section, Module, Lesson, Score
 
 class ContentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,21 +11,21 @@ class SectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Section
-        fields = ['id', 'title', 'module', 'contents']
+        fields = ['id', 'title', 'lesson', 'contents']
 
-class ModuleSerializer(serializers.ModelSerializer):
+class LessonSerializer(serializers.ModelSerializer):
     sections = SectionSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Module
-        fields = ['id', 'unit', 'image', 'title', 'description', 'details', 'sections']
+        model = Lesson
+        fields = ['id', 'module', 'image', 'title', 'description', 'details', 'sections']
         
-class UnitSerializer(serializers.ModelSerializer):
-    modules = ModuleSerializer(many=True, read_only=True)
+class ModuleSerializer(serializers.ModelSerializer):
+    lessons = LessonSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Unit
-        fields = ['id', 'title', 'modules']
+        model = Module
+        fields = ['id', 'title', 'lessons']
         
 class ScoreSerializer(serializers.ModelSerializer):
     class Meta:

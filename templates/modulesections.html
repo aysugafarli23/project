@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block nav__title %}
-    {{ module.title }}
+    {{ lesson.title }}
 {% endblock nav__title %}
 
 {% block body %}
-    <div class="module__container">
+    <div class="lesson__container">
         {% for section_content in section_contents %}
         <h2>{{ section_content.section.title }}</h2>
         <ul>

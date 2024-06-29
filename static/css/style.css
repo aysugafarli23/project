@@ -385,11 +385,11 @@ nav {
 
 
 /*-------------------------------------module.html style ------------------------------------*/
-.modules__container{
+.lessons__container{
     width: 80%;
 }
 
-.unit{
+.module{
     margin: 150px;
 }
 
@@ -413,7 +413,7 @@ nav {
     background-color: #f1f1f1;
   }
 
-  .module{
+  .lesson{
     width:100%;
 
   }
