@@ -23,7 +23,6 @@ from users.forms import LoginForm
 from users.views import *
 from module.views import *
 from dictionary.views import *
-from profiles.views import *
 from contact.views import *
 from django.urls import re_path
 
@@ -32,18 +31,19 @@ from django.urls import re_path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', modulesPage, name = "contact"),
-    path('register/', RegisterView.as_view(), name='users-register'),
-    path('login/', CustomLoginView.as_view(redirect_authenticated_user=True, template_name='login.html', authentication_form=LoginForm), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'),
-    path('password-change/', ChangePasswordView.as_view(), name='password_change'),
-    #new url entry to include the social auth's urls
-    re_path(r'^oauth/', include('social_django.urls', namespace='social')),
+    # path('register/', RegisterView.as_view(), name='users-register'),
+    # path('login/', CustomLoginView.as_view(redirect_authenticated_user=True, template_name='login.html', authentication_form=LoginForm), name='login'),
+    # path('logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'),
+    # path('password-change/', ChangePasswordView.as_view(), name='password_change'),
+    # #new url entry to include the social auth's urls
+    # re_path(r'^oauth/', include('social_django.urls', namespace='social')),
+    # path('profile/', profile, name="profile"),
+    path('users/', include("users.urls")),
     path('modules/', modulesPage, name="modules"),
     path('modules/', include("module.urls")),
     path('modules-api/', include("module.api.urls"), name="modules-api"),
     path('dictionary/', dictPage, name = "dictionary"),
     path('dictionary/', include("dictionary.urls")),
-    path('profile/', profile, name="profile"),
     path('contact/', include('contact.urls')),
 ]
 
