@@ -1,18 +1,40 @@
-{% extends "base.html" %}
-
+{% extends 'base.html' %}
 {% load static %}
 
-{% block nav__title %}{% endblock nav__title %}
+{% block nav__title %}
+  Search Results
+{% endblock %}
 
 {% block body %}
-<div class="search">
-    <!-- 1. The widget will replace this <div> tag. -->
-        <div id="widget-1">
-            <form id="searchForm" method="GET" action="">
-                <input type="text" class="form-control mb-3" id="exampleFormControlInput1" placeholder="Enter Word Here" value="{{ query }}">
-              </form>
-        </div>
+<div class="search__container">
+  <div id="widget-1"></div>
 </div>
 
-<script src="{% static 'js/search.js' %}"></script>
-{% endblock body %}
+
+<script>
+  var tag = document.createElement('script');
+
+  tag.src = "https://youglish.com/public/emb/widget.js";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+  // 3. This function creates a widget after the API code downloads.
+  var widget;
+  function onYouglishAPIReady() {
+    widget = new YG.Widget("widget-1", {
+      components: 8408 // search box & caption
+    });
+  }
+
+  function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  }
+
+  function handleSearch() {
+    var inputText = document.getElementById('searchInput').value;
+    widget.fetch(inputText, "english"); // Fetch the results for the initial search term
+  }
+</script>
+{% endblock %}

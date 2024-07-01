@@ -1,8 +1,8 @@
-from django.urls import path, include
+from django.urls import path
 from .views import *
 
 app_name = "dictionary"
 
 urlpatterns = [
-    path('search/', searchPage, name="search"),
+    path(f'search/', searchPage, name="search"),
 ]

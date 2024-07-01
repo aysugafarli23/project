@@ -16,12 +16,10 @@
       <div class="dict__content">
         <div class="dict__searchHolder">
           <div class="dict__input">
-            <input id="dictInput" type="text" placeholder="What do you want to pronounce..." autocomplete="on" />
-          </div>
-          <form action="{% url 'dictionary:search' %}" method="get">
-            <button class="searchBtn">Hear Pronunciation</button>
-          </form>
-        </div>
+            <input id="searchInput" type="text" placeholder="What do you want to pronounce..." onkeypress="handleKeyPress(event)" autocomplete="on" />
+            </div>
+            <a href="{% url "dictionary:search" %}?q={{ searchInput.value }}"><button id="searchButton" onclick="handleSearch()" class="searchBtn">Hear Pronunciation</button></a> 
+           </div>
         <div class="dict__suggestions">
           <h4 id="suggest">You may want to try these:</h4>
           <div class="dict__items">
@@ -36,5 +34,6 @@
       </div>
     </div>
   </div>
+
   <script src="{% static 'js/search.js' %}"></script>
 {% endblock %}

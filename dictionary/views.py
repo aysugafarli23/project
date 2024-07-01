@@ -24,7 +24,6 @@ def dictPage(request):
     return render(request, 'dict.html', context)
 
 
-
 def searchPage(request):
     # Contact form logic
     if request.method == 'POST':
@@ -37,10 +36,7 @@ def searchPage(request):
         form = ContactForm()
 
     current_url = resolve(request.path_info).url_name
-    query = ''  # Reset the query to an empty string
-
-    if 'q' in request.GET:
-        query = request.GET['q'].strip()
+    query = request.GET.get('q', '')  
 
     context = {
         'current_url': current_url,
