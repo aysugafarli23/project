@@ -155,11 +155,10 @@ LOGIN_URL = 'login'
 #Sign in with social apps
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
-
     'django.contrib.auth.backends.ModelBackend',
 )
 
 
 # social auth configs for google
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = str(os.getenv('GOOGLE_KEY'))
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = str(os.getenv('GOOGLE_SECRET'))
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = str(os.getenv('703386953476-b02pq8gmoj1lms8i5kcnqjf4t89h1iul.apps.googleusercontent.com'))
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = str(os.getenv('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'))
