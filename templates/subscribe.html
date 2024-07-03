@@ -11,7 +11,20 @@
   <h2>Available Plans:</h2>
   <ul>
     {% for product in products %}
-      <li>{{ product.name }} - ${{ product.amount_monthly|floatformat:2 }}</li>
+      <li> <h2>Our Plans</h2>
+        <div class="plans">
+          {% for product in products %}
+            <div class="plan">
+              <h3>{{ product.name }}</h3>
+              <p>{{ product.description }}</p>
+              <ul>
+                {% for price in product.prices.all %}
+                  <li>{{ price.nickname }}: {{ price.unit_amount  }} {{ price.currency }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endfor %}
+        </div></li>
     {% endfor %}
   </ul>
 {% endblock %}

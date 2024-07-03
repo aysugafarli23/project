@@ -8,5 +8,4 @@ urlpatterns = [
     path('subscribe/', subscribe, name='subscribe'),
     path('success/', success, name='success'),
     path('cancel/', cancel, name='cancel'),
-    path('plans/', plans, name='plans')
 ]

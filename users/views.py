@@ -112,6 +112,7 @@ class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
 # stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
 
 def subscribe(request):
+    products = Product.objects.all()
     if request.method == 'POST':
         form = SubscriptionForm(request.POST)
         if form.is_valid():
@@ -139,7 +140,7 @@ def subscribe(request):
                 return render(request, 'error.html', {'message': str(e)})
     else:
         form = SubscriptionForm()
-    return render(request, 'subscribe.html', {'form': form})
+    return render(request, 'subscribe.html', {'form': form, 'products': products})
 
 def success(request):
     # Handle the success callback from Stripe
@@ -148,9 +149,3 @@ def success(request):
 def cancel(request):
     # Handle the cancellation callback from Stripe
     return render(request, 'cancel.html')
-
-
-def plans(request):
-    # Fetch all products and their prices from the local database
-    products = Product.objects.all()
-    return render(request, 'plans.html', {'products': products})
