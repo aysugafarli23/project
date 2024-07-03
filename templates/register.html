@@ -69,28 +69,6 @@
                 </div>
                 <div class="form-group mt-4 mb-0">
                   <div id="paypal-button-container-P-8C4818300V0769151M2BXPVY"></div>
-                  <script src="https://www.paypal.com/sdk/js?client-id=ARlCjPZcYLGeDLalL55MtbLAsmGTT26QygS_HAJGTwz89BsE4aUKQUlvxiM2pCqeU9T53xeE0-sk7XM_&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
-                  <script>
-                    paypal
-                      .Buttons({
-                        style: {
-                          shape: 'pill',
-                          color: 'blue',
-                          layout: 'vertical',
-                          label: 'paypal'
-                        },
-                        createSubscription: function (data, actions) {
-                          return actions.subscription.create({
-                            /* Creates the subscription */
-                            plan_id: 'P-8C4818300V0769151M2BXPVY'
-                          })
-                        },
-                        onApprove: function (data, actions) {
-                          alert(data.subscriptionID) // You can add optional success message for the subscriber here
-                        }
-                      })
-                      .render('#paypal-button-container-P-8C4818300V0769151M2BXPVY') // Renders the PayPal button
-                  </script>
                 </div>
                 <div class="form-group mt-4 mb-0">
                   <button type="submit" class="col-md-12 btn btn-dark">Sign Up</button><br /><br />

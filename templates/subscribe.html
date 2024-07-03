@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block body %}
+  <h2>Select a Plan:</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Subscribe</button>
+  </form>
+  <hr />
+  <h2>Available Plans:</h2>
+  <ul>
+    {% for product in products %}
+      <li>{{ product.name }} - ${{ product.amount_monthly|floatformat:2 }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

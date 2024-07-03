@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'social_django',
+    'djstripe',
 ]
 
 MIDDLEWARE = [
@@ -161,4 +162,13 @@ AUTHENTICATION_BACKENDS = (
 
 # social auth configs for google
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = str(os.getenv('703386953476-b02pq8gmoj1lms8i5kcnqjf4t89h1iul.apps.googleusercontent.com'))
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = str(os.getenv('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'))
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = str(os.getenv('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'))
+
+#Stripe configuration
+STRIPE_TEST_PUBLIC_KEY = os.environ.get("STRIPE_TEST_PUBLIC_KEY","pk_test_51PX8O7Ee6ATWy3dPTPlqOlU0TJz9bISnx3MgYkl8rHIfnMDO4DpppPz7vheR7U5T6he6BhnrMX84UsGOIOifo7OY00y8JUG6Zl")
+# STRIPE_TEST_SECRET_KEY = os.environ.get("STRIPE_TEST_SECRET_KEY","sk_test_51PX8O7Ee6ATWy3dP72TIFrAcaqcFaFOW6P0R9tPescQXCxvgPSt8UHw5ZOjxW6pQKpjzFu7Dr5DESmzsfyZRGsR100cxdm7KBn")
+DJSTRIPE_WEBHOOK_SECRET = 'whsec_784668e2972b0114189003dcacc5e278930b5c00d2abfd6e894860707e214aa6'
+
+# Use test keys while in development
+STRIPE_LIVE_MODE = False  # Change to True in production
+DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"

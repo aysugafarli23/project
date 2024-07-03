@@ -42,3 +42,12 @@ class UpdateProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['avatar', 'bio']
+   
+        
+#Stripe Subscription
+class SubscriptionForm(forms.Form):
+    PLAN_CHOICES = [
+        ('basic', 'Basic Plan'),
+        ('premium', 'Premium Plan'),
+    ]
+    plan = forms.ChoiceField(choices=PLAN_CHOICES)

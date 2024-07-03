@@ -45,6 +45,7 @@ urlpatterns = [
     path('dictionary/', dictPage, name = "dictionary"),
     path('dictionary/', include("dictionary.urls")),
     path('contact/', include('contact.urls')),
+    path("stripe/", include("djstripe.urls", namespace="djstripe")),
 ]
 
 if settings.DEBUG:

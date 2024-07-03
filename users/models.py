@@ -24,5 +24,21 @@ class Profile(models.Model):
             new_img = (100, 100)
             img.thumbnail(new_img)
             img.save(self.avatar.path)
-            
-        
+     
+     
+#Stripe Subscription            
+class Plan(models.Model):
+    name = models.CharField(max_length=100)
+    stripe_price_id = models.CharField(max_length=100)  # Stripe Price ID
+
+    def __str__(self):
+        return self.name
+
+class Subscription(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    stripe_subscription_id = models.CharField(max_length=100)
+    plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.plan.name}'    

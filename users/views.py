@@ -8,6 +8,10 @@ from contact.forms import ContactForm
 from django.contrib.auth.decorators import login_required  
 from django.urls import reverse_lazy, resolve
 import os
+from django.conf import settings
+from djstripe.models import Customer, Price, Product
+import stripe
+from .models import *
 
 class RegisterView(View):
     form_class = RegisterForm
@@ -100,4 +104,53 @@ class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
     template_name = 'change_password.html'
     success_message = "Successfully Changed Your Password"
     success_url = reverse_lazy('profile')
+   
     
+#Stripe configuration
+
+
+# stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+
+def subscribe(request):
+    if request.method == 'POST':
+        form = SubscriptionForm(request.POST)
+        if form.is_valid():
+            plan_name = form.cleaned_data['plan']
+            plan = Plan.objects.get(name=plan_name)
+
+            try:
+                customer, created = Customer.get_or_create(subscriber=request.user)
+
+                checkout_session = stripe.checkout.Session.create(
+                    payment_method_types=['card'],
+                    line_items=[
+                        {
+                            'price': plan.stripe_price_id,
+                            'quantity': 1,
+                        },
+                    ],
+                    mode='subscription',
+                    customer=customer.id,
+                    success_url='http://127.0.0.1:8000/success/',
+                    cancel_url='http://127.0.0.1:8000/cancel/',
+                )
+                return redirect(checkout_session.url)
+            except Exception as e:
+                return render(request, 'error.html', {'message': str(e)})
+    else:
+        form = SubscriptionForm()
+    return render(request, 'subscribe.html', {'form': form})
+
+def success(request):
+    # Handle the success callback from Stripe
+    return render(request, 'success.html')
+
+def cancel(request):
+    # Handle the cancellation callback from Stripe
+    return render(request, 'cancel.html')
+
+
+def plans(request):
+    # Fetch all products and their prices from the local database
+    products = Product.objects.all()
+    return render(request, 'plans.html', {'products': products})
