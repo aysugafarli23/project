@@ -1,30 +1,14 @@
 {% extends 'base.html' %}
 
 {% block body %}
-  <h2>Select a Plan:</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Subscribe</button>
-  </form>
-  <hr />
-  <h2>Available Plans:</h2>
-  <ul>
-    {% for product in products %}
-      <li> <h2>Our Plans</h2>
-        <div class="plans">
-          {% for product in products %}
-            <div class="plan">
-              <h3>{{ product.name }}</h3>
-              <p>{{ product.description }}</p>
-              <ul>
-                {% for price in product.prices.all %}
-                  <li>{{ price.nickname }}: {{ price.unit_amount  }} {{ price.currency }}</li>
-                {% endfor %}
-              </ul>
-            </div>
-          {% endfor %}
-        </div></li>
-    {% endfor %}
-  </ul>
+<form method="post" id="payment-form">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <label>Card Details</label>
+  <div id="card-element"></div>
+  <div id="card-errors" role="alert"></div>
+  <button type="submit" id="pay-button">Pay</button>
+</form>
+
+
 {% endblock %}

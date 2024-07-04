@@ -9,9 +9,11 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy, resolve
 import os
 from django.conf import settings
-from djstripe.models import Customer, Price, Product
+from djstripe.models import Customer, Product, Price, Plan as StripePlan
 import stripe
 from .models import *
+from django.http import JsonResponse
+
 
 class RegisterView(View):
     form_class = RegisterForm
@@ -108,16 +110,30 @@ class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
     
 #Stripe configuration
 
+def list_plans(request):
+    plans = StripePlan.objects.all()
+    plan_list = []
+    for plan in plans:
+        plan_data = {
+            "id": plan.id,
+            "nickname": plan.nickname,
+            "product": str(plan.product),  # Convert Product object to string
+            "amount": plan.amount,
+            "currency": plan.currency,
+            "interval": plan.interval,
+        }
+        plan_list.append(plan_data)
+    return JsonResponse(plan_list, safe=False)
+
 
 # stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
-
 def subscribe(request):
     products = Product.objects.all()
     if request.method == 'POST':
         form = SubscriptionForm(request.POST)
         if form.is_valid():
-            plan_name = form.cleaned_data['plan']
-            plan = Plan.objects.get(name=plan_name)
+            price_pk = form.cleaned_data['plan']
+            price = Price.objects.get(pk=price_pk)
 
             try:
                 customer, created = Customer.get_or_create(subscriber=request.user)
@@ -126,7 +142,7 @@ def subscribe(request):
                     payment_method_types=['card'],
                     line_items=[
                         {
-                            'price': plan.stripe_price_id,
+                            'price': price.stripe_price_id,
                             'quantity': 1,
                         },
                     ],

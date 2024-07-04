@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import Profile
+from djstripe.models import *
 
 class RegisterForm(UserCreationForm):
     # fields we want to include and customize in our form
@@ -45,9 +46,23 @@ class UpdateProfileForm(forms.ModelForm):
    
         
 #Stripe Subscription
+PLACEHOLDER_PLAN_CHOICES = [
+    ('price_1NxoPmEe6AtWy3dPwOwFqHnG', 'Free Plan'),
+    ('price_1NxoPHEe6AtWy3dPOkj2cVfj', 'Pro Plan'),
+]
+
 class SubscriptionForm(forms.Form):
-    PLAN_CHOICES = [
-        ('basic', 'Basic Plan'),
-        ('premium', 'Premium Plan'),
-    ]
-    plan = forms.ChoiceField(choices=PLAN_CHOICES)
+    plan = forms.ChoiceField(choices=[])
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['plan'].choices = [
+            ('', '- Select a plan -')
+        ] + [(pk, label) for pk, label in PLACEHOLDER_PLAN_CHOICES]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        plan_pk = cleaned_data.get("plan")
+        if plan_pk and not Price.objects.filter(product__nickname=plan_pk).exists():
+            raise forms.ValidationError('Selected plan cannot be processed.')
+        return cleaned_data
