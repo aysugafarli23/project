@@ -156,7 +156,9 @@ def subscribe(request):
                 return render(request, 'error.html', {'message': str(e)})
     else:
         form = SubscriptionForm()
-    return render(request, 'subscribe.html', {'form': form, 'products': products})
+    return render(request, 'subscribe.html', {'form': form,
+        'products': products,
+        'stripe_public_key': settings.STRIPE_TEST_PUBLIC_KEY})
 
 def success(request):
     # Handle the success callback from Stripe
