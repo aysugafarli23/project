@@ -422,3 +422,12 @@ nav {
 #btns img{
     height: 30px;
 }
+
+/*--------------------------------------Register fom style ----------------------------------------*/
+.register__form__label:{
+    font-size: 20px;
+    font-weight: 600;
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-start;
+}

@@ -109,56 +109,36 @@ class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
    
     
 #Stripe configuration
+stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
 
-def list_plans(request):
-    plans = StripePlan.objects.all()
-    plan_list = []
-    for plan in plans:
-        plan_data = {
-            "id": plan.id,
-            "nickname": plan.nickname,
-            "product": str(plan.product),  # Convert Product object to string
-            "amount": plan.amount,
-            "currency": plan.currency,
-            "interval": plan.interval,
-        }
-        plan_list.append(plan_data)
-    return JsonResponse(plan_list, safe=False)
-
-
-# stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
 def subscribe(request):
-    products = Product.objects.all()
     if request.method == 'POST':
-        form = SubscriptionForm(request.POST)
-        if form.is_valid():
-            price_pk = form.cleaned_data['plan']
-            price = Price.objects.get(pk=price_pk)
+        plan_id = request.POST.get('plan_id')
+        price = Price.objects.get(id=plan_id)
+        
+        try:
+            customer, created = Customer.get_or_create(subscriber=request.user)
 
-            try:
-                customer, created = Customer.get_or_create(subscriber=request.user)
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[
+                    {
+                        'price': price.id,
+                        'quantity': 1,
+                    },
+                ],
+                mode='subscription',
+                customer=customer.id,
+                success_url='http://127.0.0.1:8000/users/success/',
+                cancel_url='http://127.0.0.1:8000/users/cancel/',
+            )
+            return redirect(checkout_session.url)
+        except Exception as e:
+            return render(request, 'error.html', {'message': str(e)})
 
-                checkout_session = stripe.checkout.Session.create(
-                    payment_method_types=['card'],
-                    line_items=[
-                        {
-                            'price': price.stripe_price_id,
-                            'quantity': 1,
-                        },
-                    ],
-                    mode='subscription',
-                    customer=customer.id,
-                    success_url='http://127.0.0.1:8000/success/',
-                    cancel_url='http://127.0.0.1:8000/cancel/',
-                )
-                return redirect(checkout_session.url)
-            except Exception as e:
-                return render(request, 'error.html', {'message': str(e)})
-    else:
-        form = SubscriptionForm()
-    return render(request, 'subscribe.html', {'form': form,
-        'products': products,
-        'stripe_public_key': settings.STRIPE_TEST_PUBLIC_KEY})
+    prices = Price.objects.all()
+    return render(request, 'subscribe.html', {'prices': prices})
+
 
 def success(request):
     # Handle the success callback from Stripe
