@@ -1,6 +1,7 @@
 # myapp/models.py
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
+
 
 class Module(models.Model):
     title = models.CharField(max_length=200)
@@ -25,7 +26,7 @@ class Content(models.Model):
     audio = models.FileField(upload_to='content_audio/', blank=True, null=True)
     audio_file = models.FileField(upload_to="recordings/", null=True, blank=True)
     video = models.FileField(upload_to='content_videos/', blank=True, null=True)
-    user = models.ForeignKey(User, related_name='contents', on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='contents', on_delete=models.CASCADE, null=True)
 
 
     def __str__(self):
@@ -40,7 +41,7 @@ class Section(models.Model):
         return f"{self.title}"
 
 class Score(models.Model):
-    user = models.ForeignKey(User, related_name='scores', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='scores', on_delete=models.CASCADE)
     content = models.ForeignKey(Content, related_name='scores', on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
 

@@ -1,66 +1,64 @@
 from django import forms
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import Profile
+from django.contrib.auth.forms import AuthenticationForm
+from .models import User, Profile
 from djstripe.models import *
+from django.urls import reverse_lazy
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 
-class RegisterForm(UserCreationForm):
-    PEOPLE_CHOICES = [
-        ('H', 'have told me that I have a strong accent.'),
-        ('O', 'often ask me to repeat what I said'),
-        ('S', 'speak too fast, and I have a hard time understanding.'),
-    ]
-    METHOD_CHOICES = [
-        ('B', 'Be better at my current job and get paid more'),
-        ('F', 'Find a new job'),
-        ('I', 'Improve my networking and relationships'),
-        ('T', 'To get better immersed in the American culture')
-    ]
-    USA_CHOICES = [
-        ('Y', 'Yes'),
-        ('N', 'No')
-    ]
-    SPEAK_CHOICES = [
-        ('1', '80% of the time or more'),
-        ('2', 'about 50% of the time'),
-        ('3', '10% of the time or less')
-    ]
-    MINUTE_CHOICES = [
-        ('1', '5-10 mins'),
-        ('2', '15-20 minute'),
-        ('3', '30 mins'),
-        ('4', 'More than that'),
-    ]
-    
+
+class RegisterForm(forms.ModelForm): 
     # fields we want to include and customize in our form
-    first_name = forms.CharField(max_length=100)
-    last_name = forms.CharField(max_length=100)
-    username = forms.CharField(max_length=100)
-    email = forms.EmailField( )
-    password1 = forms.CharField(max_length=50,  widget=forms.PasswordInput(attrs={'data-toggle': 'password', 'id': 'password',}))
-    password2 = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={'data-toggle': 'password','id': 'password',}))
     nativel = forms.ChoiceField(choices=[])
-    people = forms.ChoiceField(choices=PEOPLE_CHOICES, widget=forms.RadioSelect(attrs={'class': 'form-check-input'}))
-    method = forms.ChoiceField(choices=METHOD_CHOICES, widget=forms.RadioSelect(attrs={'class': 'form-check-input'}))
-    usa = forms.ChoiceField(choices=USA_CHOICES, widget=forms.RadioSelect(attrs={'class': 'forms-check-input'}))
-    speak = forms.ChoiceField(choices=SPEAK_CHOICES, widget=forms.RadioSelect(attrs={'class': 'form-check-input'}))
-    minute = forms.ChoiceField(choices=MINUTE_CHOICES, widget=forms.RadioSelect(attrs={'class': 'form-check-input'}))
-    
+    people = forms.ChoiceField(choices=User.People.choices)
+    method = forms.ChoiceField(choices=User.Method.choices)
+    usa = forms.ChoiceField(choices=User.USA.choices)
+    speak = forms.ChoiceField(choices=User.Speak.choices)
+    minute = forms.ChoiceField(choices=User.Minute.choices)
+
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2', 'nativel', 'people', 'method','usa','speak', 'minute']
+        fields = ['username', 'password', 'email', 'nativel', 'people', 'method','usa','speak', 'minute']
+        widgets = {
+            'password': forms.PasswordInput(attrs={'data-toggle':'password'}),
+        }
         
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
         self.fields['nativel'].choices = self.get_nativel_choices()
         for field in self.fields.values():
-           field.widget.attrs['class'] = 'form-control '
-           
+            field.widget.attrs['class'] = 'form-control'
 
+        self.helper = FormHelper(self)
+        # self.helper.form_action = reverse_lazy('login')
+        self.helper.form_id = 'register-form'
+        self.helper.attrs = {
+            'hx-post': reverse_lazy('login'),
+            'hx-target': '#register-form',
+            'hx-swap': 'outerHTML'
+        }
+        self.helper.add_input(Submit('submit', 'Submit'))
+      
+     
     def get_nativel_choices(self):
         with open('users/languages.txt') as f:
             nativels = f.read().splitlines()
         return [(nativel, nativel) for nativel in nativels]
+    
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if len(username) <= 3:
+            raise forms.ValidationError("Username is too short")
+        return username 
+        
+    
+    def save(self, commit=True):
+        """ Hash users's password on save """
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])
+        if commit:
+            user.save()
+        return user
         
 
 class LoginForm(AuthenticationForm):

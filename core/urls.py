@@ -30,8 +30,8 @@ from django.urls import re_path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', modulesPage, name = "contact"),
-    path('register/', RegisterView.as_view(), name='users-register'),
+    path('', modulesPage, name = "base"),
+    path('register/', register, name='users-register'),
     path('login/', CustomLoginView.as_view(redirect_authenticated_user=True, template_name='login.html', authentication_form=LoginForm), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'),
     path('password-change/', ChangePasswordView.as_view(), name='password_change'),

@@ -7,44 +7,34 @@ from .forms import *
 from contact.forms import ContactForm
 from django.contrib.auth.decorators import login_required  
 from django.urls import reverse_lazy, resolve
-import os
 from django.conf import settings
 from djstripe.models import Customer, Product, Price, Plan as StripePlan
 import stripe
 from .models import *
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.template.context_processors import csrf
+from crispy_forms.utils import render_crispy_form
 
 
-class RegisterView(View):
-    form_class = RegisterForm
-    initial = {'key': 'value'}
-    template_name = 'register.html'
+def register(request):
+    if request.method == 'GET':
+        context = {'form': RegisterForm()}
+        return render (request, 'register.html', context)
     
-    def dispatch(self, request, *args, **kwargs):
-        # will redirect to the home page if a user tries to access the register page while logged in
-        if request.user.is_authenticated:
-            return redirect(to='/')
-
-        # else process dispatch as it otherwise normally would
-        return super(RegisterView, self).dispatch(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form})
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-
+    elif request.method == 'POST':
+        form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+           user =   form.save()     
+           username = form.cleaned_data.get('username')
+           messages.success(request, f'Account created for {username}')
 
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}')
+           return redirect(to='profile')    
+       
+        ctx = {}
+        ctx.update(csrf(request))
+        form_html = render_crispy_form(form, context=ctx)
+        return HttpResponse(form_html)
 
-            return redirect(to='/')
-
-        return render(request, self.template_name, {'form': form})
-    
 
 # Class based view that extends from the built in login view to add a remember me functionality
 class CustomLoginView(LoginView):
@@ -109,7 +99,7 @@ class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
    
     
 #Stripe configuration
-stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+# stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
 
 def subscribe(request):
     if request.method == 'POST':

@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'django_filters',
     'social_django',
     'djstripe',
+    'crispy_forms',
+    'crispy_bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -166,9 +168,16 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = str(os.getenv('GOCSPX-slR-U4YhTvp4hBwZ5PE8BVi
 
 #Stripe configuration
 STRIPE_TEST_PUBLIC_KEY = os.environ.get("STRIPE_TEST_PUBLIC_KEY","pk_test_51PX8O7Ee6ATWy3dPTPlqOlU0TJz9bISnx3MgYkl8rHIfnMDO4DpppPz7vheR7U5T6he6BhnrMX84UsGOIOifo7OY00y8JUG6Zl")
-STRIPE_TEST_SECRET_KEY = os.environ.get("STRIPE_TEST_SECRET_KEY","sk_test_51PX8O7Ee6ATWy3dP72TIFrAcaqcFaFOW6P0R9tPescQXCxvgPSt8UHw5ZOjxW6pQKpjzFu7Dr5DESmzsfyZRGsR100cxdm7KBn")
+# STRIPE_TEST_SECRET_KEY = os.environ.get("STRIPE_TEST_SECRET_KEY","sk_test_51PX8O7Ee6ATWy3dP72TIFrAcaqcFaFOW6P0R9tPescQXCxvgPSt8UHw5ZOjxW6pQKpjzFu7Dr5DESmzsfyZRGsR100cxdm7KBn")
 DJSTRIPE_WEBHOOK_SECRET = 'whsec_784668e2972b0114189003dcacc5e278930b5c00d2abfd6e894860707e214aa6'
 
 # Use test keys while in development
 STRIPE_LIVE_MODE = False  # Change to True in production
 DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
+
+#Django Crispy Forms
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+#Abstract user class
+AUTH_USER_MODEL = 'users.User'
