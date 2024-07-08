@@ -10,27 +10,33 @@ from crispy_forms.layout import Submit
 class RegisterForm(forms.ModelForm): 
     # fields we want to include and customize in our form
     nativel = forms.ChoiceField(choices=[])
-    people = forms.ChoiceField(choices=User.People.choices)
-    method = forms.ChoiceField(choices=User.Method.choices)
-    usa = forms.ChoiceField(choices=User.USA.choices)
-    speak = forms.ChoiceField(choices=User.Speak.choices)
-    minute = forms.ChoiceField(choices=User.Minute.choices)
 
     class Meta:
         model = User
         fields = ['username', 'password', 'email', 'nativel', 'people', 'method','usa','speak', 'minute']
         widgets = {
             'password': forms.PasswordInput(attrs={'data-toggle':'password'}),
+            'people': forms.RadioSelect,
+            'method': forms.RadioSelect,
+            'usa': forms.RadioSelect,
+            'speak': forms.RadioSelect,
+            'minute': forms.RadioSelect,
         }
         
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
         self.fields['nativel'].choices = self.get_nativel_choices()
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
+        
+          
+        # Set choices without the blank option
+        self.fields['people'].choices = [(choice.value, choice.label) for choice in User.People]
+        self.fields['method'].choices = [(choice.value, choice.label) for choice in User.Method]
+        self.fields['usa'].choices = [(choice.value, choice.label) for choice in User.USA]
+        self.fields['speak'].choices = [(choice.value, choice.label) for choice in User.Speak]
+        self.fields['minute'].choices = [(choice.value, choice.label) for choice in User.Minute]
+
 
         self.helper = FormHelper(self)
-        # self.helper.form_action = reverse_lazy('login')
         self.helper.form_id = 'register-form'
         self.helper.attrs = {
             'hx-post': reverse_lazy('login'),

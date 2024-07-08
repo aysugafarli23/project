@@ -2,15 +2,24 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-<form method="post" action="{% url 'users-register' %}">
+<form method="post" action="{% url 'users-register' step=step %}">
   {% csrf_token %}
-  {{ form|crispy }}
-  <input type="submit" value="Submit" class="btn btn-success">
+  
+  {% if step == 'step1' %}
+    {% include 'username_field.html' with field=form.username %}
+    <!-- Include other fields for step 1 -->
+    <a href="{% url 'users-register' step='step2' %}"><button class="btn btn-primary">Next</button></a>
+  {% elif step == 'step2' %}
+    {% include 'password_field.html' with field=form.password %}
+    <!-- Include other fields for step 2 -->
+    <button type="submit" class="btn btn-primary">Next</button>
+  {% elif step == 'final_step' %}
+    {% for field in form.visible_fields %}
+      <div class="form-group">
+        {{ field|as_crispy_field }}
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Submit</button>
+  {% endif %}
 </form>
-
-<div class="card-footer text-center">
-  <div class="small">
-    <a href="#">Have an account? Go to Sign in</a>
-  </div>
-</div>
 {% endblock %}

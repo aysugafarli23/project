@@ -30,8 +30,9 @@ class User(AbstractUser):
         M15 = '15', '15-20 minute'
         M30 = '30', '30 mins'
         MORE = 'more', 'More than that'
-        
-    nativel = models.CharField(max_length=100, blank=True, null=True)
+      
+    email = models.EmailField()    
+    nativel = models.CharField(max_length=100)
     people = models.CharField(max_length=1, choices=People.choices)
     method = models.CharField(max_length=1, choices=Method.choices)
     usa = models.CharField(max_length=1, choices=USA.choices)

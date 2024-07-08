@@ -11,29 +11,30 @@ from django.conf import settings
 from djstripe.models import Customer, Product, Price, Plan as StripePlan
 import stripe
 from .models import *
-from django.http import JsonResponse, HttpResponse
-from django.template.context_processors import csrf
-from crispy_forms.utils import render_crispy_form
+from django.http import JsonResponse
 
 
-def register(request):
-    if request.method == 'GET':
-        context = {'form': RegisterForm()}
-        return render (request, 'register.html', context)
-    
-    elif request.method == 'POST':
-        form = RegisterForm(request.POST)
+def register(request, step=None):
+    form = RegisterForm(request.POST or None)
+    if request.method =='POST':
+        form = RegisterForm(request.POST or None)
         if form.is_valid():
-           user =   form.save()     
-           username = form.cleaned_data.get('username')
-           messages.success(request, f'Account created for {username}')
+           if step == 'final_step':
+                # Process final step and save form data
+                    user =   form.save()     
+                    username = form.cleaned_data.get('username')
+                    messages.success(request, f'Account created for {username}')
+                    return redirect('profile')  # Redirect to success page
+           else:
+                # Move to the next step based on the step parameter
+                return redirect('users-register', step='final_step')
 
-           return redirect(to='profile')    
-       
-        ctx = {}
-        ctx.update(csrf(request))
-        form_html = render_crispy_form(form, context=ctx)
-        return HttpResponse(form_html)
+     # Render the form for the current step
+    context = {
+        'form': form,
+        'step': step,
+    }
+    return render(request, 'register.html', context)
 
 
 # Class based view that extends from the built in login view to add a remember me functionality
@@ -137,3 +138,7 @@ def success(request):
 def cancel(request):
     # Handle the cancellation callback from Stripe
     return render(request, 'cancel.html')
+
+# On CMD:
+# python manage.py djstripe_sync_models Price
+# python manage.py djstripe_sync_models Plan
