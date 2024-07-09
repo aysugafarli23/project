@@ -1,25 +1,29 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% load i18n %}
 
-{% block body %}
-<form method="post" action="{% url 'users-register' step=step %}">
-  {% csrf_token %}
-  
-  {% if step == 'step1' %}
-    {% include 'username_field.html' with field=form.username %}
-    <!-- Include other fields for step 1 -->
-    <a href="{% url 'users-register' step='step2' %}"><button class="btn btn-primary">Next</button></a>
-  {% elif step == 'step2' %}
-    {% include 'password_field.html' with field=form.password %}
-    <!-- Include other fields for step 2 -->
-    <button type="submit" class="btn btn-primary">Next</button>
-  {% elif step == 'final_step' %}
-    {% for field in form.visible_fields %}
-      <div class="form-group">
-        {{ field|as_crispy_field }}
-      </div>
+{% block head %}
+{{ wizard.form.media }}
+{% endblock %}
+
+{% block content %}
+<p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
+<form action="" method="post">{% csrf_token %}
+<table>
+{{ wizard.management_form }}
+{% if wizard.form.forms %}
+    {{ wizard.form.management_form }}
+    {% for form in wizard.form.forms %}
+        {{ form|crispy }}
     {% endfor %}
-    <button type="submit" class="btn btn-primary">Submit</button>
-  {% endif %}
+{% else %}
+    {{ wizard.form|crispy }}
+{% endif %}
+</table>
+{% if wizard.steps.prev %}
+<button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">{% translate "first step" %}</button>
+<button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% translate "prev step" %}</button>
+{% endif %}
+<input type="submit" value="{% translate "submit" %}"/>
 </form>
 {% endblock %}

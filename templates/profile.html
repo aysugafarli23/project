@@ -3,7 +3,7 @@
 
 {% block nav__title %}Profile{% endblock nav__title %}
 
-{% block body %}
+{% block content %}
 <div class="row my-3 p-3">
     <img class="rounded-circle account-img" src="{{ user.profile.avatar.url }} " style="cursor: pointer;"/>
 </div>
@@ -44,4 +44,4 @@
         <button type="reset" class="btn btn-dark btn-lg">Reset</button>
     </form>
 </div>
-{% endblock body %}
+{% endblock content %}

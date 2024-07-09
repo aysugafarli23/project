@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'djstripe',
     'crispy_forms',
     'crispy_bootstrap4',
+    'formtools',
 ]
 
 MIDDLEWARE = [
@@ -167,9 +168,9 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = str(os.getenv('703386953476-b02pq8gmoj1lms8i5kcn
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = str(os.getenv('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'))
 
 #Stripe configuration
-STRIPE_TEST_PUBLIC_KEY = os.environ.get("STRIPE_TEST_PUBLIC_KEY","pk_test_51PX8O7Ee6ATWy3dPTPlqOlU0TJz9bISnx3MgYkl8rHIfnMDO4DpppPz7vheR7U5T6he6BhnrMX84UsGOIOifo7OY00y8JUG6Zl")
-# STRIPE_TEST_SECRET_KEY = os.environ.get("STRIPE_TEST_SECRET_KEY","sk_test_51PX8O7Ee6ATWy3dP72TIFrAcaqcFaFOW6P0R9tPescQXCxvgPSt8UHw5ZOjxW6pQKpjzFu7Dr5DESmzsfyZRGsR100cxdm7KBn")
-DJSTRIPE_WEBHOOK_SECRET = 'whsec_784668e2972b0114189003dcacc5e278930b5c00d2abfd6e894860707e214aa6'
+STRIPE_LIVE_PUBLIC_KEY = os.environ.get("STRIPE_LIVE_PUBLIC_KEY","pk_live_51OEGWrHjFy6RonnzfhmrPrr8el9H5eP2QpQCw1Ckw2ynSCTGrZgeMp4K394RyJQhfafFRJgDxiMzgmBxLxq14W6k00NQJGzf0S")
+STRIPE_LIVE_SECRET_KEY = os.environ.get("STRIPE_LIVE_SECRET_KEY","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")
+DJSTRIPE_WEBHOOK_SECRET = 'whsec_RkU4vVKQEYDI8D3fBkjBvSZgME724lEVIDreq_IzTzj2Q0VV5O1K'
 
 # Use test keys while in development
 STRIPE_LIVE_MODE = False  # Change to True in production
@@ -178,6 +179,3 @@ DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
 #Django Crispy Forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
-
-#Abstract user class
-AUTH_USER_MODEL = 'users.User'

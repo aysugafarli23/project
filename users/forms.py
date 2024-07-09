@@ -1,21 +1,37 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from .models import User, Profile
+from .models import *
 from djstripe.models import *
 from django.urls import reverse_lazy
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
+class RegisterForm(forms.ModelForm):
+    
+    class Meta:
+        model = Register
+        fields = ['username', 'password', 'password_confirm', 'email']
+        widgets = {
+            'password': forms.PasswordInput(attrs={'data-toggle':'password'}),
+            'password_confirm': forms.PasswordInput(attrs={'data-toggle':'password'})
+        }
+        
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if len(username) <= 3:
+            raise forms.ValidationError("Username is too short")
+        return username 
+        
 
-class RegisterForm(forms.ModelForm): 
+
+class CustomDetailForm(forms.ModelForm): 
     # fields we want to include and customize in our form
     nativel = forms.ChoiceField(choices=[])
 
     class Meta:
-        model = User
-        fields = ['username', 'password', 'email', 'nativel', 'people', 'method','usa','speak', 'minute']
+        model = CustomDetail
+        fields = ['nativel', 'people', 'method','usa','speak', 'minute']
         widgets = {
-            'password': forms.PasswordInput(attrs={'data-toggle':'password'}),
             'people': forms.RadioSelect,
             'method': forms.RadioSelect,
             'usa': forms.RadioSelect,
@@ -24,47 +40,30 @@ class RegisterForm(forms.ModelForm):
         }
         
     def __init__(self, *args, **kwargs):
-        super(RegisterForm, self).__init__(*args, **kwargs)
+        super(CustomDetailForm, self).__init__(*args, **kwargs)
         self.fields['nativel'].choices = self.get_nativel_choices()
-        
-          
         # Set choices without the blank option
-        self.fields['people'].choices = [(choice.value, choice.label) for choice in User.People]
-        self.fields['method'].choices = [(choice.value, choice.label) for choice in User.Method]
-        self.fields['usa'].choices = [(choice.value, choice.label) for choice in User.USA]
-        self.fields['speak'].choices = [(choice.value, choice.label) for choice in User.Speak]
-        self.fields['minute'].choices = [(choice.value, choice.label) for choice in User.Minute]
+        self.fields['people'].choices = [(choice.value, choice.label) for choice in CustomDetail.People]
+        self.fields['method'].choices = [(choice.value, choice.label) for choice in CustomDetail.Method]
+        self.fields['usa'].choices = [(choice.value, choice.label) for choice in CustomDetail.USA]
+        self.fields['speak'].choices = [(choice.value, choice.label) for choice in CustomDetail.Speak]
+        self.fields['minute'].choices = [(choice.value, choice.label) for choice in CustomDetail.Minute]
 
-
-        self.helper = FormHelper(self)
-        self.helper.form_id = 'register-form'
-        self.helper.attrs = {
-            'hx-post': reverse_lazy('login'),
-            'hx-target': '#register-form',
-            'hx-swap': 'outerHTML'
-        }
-        self.helper.add_input(Submit('submit', 'Submit'))
-      
      
     def get_nativel_choices(self):
         with open('users/languages.txt') as f:
             nativels = f.read().splitlines()
         return [(nativel, nativel) for nativel in nativels]
     
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        if len(username) <= 3:
-            raise forms.ValidationError("Username is too short")
-        return username 
-        
+
     
-    def save(self, commit=True):
-        """ Hash users's password on save """
-        user = super().save(commit=False)
-        user.set_password(self.cleaned_data['password'])
-        if commit:
-            user.save()
-        return user
+    # def save(self, commit=True):
+    #     """ Hash users's password on save """
+    #     user = super().save(commit=False)
+    #     user.set_password(self.cleaned_data['password'])
+    #     if commit:
+    #         user.save()
+    #     return user
         
 
 class LoginForm(AuthenticationForm):

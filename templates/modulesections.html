@@ -4,7 +4,7 @@
     {{ lesson.title }}
 {% endblock nav__title %}
 
-{% block body %}
+{% block content %}
     <div class="lesson__container">
         {% for section_content in section_contents %}
         <h2>{{ section_content.section.title }}</h2>
@@ -18,4 +18,4 @@
     {% endfor %}
     </div>
 
-{% endblock body %}
+{% endblock content %}

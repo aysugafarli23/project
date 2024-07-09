@@ -11,30 +11,69 @@ from django.conf import settings
 from djstripe.models import Customer, Product, Price, Plan as StripePlan
 import stripe
 from .models import *
-from django.http import JsonResponse
+from formtools.wizard.views import SessionWizardView
+from django.http import HttpResponse
+from django.db.utils import IntegrityError
 
 
-def register(request, step=None):
-    form = RegisterForm(request.POST or None)
-    if request.method =='POST':
-        form = RegisterForm(request.POST or None)
-        if form.is_valid():
-           if step == 'final_step':
-                # Process final step and save form data
-                    user =   form.save()     
-                    username = form.cleaned_data.get('username')
-                    messages.success(request, f'Account created for {username}')
-                    return redirect('profile')  # Redirect to success page
-           else:
-                # Move to the next step based on the step parameter
-                return redirect('users-register', step='final_step')
 
-     # Render the form for the current step
-    context = {
-        'form': form,
-        'step': step,
-    }
-    return render(request, 'register.html', context)
+class CustomRegisterView(SessionWizardView):
+    form_list = [RegisterForm, CustomDetailForm]
+    template_name = 'register.html'
+
+    def done(self, form_list, **kwargs):
+        register_form = form_list[0]
+        custom_detail_form = form_list[1]
+
+        # Extract data from the form
+        username = register_form.cleaned_data['username']
+        password = register_form.cleaned_data['password']
+
+        # Check if the username already exists
+        if User.objects.filter(username=username).exists():
+            return HttpResponse("Username already exists. Please choose another username.")
+
+        try:
+            # Create the user
+            new_user = User(username=username)
+            new_user.set_password(password)
+            new_user.save()
+
+            # Save the register form and link it to the user
+            register = register_form.save(commit=False)
+            register.user = new_user
+            register.save()
+
+            # Save the custom detail form and link it to the register
+            custom_detail = custom_detail_form.save(commit=False)
+            custom_detail.register = register
+            custom_detail.save()
+
+            return HttpResponse("Form submitted!")
+        except IntegrityError:
+            return HttpResponse("There was an error creating the user. Please try again.")
+
+# def register(request, step=None):
+#     form = RegisterForm(request.POST or None)
+#     if request.method =='POST':
+#         form = RegisterForm(request.POST or None)
+#         if form.is_valid():
+#            if step == 'final_step':
+#                 # Process final step and save form data
+#                     user =   form.save()     
+#                     username = form.cleaned_data.get('username')
+#                     messages.success(request, f'Account created for {username}')
+#                     return redirect('profile')  # Redirect to success page
+#            else:
+#                 # Move to the next step based on the step parameter
+#                 return redirect('users-register', step='final_step')
+
+#      # Render the form for the current step
+#     context = {
+#         'form': form,
+#         'step': step,
+#     }
+#     return render(request, 'register.html', context)
 
 
 # Class based view that extends from the built in login view to add a remember me functionality
@@ -100,13 +139,13 @@ class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
    
     
 #Stripe configuration
-# stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+stripe.api_key = settings.STRIPE_LIVE_SECRET_KEY
 
 def subscribe(request):
     if request.method == 'POST':
         plan_id = request.POST.get('plan_id')
         price = Price.objects.get(id=plan_id)
-        
+            
         try:
             customer, created = Customer.get_or_create(subscriber=request.user)
 

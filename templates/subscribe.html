@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
 
-{% block body %}
-<div>
+
+{% block content %}
+  <div>
     <h2>Choose your plan</h2>
     <form method="post">
-        {% csrf_token %}
-        {% for price in prices %}
+      {% csrf_token %}
+      {% for price in prices %}
         <div>
-            <h3>{{ price.nickname }}</h3>
-            <p>{{ price.unit_amount_decimal|floatformat:2 }} {{ price.currency.upper }}</p>
-            <button type="submit" name="plan_id" value="{{ price.id }}">Subscribe</button>
+          <h3>{{ price.nickname }}</h3>
+          <p>{{ price.unit_amount }} {{ price.currency.upper }}</p>
+          <button type="submit" name="plan_id" value="{{ price.id }}">Subscribe</button>
         </div>
-        {% endfor %}
+      {% endfor %}
     </form>
-</div>
+  </div>
 {% endblock %}
