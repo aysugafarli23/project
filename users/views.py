@@ -21,6 +21,7 @@ class CustomRegisterView(SessionWizardView):
     form_list = [RegisterForm, CustomDetailForm, SubscriptionPlanForm]
     template_name = 'register.html'
 
+    
     def done(self, form_list, **kwargs):
         register_form = form_list[0]
         custom_detail_form = form_list[1]

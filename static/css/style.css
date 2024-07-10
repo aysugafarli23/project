@@ -21,7 +21,6 @@ body {
     --sapphire: #0091ff;
     --main-font: "Metropolis", sans-serif;
 }
-
 /*-------------------------------------base.html style-------------------------------------*/
 .container__general {
     display: grid;
@@ -424,7 +423,7 @@ nav {
     height: 30px;
 }
 
-/*--------------------------------------Register fom style ----------------------------------------*/
+/*--------------------------------------register.html style ----------------------------------------*/
 .register{
     background-color: var(--neutral-colors-white);
     width: 800px;
@@ -448,5 +447,184 @@ nav {
 }
 
 .submit{
+    background-color: var(--main-colors-green);
+}
+
+/*--------------------------------------success.html style ----------------------------------------*/
+.success h1, .success-message, h2{
+    text-align: center;
+    padding-top: 30px;
+}
+/*--------------------------------------cancel.html style ----------------------------------------*/
+.cancel h1, .cancel-message{
+    text-align: center;
+    padding-top: 30px;
+}
+
+.buttons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+/*--------------------------------------profile.html style ----------------------------------------*/
+.profile__general{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile_menuCol{
+    width: 320px;
+    margin-right: auto;
+}
+
+.profile__card{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+    position: relative;
+    width: 320px;
+    min-height: 65px;
+    padding: 18px 24px 17px;
+    border-radius: 15px;
+    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, .1);
+    background-color: var(--neutral-colors-white);
+    border: 2px solid hsla(0, 0%, 100%, 0);
+    margin-bottom: 20px;
+    cursor: pointer;
+    padding-right: 40px;
+    border: 2px solid var(--main-colors-sapphire);
+}
+
+.profile__image{
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile__image img{
+    width: 100%;
+}
+
+.profile__title{
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.6;
+    letter-spacing: normal;
+    color: var(--neutral-colors-black);
+}
+
+.profile__card::after{
+    content: "";
+    display: block;
+    width: 10px;
+    height: 10px;
+    border: 1px solid var( --neutral-colors-gray-75);
+    border-width: 2px 2px 0 0;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: absolute;
+    right: 24px;
+    transition-duration: .3s !important;
+    transition: all;
+}
+
+.profile__card:hover::after{
+    content: "";
+    display: block;
+    width: 10px;
+    height: 10px;
+    border: 1px solid var(--main-colors-blue);
+    border-width: 2px 2px 0 0;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: absolute;
+    right: 10px;
+    transition-duration: .3s !important;
+    transition: all;
+}
+
+.profile__icon{
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile__icon img{
+    width: 100%;
+}
+
+.profile__badge{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: #f1f1f5;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.profile__contentHolder a{
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.14;
+    letter-spacing: normal;
+    color: var(--neutral-colors-black);
+    text-decoration: none;
+}
+
+.avatar__image{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative ;
+}
+
+.form-content .round{
+    position: absolute;
+    top: 200px;
+    transform: translateX(230px);
+    background-color: var(--main-colors-sapphire);
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.round i{
+    color: #fff;
+    transform: translateY(-10px);
+}
+
+#div_id_avatar > div > input[type='file']{
+    position: absolute;
+    transform: scale(2);
+    opacity: 0;
+}
+
+#div_id_avatar > div > input[type=file]::-webkit-file-upload-button{
+    cursor: pointer;
+}
+
+.save__btn{
+    background-color: var(--main-colors-sapphire);
+}
+
+.reset__btn{
+    background-color: var(--main-colors-blue);
+}
+
+.password__change__btn{
     background-color: var(--main-colors-green);
 }

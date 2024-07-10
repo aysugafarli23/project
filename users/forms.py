@@ -112,11 +112,30 @@ class UpdateUserForm(forms.ModelForm):
 
 
 class UpdateProfileForm(forms.ModelForm):
-    avatar = forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control-file'}))
-    bio = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))
+    class Gender(models.TextChoices):
+        M = 'Male', 'Male'
+        F = 'Female', 'Female'
+        O = 'Other', 'Other'
+        
+        
+    avatar = forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control-file'}), label="", initial='./images/profile_image.gif')
+    gender = forms.ChoiceField(label="Gender", choices=Gender.choices,  widget=forms.RadioSelect(attrs={'class': 'form-control'}))
+    nativel = forms.ChoiceField(choices=[])
+       
+    def __init__(self, *args, **kwargs):
+        super(UpdateProfileForm, self).__init__(*args, **kwargs)
+        self.fields['nativel'].choices = self.get_nativel_choices()
+        # Set choices without the blank option
+     
+    def get_nativel_choices(self):
+        with open('users/languages.txt') as f:
+            nativels = f.read().splitlines()
+        return [(nativel, nativel) for nativel in nativels]
+    
 
     class Meta:
         model = Profile
-        fields = ['avatar', 'bio']
+        fields = ['avatar', 'gender', 'nativel']
+        
    
         

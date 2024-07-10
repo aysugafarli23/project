@@ -24,11 +24,12 @@
         {{ wizard.form|crispy }}
     {% endif %}
     </table>
-    {% if wizard.steps.prev %}
-    <button class="first__step btn" name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">{% translate "first step" %}</button>
-    <button class="prev__step btn" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% translate "prev step" %}</button>
-    {% endif %}
-    <input class="submit btn" type="submit" value="{% translate "submit" %}"/>
-    </form>
+    <div class="buttons">
+        {% if wizard.steps.prev %}
+        <button class="first__step btn" name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">{% translate "first step" %}</button>
+        <button class="prev__step btn" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% translate "prev step" %}</button>
+        {% endif %}
+        <input class="submit btn" type="submit" value="{% translate "submit" %}"/>
+    </div> </form>
 </div>
 {% endblock %}

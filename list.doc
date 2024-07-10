@@ -10,6 +10,8 @@ Order:
  --OpenAI
  --RECORDING
 -Profile
+ **--Term & Conditions Page
+ --Contact Form Function
 * --RegisterForum UI + details like questions
  --Billing System
  --Login Forum, Sign in with Google, Github

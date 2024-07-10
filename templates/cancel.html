@@ -3,10 +3,12 @@
 {% block nav__title %}Cancel page{% endblock nav__title %}
 
 {% block content %}
-<div class="container cancel-container">
+<div class="cancel container">
     <h1 class="display-4">Registration Canceled😢</h1>
     <p class="cancel-message">We're sorry to see you go. If you change your mind, you can always register again. 👋</p>
-    <a href="/" class="btn">Go to Home</a>
-    <a href="/register" class="btn">Try Again</a>
+    <div class="buttons">
+        <a href="/" class="btn">Go to Home</a>
+        <a href="/register" class="btn">Try Again</a>
+    </div>
 </div>
 {% endblock content %}
