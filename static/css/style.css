@@ -15,11 +15,10 @@ body {
     --neutral-colors-white: #fff;
     --neutral-colors-black: #000;
     --neutral-colors-gray-75: #484a4d;
-    --main-colors-blue: #021a70;
+    --main-colors-blue: #031a70;
+    --main-colors-sapphire:#0ca9ef;
+    --main-colors-green: #9ddf42;
     --sapphire: #0091ff;
-    --primaryLight: #42cf59;
-    --primaryDark: #34a77e;
-    --primaryBorder: #289467;
     --main-font: "Metropolis", sans-serif;
 }
 
@@ -92,7 +91,7 @@ nav {
     position: fixed;
     left: calc(50% - 366px);
     margin-top: 32px;
-    padding: 18px 17px 16px;
+    padding: 40px 17px;
     border-radius: 16px;
     box-shadow: 0 2px 7px 0 rgba(0, 0, 0, .1);
     background-color: var(--neutral-colors-white);
@@ -144,6 +143,8 @@ nav {
 
 .nav__link .logout {
     color: var(--neutral-colors-black);
+    background-color: transparent;
+    font-size: 24px;
 }
 
 .app__content {
@@ -424,10 +425,28 @@ nav {
 }
 
 /*--------------------------------------Register fom style ----------------------------------------*/
-.register__form__label:{
-    font-size: 20px;
-    font-weight: 600;
-    display: flex !important;
-    align-items: center;
-    justify-content: flex-start;
+.register{
+    background-color: var(--neutral-colors-white);
+    width: 800px;
+    padding: 35px;
+    border-radius: 16px;
+    transform: translateY(40px);
+}
+.btn{
+    color: white;
+    background-color: var(--main-colors-blue);
+    padding: 10px 25px;
+    outline: 0;
+    border-radius: 35px;
+    border: none;
+    cursor: pointer;
+    text-transform: capitalize;
+
+}
+.first__step{
+    background-color: var(--main-colors-sapphire);
+}
+
+.submit{
+    background-color: var(--main-colors-green);
 }

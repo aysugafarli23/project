@@ -27,12 +27,12 @@
                 <div class="form-row">
                   <div class="col-md-10 offset-md-1">
                     <div class="form-group">
-                      {% comment %} <a href="#" class="btn btn-link btn-lg active btn-block">Sign in with GitHub</a> {% endcomment %}
+                      {% comment %} <a href="#" class="btn btn-link btn-lg active btn-block">Sign in with GitHub</a>
                       <a href="{% url 'social:begin' 'google-oauth2'%}" class="btn btn-link btn-lg active btn-block">Sign in with Google</a>
                       <hr />
                       <p class="text-center">
                         <strong>OR</strong>
-                      </p>
+                      </p> {% endcomment %}
                       <hr />
                       <label class="small mb-1">Username</label>
                       {{ form.username }}

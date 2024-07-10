@@ -62,7 +62,7 @@
                       <form method="post" action="{% url 'logout' %}">
                           {% csrf_token %}
                           {% comment %} <a href="{% url "logout" %}"><i class="logout fa-solid fa-arrow-right-from-bracket"></i></a> {% endcomment %}
-                          <button class="btn btn-primary btn-lg" type="submit">Log out</button>
+                          <button class="btn logout" type="submit"><i class="logout fa-solid fa-arrow-right-from-bracket"></i></button>
                       </form>
                   {% else %}
                       <a href="{% url "login" %}">Sign in</a>

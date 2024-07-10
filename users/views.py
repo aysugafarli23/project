@@ -12,18 +12,19 @@ from djstripe.models import Customer, Product, Price, Plan as StripePlan
 import stripe
 from .models import *
 from formtools.wizard.views import SessionWizardView
-from django.http import HttpResponse
+from django.http import  HttpResponse,HttpResponseRedirect
 from django.db.utils import IntegrityError
 
 
 
 class CustomRegisterView(SessionWizardView):
-    form_list = [RegisterForm, CustomDetailForm]
+    form_list = [RegisterForm, CustomDetailForm, SubscriptionPlanForm]
     template_name = 'register.html'
 
     def done(self, form_list, **kwargs):
         register_form = form_list[0]
         custom_detail_form = form_list[1]
+        subscription_plan_form = form_list[2]
 
         # Extract data from the form
         username = register_form.cleaned_data['username']
@@ -48,34 +49,32 @@ class CustomRegisterView(SessionWizardView):
             custom_detail = custom_detail_form.save(commit=False)
             custom_detail.register = register
             custom_detail.save()
+            
+            # Save the subscription plan form and link it to the user
+            subscription_plan = subscription_plan_form.save(commit=False)
+            subscription_plan.user = new_user
+            subscription_plan.save()
+            
+           # Create a Stripe Checkout session
+            price_id = subscription_plan.price_id
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[{
+                    'price': price_id,
+                    'quantity': 1,
+                }],
+                mode='subscription',
+                success_url='http://127.0.0.1:8000/users/success/',
+                cancel_url='http://127.0.0.1:8000/users/cancel/',
+            )
 
-            return HttpResponse("Form submitted!")
+            # Redirect to the payment link
+            return HttpResponseRedirect(checkout_session.url)
+
         except IntegrityError:
             return HttpResponse("There was an error creating the user. Please try again.")
-
-# def register(request, step=None):
-#     form = RegisterForm(request.POST or None)
-#     if request.method =='POST':
-#         form = RegisterForm(request.POST or None)
-#         if form.is_valid():
-#            if step == 'final_step':
-#                 # Process final step and save form data
-#                     user =   form.save()     
-#                     username = form.cleaned_data.get('username')
-#                     messages.success(request, f'Account created for {username}')
-#                     return redirect('profile')  # Redirect to success page
-#            else:
-#                 # Move to the next step based on the step parameter
-#                 return redirect('users-register', step='final_step')
-
-#      # Render the form for the current step
-#     context = {
-#         'form': form,
-#         'step': step,
-#     }
-#     return render(request, 'register.html', context)
-
-
+        
+        
 # Class based view that extends from the built in login view to add a remember me functionality
 class CustomLoginView(LoginView):
     form_class = LoginForm

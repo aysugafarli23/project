@@ -54,7 +54,34 @@ class CustomDetailForm(forms.ModelForm):
         with open('users/languages.txt') as f:
             nativels = f.read().splitlines()
         return [(nativel, nativel) for nativel in nativels]
-    
+ 
+ 
+class SubscriptionPlanForm(forms.ModelForm):
+    plan = forms.ChoiceField(choices=[], label="Subscription Plan")
+
+    class Meta:
+        model = SubscriptionPlan
+        fields = ['plan']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['plan'].choices = self.get_price_choices()
+
+    def get_price_choices(self):
+        prices = Price.objects.filter(active=True).order_by('unit_amount')
+        choices = []
+        for price in prices:
+            interval = price.recurring["interval"]
+            display_name = f"{price.unit_amount / 100:.2f} {price.currency.upper()}/{interval.capitalize()} for {price.product.name}"
+            choices.append((price.id, display_name))
+        return choices
+
+    def save(self, commit=True):
+        subscription_plan = super().save(commit=False)
+        subscription_plan.price_id = self.cleaned_data['plan']
+        if commit:
+            subscription_plan.save()
+        return subscription_plan
 
     
     # def save(self, commit=True):

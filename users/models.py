@@ -6,7 +6,7 @@ from PIL import Image
      
 class Register(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
-    username = models.CharField(max_length=30, verbose_name="What is your native language?")
+    username = models.CharField(max_length=30, verbose_name="Username")
     password = models.CharField(max_length=100)
     password_confirm = models.CharField(max_length=100, verbose_name = "Confirme password")
     email = models.EmailField() 
@@ -49,7 +49,14 @@ class CustomDetail(models.Model):
     speak = models.CharField(max_length=2, verbose_name="How often do you speak English?", choices=Speak.choices)
     minute = models.CharField(max_length=4, verbose_name="How much time each day can you spend improving your English speaking skills?", choices=Minute.choices)
 
+class SubscriptionPlan(models.Model):
+    price_id = models.CharField(max_length=100)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.price_id
+    
+    
 # Extending User Model Using a One-To-One Link
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
