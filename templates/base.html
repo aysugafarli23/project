@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="keywords" content="WebRTC getUserMedia MediaRecorder API">  
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="shortcut icon" href="{% static 'images/logo.jpeg' %}" type="image/x-icon" />
+    <link rel="shortcut icon" href="{% static 'images/Logo.svg' %}" type="image/x-icon" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <title>SpeakEnglishTodAI</title>
@@ -16,117 +16,15 @@
   </head>
 
   <body>
-    <div class="container__general">
-      <div class="navbar">
-        <div class="nav__logo">
-          <a href="{% url "modules" %}"><img src="/static/images/logo.jpeg" alt="Logo" /></a>
-        </div>
-        <div class="nav__links">
-          <dir class="nav__item {% if current_url == 'modules' %}active{% endif %}">
-            <a href="{% url 'modules' %}"><img src="/static/images/modules-icon-{% if current_url == 'modules' %}active{% else %}deactive{% endif %}.svg"alt="Modules" />
-            </a><span>Modules</span>
-          </dir>
-          <dir class=" nav__item {% if current_url == 'dictionary' %}active{% endif %}">
-            <a href="{% url 'dictionary' %}"><img src="/static/images/dictionary-icon-{% if current_url == 'dictionary' or current_url == 'search' %}active{% else %}deactive{% endif %}.svg" alt="Dictionary" />
-            </a><span>Dictionary</span>
-          </dir>
-          <dir class="nav__item {% if current_url == 'profile' %}active{% endif %}">
-            <a href="{% url 'profile' %}"><img src="/static/images/profile-icon-{% if current_url == 'profile' %}active{% else %}deactive{% endif %}.svg" alt="Profile" />
-            </a><span>Profile</span>
-          </dir>
-        </div>
-      </div>
+    <div class="container__general" id="{% block container_id %}{% endblock container_id %}">
+      {% include "container__general__content.html" %}
+      {% block content %}
 
-      <div class="app__content">
-        <nav>
-          <div class="nav__menu">
-            <h2>
-              {% block nav__title %}
-
-              {% endblock %}
-            </h2>
-            <ul>
-              <li>
-                <div class="nav__link">
-                  <a href="#"><span>o</span><img src="/static/images/icon-human-coach-deactive.svg" alt="" /></a>
-                </div>
-              </li>
-              <li>
-                <div class="nav__link">
-                  <a href="#"><i class="fa-solid fa-bell"></i></a>
-                </div>
-              </li>
-              <li>
-                <div class="nav__link">
-                  {% if user.is_authenticated %}
-                      <form method="post" action="{% url 'logout' %}">
-                          {% csrf_token %}
-                          {% comment %} <a href="{% url "logout" %}"><i class="logout fa-solid fa-arrow-right-from-bracket"></i></a> {% endcomment %}
-                          <button class="btn logout" type="submit"><i class="logout fa-solid fa-arrow-right-from-bracket"></i></button>
-                      </form>
-                  {% else %}
-                      <a href="{% url "login" %}">Sign in</a>
-                  {% endif %}
-                </div>
-              </li>
-            </ul>
-          </div>
-        </nav>
-           
-        
-        <div class="main__content">
-          <div class="contact">
-            <button class="contactBtn">Contact Us</button>
-          </div>
-  
-          <div id="contactFormContainer" class="contact-form-container">
-            <div class="container mt-3">
-              <div class="form__title">ChatterFox</div>
-              <form method="post">
-                {% csrf_token %}
-                <div class="form-row row">
-                  <div class="form-group col-md-6">
-                      {{ form.name }} 
-                  </div>
-                  <div class="form-group col-md-6">
-                      {{ form.email }}
-  
-                  </div>
-              </div>
-              <div class="form-group">
-                  {{ form.subject }}
-  
-              </div>
-              <div class="form-group">
-                  {{ form.message }}
-  
-              </div>
-              
-                <button type="submit" class="btn btn-info">Submit</button>
-              </form>
-              <button class="btn close" onclick="hideContactForm()"><i class="fa-regular fa-circle-xmark"></i></button>
-            </div>
-          </div>
-
-
-              <!--Any flash messages pop up in any page because this is the base template-->
-        {% if messages %}
-        <div class="alert alert-dismissible" role="alert">
-          {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-          {% endfor %}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-      {% endif %}
-          {% block content %}
-  
-          {% endblock %}
-        </div>
-        
-      </div>
+      {% endblock %}
     </div>
+    
+  </div>
+    
     <script src="{% static 'js/contact.js' %}"></script>
     <script src="{% static 'js/module.js' %}" ></script>
     <script src="{% static 'js/profile.js' %}"></script>
@@ -138,30 +36,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
    <!-- A plugin for password show/hide  -->
    <script src="https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js"></script>
-
-   <script src="https://www.paypal.com/sdk/js?client-id=ARlCjPZcYLGeDLalL55MtbLAsmGTT26QygS_HAJGTwz89BsE4aUKQUlvxiM2pCqeU9T53xeE0-sk7XM_&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
-<script>
-  paypal
-    .Buttons({
-      style: {
-        shape: 'pill',
-        color: 'blue',
-        layout: 'vertical',
-        label: 'paypal'
-      },
-      createSubscription: function (data, actions) {
-        return actions.subscription.create({
-          /* Creates the subscription */
-          plan_id: 'P-8C4818300V0769151M2BXPVY'
-        })
-      },
-      onApprove: function (data, actions) {
-        alert(data.subscriptionID) // You can add optional success message for the subscriber here
-      }
-    })
-    .render('#paypal-button-container-P-8C4818300V0769151M2BXPVY') // Renders the PayPal button
-  
-</script>
 
 
   </body>

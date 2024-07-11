@@ -167,10 +167,14 @@ AUTHENTICATION_BACKENDS = (
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = str(os.getenv('703386953476-b02pq8gmoj1lms8i5kcnqjf4t89h1iul.apps.googleusercontent.com'))
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = str(os.getenv('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'))
 
-#Stripe configuration
+# Stripe configuration
 STRIPE_LIVE_PUBLIC_KEY = os.environ.get("STRIPE_LIVE_PUBLIC_KEY","pk_live_51OEGWrHjFy6RonnzfhmrPrr8el9H5eP2QpQCw1Ckw2ynSCTGrZgeMp4K394RyJQhfafFRJgDxiMzgmBxLxq14W6k00NQJGzf0S")
 STRIPE_LIVE_SECRET_KEY = os.environ.get("STRIPE_LIVE_SECRET_KEY","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")
 DJSTRIPE_WEBHOOK_SECRET = 'whsec_RkU4vVKQEYDI8D3fBkjBvSZgME724lEVIDreq_IzTzj2Q0VV5O1K'
+
+#Integrating Stripe Price and Plans from Stripe to Djstripe
+# python manage.py djstripe_sync_models Price
+# python manage.py djstripe_sync_models Plan
 
 # Use test keys while in development
 STRIPE_LIVE_MODE = False  # Change to True in production

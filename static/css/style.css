@@ -86,7 +86,7 @@ body {
 /* Nav menu style codes */
 nav {
     width: 817px;
-    height: 66px;
+    height: 84px;
     position: fixed;
     left: calc(50% - 366px);
     margin-top: 32px;
@@ -115,6 +115,7 @@ nav {
     font-weight: 500;
     line-height: 1;
     color: var(--neutral-colors-black);
+    padding-bottom: 30px;
 }
 
 .nav__menu ul {
@@ -424,6 +425,16 @@ nav {
 }
 
 /*--------------------------------------register.html style ----------------------------------------*/
+#register__page{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url("../images/login_register_background.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
 .register{
     background-color: var(--neutral-colors-white);
     width: 800px;
@@ -431,6 +442,20 @@ nav {
     border-radius: 16px;
     transform: translateY(40px);
 }
+
+.register__login__logo{
+    width: 80px;
+    object-fit: contain;
+    cursor: pointer;
+    position: absolute;
+    top: 50px;
+    left: 100px;
+}
+
+.register__login__logo img{
+    width: 100%;
+}
+
 .btn{
     color: white;
     background-color: var(--main-colors-blue);
@@ -467,6 +492,24 @@ nav {
     justify-content: center;
     gap: 20px;
 }
+
+
+/*--------------------------------------login.html style ----------------------------------------*/
+#login__page{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login{
+    max-width: 90%;
+    width: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
 
 /*--------------------------------------profile.html style ----------------------------------------*/
 .profile__general{

@@ -167,7 +167,7 @@ def subscribe(request):
             return render(request, 'error.html', {'message': str(e)})
 
     prices = Price.objects.all()
-    return render(request, 'subscribe.html', {'prices': prices})
+    return render(request, 'success.html', {'prices': prices})
 
 
 def success(request):

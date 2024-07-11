@@ -1,6 +1,8 @@
-Order:
+Priority:
+
 -Dictionary
  **--Chatgpt API can be used maybe instead of YouGlish API
+
 -Modules
  **--UI
  **--ARRANGE and fulfill the content
@@ -9,9 +11,11 @@ Order:
  --Score
  --OpenAI
  --RECORDING
+
 -Profile
  **--Term & Conditions Page
  --Contact Form Function
+ *--Login Page=>Forgot Password? Link
 * --RegisterForum UI + details like questions
  --Billing System
  --Login Forum, Sign in with Google, Github

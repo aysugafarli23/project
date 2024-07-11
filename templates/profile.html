@@ -1,62 +1,73 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block nav__title %}Profile{% endblock nav__title %}
+{% block nav__title %}
+  Profile
+{% endblock %}
 
 {% block content %}
-
-<div class="profile__general">
+  <div class="profile__general">
     <div class="profile__menuCol">
-        <div class="profile__card">
-            <div class="profile__image"><img src="{% static './images/profile_image.png' %}" alt=""></div>
-            <div class="profile__contentHolder"><div class="profile__title">{{user_form.username.value}}</div></div>
+      <div class="profile__card">
+        <div class="profile__image">
+          <img src="{% static './images/profile_image.png' %}" alt="" />
         </div>
-        <div class="profile__card">
-            <div class="profile__image"><img src="{% static './images/coachingIcon.png' %}" alt=""></div>
-            <div class="profile__contentHolder"><div class="profile__content">Coaching Credit</div></div>
-            <div class="profile__badge">0</div>
+        <div class="profile__contentHolder">
+          <div class="profile__title">{{ user_form.username.value }}</div>
         </div>
-        <div class="profile__card">
-            <div class="profile__icon"><img src="{% static './images/termsIcon.png' %}" alt=""></div>
-            <div class="profile__contentHolder"><a href="#">Terms & Conditions</a></div>
+      </div>
+      <div class="profile__card">
+        <div class="profile__image">
+          <img src="{% static './images/coachingIcon.png' %}" alt="" />
         </div>
+        <div class="profile__contentHolder">
+          <div class="profile__content">Coaching Credit</div>
+        </div>
+        <div class="profile__badge">0</div>
+      </div>
+      <div class="profile__card">
+        <div class="profile__icon">
+          <img src="{% static './images/termsIcon.png' %}" alt="" />
+        </div>
+        <div class="profile__contentHolder">
+          <a href="#">Terms & Conditions</a>
+        </div>
+      </div>
     </div>
     <div class="profile__contentCol">
-        <div class="container">
-            <div class="avatar__image row my-3 p-3">
-                <img class="account-img" src="{{ user.profile.avatar.url }} " style="cursor: pointer;"/>
-            </div>
-            {% if user_form.errors %}
-                <div class="alert alert-danger alert-dismissible" role="alert">
-                    <div id="form_errors">
-                        {% for key, value in user_form.errors.items %}
-                            <strong>{{ value }}</strong>
-                        {% endfor %}
-                    </div>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            {% endif %}
-            <div class="form-content">
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                            {{user_form|crispy}}
-                            <div class="round">
-                                {{profile_form.avatar|as_crispy_field}}
-                                <i class="fa fa-camera"></i>
-                            </div>
-                            <div>{{profile_form.gender|as_crispy_field}}</div>
-                            <div>{{profile_form.nativel|as_crispy_field}}</div>
-                   
-                    <br><br>
-                    <button type="submit" class="save__btn btn">Save Changes</button>
-                    <button type="reset" class="reset__btn btn">Reset</button>
-                    <a class="password__change__btn btn" href="{% url "password_change" %}">Change Password</a>
-                </form>
-            </div>
+      <div class="container">
+        <div class="avatar__image row my-3 p-3">
+          <img class="account-img" src="{{ user.profile.avatar.url }} " style="cursor: pointer;" />
         </div>
+        {% if user_form.errors %}
+          <div class="alert alert-danger alert-dismissible" role="alert">
+            <div id="form_errors">
+              {% for key, value in user_form.errors.items %}
+                <strong>{{ value }}</strong>
+              {% endfor %}
+            </div>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+        {% endif %}
+        <div class="form-content">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ user_form|crispy }}
+            <div class="round">
+              {{ profile_form.avatar|as_crispy_field }}
+              <i class="fa fa-camera"></i>
+            </div>
+            <div>{{ profile_form.gender|as_crispy_field }}</div>
+            <div>{{ profile_form.nativel|as_crispy_field }}</div>
+
+            <br /><br />
+            <button type="submit" class="save__btn btn">Save Changes</button>
+            <button type="reset" class="reset__btn btn">Reset</button>
+            <a class="password__change__btn btn" href="{% url 'password_change' %}">Change Password</a>
+          </form>
+        </div>
+      </div>
     </div>
-</div>
-{% endblock content %}
+  </div>
+{% endblock %}

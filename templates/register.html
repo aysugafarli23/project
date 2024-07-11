@@ -2,13 +2,19 @@
 {% load crispy_forms_tags %}
 {% load i18n %}
 
-{% block nav__title %}Register Form{% endblock nav__title %}Register Form
+{% block nav__title %}Register Form{% endblock nav__title %}
+{% block container_id %}register__page{% endblock container_id %}
+
 
 {% block head %}
 {{ wizard.form.media }}
 {% endblock %}
 
+
 {% block content %}
+<div class="register__login__logo">
+    <a href="{% url "modules" %}"><img src="/static/images/Logo.svg" alt="Logo" /></a>
+  </div>
 <div class="register container">
     <div class="register__heading"></div>
     <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
@@ -33,3 +39,4 @@
     </div> </form>
 </div>
 {% endblock %}
+

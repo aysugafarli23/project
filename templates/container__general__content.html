@@ -1,0 +1,111 @@
+  {% if request.user.is_authenticated %}
+  <div class="navbar">
+    <div class="nav__logo">
+      <a href="{% url "modules" %}"><img src="/static/images/Logo.svg" alt="Logo" /></a>
+    </div>
+    <div class="nav__links">
+      <dir class="nav__item {% if current_url == 'modules' %}active{% endif %}">
+        <a href="{% url 'modules' %}"><img src="/static/images/modules-icon-{% if current_url == 'modules' %}active{% else %}deactive{% endif %}.svg"alt="Modules" />
+        </a><span>Modules</span>
+      </dir>
+      <dir class=" nav__item {% if current_url == 'dictionary' %}active{% endif %}">
+        <a href="{% url 'dictionary' %}"><img src="/static/images/dictionary-icon-{% if current_url == 'dictionary' or current_url == 'search' %}active{% else %}deactive{% endif %}.svg" alt="Dictionary" />
+        </a><span>Dictionary</span>
+      </dir>
+      <dir class="nav__item {% if current_url == 'profile' %}active{% endif %}">
+        <a href="{% url 'profile' %}"><img src="/static/images/profile-icon-{% if current_url == 'profile' %}active{% else %}deactive{% endif %}.svg" alt="Profile" />
+        </a><span>Profile</span>
+      </dir>
+    </div>
+  </div>
+
+<div class="app__content">
+
+  {% if request.user.is_authenticated %}
+  <nav>
+    <div class="nav__menu">
+      <h2>
+        {% block nav__title %}
+
+        {% endblock %}
+      </h2>
+      <ul>
+        <li>
+          <div class="nav__link">
+            <a href="#"><span>o</span><img src="/static/images/icon-human-coach-deactive.svg" alt="" /></a>
+          </div>
+        </li>
+        <li>
+          <div class="nav__link">
+            <a href="#"><i class="fa-solid fa-bell"></i></a>
+          </div>
+        </li>
+        <li>
+          <div class="nav__link">
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    {% comment %} <a href="{% url "logout" %}"><i class="logout fa-solid fa-arrow-right-from-bracket"></i></a> {% endcomment %}
+                    <button class="btn logout" type="submit"><i class="logout fa-solid fa-arrow-right-from-bracket"></i></button>
+                </form>
+            {% else %}
+                <a href="{% url "login" %}">Sign in</a>
+            {% endif %}
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  {% endif %}
+    
+    
+  
+  <div class="main__content">
+    <div class="contact">
+      <button class="contactBtn">Contact Us</button>
+    </div>
+
+    <div id="contactFormContainer" class="contact-form-container">
+      <div class="container mt-3">
+        <div class="form__title">ChatterFox</div>
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-row row">
+            <div class="form-group col-md-6">
+                {{ form.name }} 
+            </div>
+            <div class="form-group col-md-6">
+                {{ form.email }}
+
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form.subject }}
+
+        </div>
+        <div class="form-group">
+            {{ form.message }}
+
+        </div>
+        
+          <button type="submit" class="btn btn-info">Submit</button>
+        </form>
+        <button class="btn close" onclick="hideContactForm()"><i class="fa-regular fa-circle-xmark"></i></button>
+      </div>
+    </div>
+
+
+        <!--Any flash messages pop up in any page because this is the base template-->
+        {% if messages %}
+        <div class="alert alert-dismissible" role="alert">
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endif %}
+
+
+  {% endif %}
