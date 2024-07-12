@@ -26,13 +26,13 @@ class RegisterForm(forms.ModelForm):
 
 class CustomDetailForm(forms.ModelForm): 
     # fields we want to include and customize in our form
-    nativel = forms.ChoiceField(choices=[])
+    nativel = forms.ChoiceField(choices=[], label="Native language")
 
     class Meta:
         model = CustomDetail
-        fields = ['nativel', 'people', 'method','usa','speak', 'minute']
+        fields = ['nativel', 'situation', 'method','usa','speak', 'minute']
         widgets = {
-            'people': forms.RadioSelect,
+            'situation': forms.RadioSelect,
             'method': forms.RadioSelect,
             'usa': forms.RadioSelect,
             'speak': forms.RadioSelect,
@@ -43,7 +43,7 @@ class CustomDetailForm(forms.ModelForm):
         super(CustomDetailForm, self).__init__(*args, **kwargs)
         self.fields['nativel'].choices = self.get_nativel_choices()
         # Set choices without the blank option
-        self.fields['people'].choices = [(choice.value, choice.label) for choice in CustomDetail.People]
+        self.fields['situation'].choices = [(choice.value, choice.label) for choice in CustomDetail.Situation]
         self.fields['method'].choices = [(choice.value, choice.label) for choice in CustomDetail.Method]
         self.fields['usa'].choices = [(choice.value, choice.label) for choice in CustomDetail.USA]
         self.fields['speak'].choices = [(choice.value, choice.label) for choice in CustomDetail.Speak]

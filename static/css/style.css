@@ -16,11 +16,12 @@ body {
     --neutral-colors-black: #000;
     --neutral-colors-gray-75: #484a4d;
     --main-colors-blue: #031a70;
-    --main-colors-sapphire:#0ca9ef;
+    --main-colors-sapphire: #0ca9ef;
     --main-colors-green: #9ddf42;
     --sapphire: #0091ff;
     --main-font: "Metropolis", sans-serif;
 }
+
 /*-------------------------------------base.html style-------------------------------------*/
 .container__general {
     display: grid;
@@ -151,13 +152,13 @@ nav {
     grid-area: app__content;
 }
 
-.main__content{
+.main__content {
     margin-top: 110px;
 }
 
 .contact {
     position: fixed;
-    right: -60px; 
+    right: -60px;
     top: 73%;
     transform: translateY(-50%);
     z-index: 1000;
@@ -206,7 +207,7 @@ nav {
     margin-bottom: 1rem;
 }
 
-.form__title{
+.form__title {
     height: 62px;
     color: #222;
     font-size: 20px;
@@ -228,7 +229,8 @@ nav {
 
 .btn-info:hover {
     color: var(--neutral-colors-white);
-    box-shadow: 0 3px 3px 0 rgba(0, 163, 254, 0.4);;
+    box-shadow: 0 3px 3px 0 rgba(0, 163, 254, 0.4);
+    ;
 }
 
 .btn.close {
@@ -386,11 +388,11 @@ nav {
 
 
 /*-------------------------------------module.html style ------------------------------------*/
-.lessons__container{
+.lessons__container {
     width: 80%;
 }
 
-.module{
+.module {
     margin: 150px;
 }
 
@@ -404,38 +406,40 @@ nav {
     text-align: left;
     outline: none;
     font-size: 15px;
-  }
-  
-  .content {
+}
+
+.content {
     padding: 0 18px;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
     background-color: #f1f1f1;
-  }
+}
 
-  .lesson{
-    width:100%;
+.lesson {
+    width: 100%;
 
-  }
+}
 
-  /*-------------------------------------record_audio.html style ------------------------------------*/
-#btns img{
+/*-------------------------------------record_audio.html style ------------------------------------*/
+#btns img {
     height: 30px;
 }
 
 /*--------------------------------------register.html style ----------------------------------------*/
-#register__page{
+#register__page {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url("../images/login_register_background.jpg");
+    /* background-image: url("../images/texture-2_1280.jpg"); */
+    background: rgb(4,72,171);
+    background: radial-gradient(circle, rgba(4,72,171,1) 0%, rgba(1,11,70,1) 74%, rgba(0,10,69,1) 100%);        
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-.register{
+.register {
     background-color: var(--neutral-colors-white);
     width: 800px;
     padding: 35px;
@@ -443,7 +447,7 @@ nav {
     transform: translateY(40px);
 }
 
-.register__login__logo{
+.register__login__logo {
     width: 80px;
     object-fit: contain;
     cursor: pointer;
@@ -452,11 +456,11 @@ nav {
     left: 100px;
 }
 
-.register__login__logo img{
+.register__login__logo img {
     width: 100%;
 }
 
-.btn{
+.btn {
     color: white;
     background-color: var(--main-colors-blue);
     padding: 10px 25px;
@@ -467,26 +471,37 @@ nav {
     text-transform: capitalize;
 
 }
-.first__step{
+
+.first__step {
     background-color: var(--main-colors-sapphire);
 }
 
-.submit{
+.submit {
     background-color: var(--main-colors-green);
 }
 
 /*--------------------------------------success.html style ----------------------------------------*/
-.success h1, .success-message, h2{
-    text-align: center;
-    padding-top: 30px;
-}
-/*--------------------------------------cancel.html style ----------------------------------------*/
-.cancel h1, .cancel-message{
+.success h1,
+.success-message,
+h2 {
     text-align: center;
     padding-top: 30px;
 }
 
-.buttons{
+/*--------------------------------------cancel.html style ----------------------------------------*/
+#cancel__page{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cancel h1,
+.cancel-message {
+    text-align: center;
+    padding-top: 30px;
+}
+
+.buttons {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -495,13 +510,13 @@ nav {
 
 
 /*--------------------------------------login.html style ----------------------------------------*/
-#login__page{
+#login__page {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.login{
+.login {
     max-width: 90%;
     width: 1200px;
     display: flex;
@@ -512,18 +527,18 @@ nav {
 
 
 /*--------------------------------------profile.html style ----------------------------------------*/
-.profile__general{
+.profile__general {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.profile_menuCol{
+.profile_menuCol {
     width: 320px;
     margin-right: auto;
 }
 
-.profile__card{
+.profile__card {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -542,7 +557,7 @@ nav {
     border: 2px solid var(--main-colors-sapphire);
 }
 
-.profile__image{
+.profile__image {
     width: 60px;
     height: 60px;
     display: flex;
@@ -550,11 +565,11 @@ nav {
     justify-content: center;
 }
 
-.profile__image img{
+.profile__image img {
     width: 100%;
 }
 
-.profile__title{
+.profile__title {
     font-size: 15px;
     font-weight: 600;
     line-height: 1.6;
@@ -562,12 +577,12 @@ nav {
     color: var(--neutral-colors-black);
 }
 
-.profile__card::after{
+.profile__card::after {
     content: "";
     display: block;
     width: 10px;
     height: 10px;
-    border: 1px solid var( --neutral-colors-gray-75);
+    border: 1px solid var(--neutral-colors-gray-75);
     border-width: 2px 2px 0 0;
     -webkit-transform: rotate(45deg);
     transform: rotate(45deg);
@@ -577,7 +592,7 @@ nav {
     transition: all;
 }
 
-.profile__card:hover::after{
+.profile__card:hover::after {
     content: "";
     display: block;
     width: 10px;
@@ -592,7 +607,7 @@ nav {
     transition: all;
 }
 
-.profile__icon{
+.profile__icon {
     width: 30px;
     height: 30px;
     display: flex;
@@ -600,11 +615,11 @@ nav {
     justify-content: center;
 }
 
-.profile__icon img{
+.profile__icon img {
     width: 100%;
 }
 
-.profile__badge{
+.profile__badge {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -617,7 +632,7 @@ nav {
     font-weight: 600;
 }
 
-.profile__contentHolder a{
+.profile__contentHolder a {
     font-size: 14px;
     font-weight: 300;
     line-height: 1.14;
@@ -626,14 +641,14 @@ nav {
     text-decoration: none;
 }
 
-.avatar__image{
+.avatar__image {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative ;
+    position: relative;
 }
 
-.form-content .round{
+.form-content .round {
     position: absolute;
     top: 200px;
     transform: translateX(230px);
@@ -645,29 +660,29 @@ nav {
     overflow: hidden;
 }
 
-.round i{
+.round i {
     color: #fff;
     transform: translateY(-10px);
 }
 
-#div_id_avatar > div > input[type='file']{
+#div_id_avatar>div>input[type='file'] {
     position: absolute;
     transform: scale(2);
     opacity: 0;
 }
 
-#div_id_avatar > div > input[type=file]::-webkit-file-upload-button{
+#div_id_avatar>div>input[type=file]::-webkit-file-upload-button {
     cursor: pointer;
 }
 
-.save__btn{
+.save__btn {
     background-color: var(--main-colors-sapphire);
 }
 
-.reset__btn{
+.reset__btn {
     background-color: var(--main-colors-blue);
 }
 
-.password__change__btn{
+.password__change__btn {
     background-color: var(--main-colors-green);
 }
