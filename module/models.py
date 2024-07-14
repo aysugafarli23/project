@@ -1,48 +1,49 @@
 # myapp/models.py
 from django.db import models
-from django.conf import settings
+from django.contrib.auth.models import User
 
 
 class Module(models.Model):
-    title = models.CharField(max_length=200)
+    module_title = models.CharField(max_length=200)
+    module_image = models.FileField(upload_to="module_images/", blank=True, null=True)
 
     def __str__(self):
         return f"{self.title}"
     
+    
 class Lesson(models.Model):
-    module = models.ForeignKey(Module, related_name='lessons', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="Lesson Images", blank=True, null=True)
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    details = models.TextField(blank=True, null=True)
+    lesson_module = models.ForeignKey(Module, related_name='lessons', on_delete=models.CASCADE)
+    lesson_title = models.CharField(max_length=255)
 
     def __str__(self):
         return f"{self.module.title} - {self.title}"
 
-class Content(models.Model):
-    title = models.CharField(max_length=200)
-    body = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='content_images/', blank=True, null=True)
-    audio = models.FileField(upload_to='content_audio/', blank=True, null=True)
-    audio_file = models.FileField(upload_to="recordings/", null=True, blank=True)
-    video = models.FileField(upload_to='content_videos/', blank=True, null=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='contents', on_delete=models.CASCADE, null=True)
-
-
-    def __str__(self):
-        return f"{self.title}"
 
 class Section(models.Model):
-    title = models.CharField(max_length=200)
-    lesson = models.ManyToManyField(Module, related_name='sections')
-    contents = models.ManyToManyField(Content, related_name='sections')
-
+    section_title = models.CharField(max_length=200)
+    section_lesson = models.ManyToManyField(Lesson)
+    
     def __str__(self):
         return f"{self.title}"
 
+
+class Content(models.Model):
+    content_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    content_section = models.ForeignKey(Section, on_delete=models.CASCADE)
+    content_title = models.CharField(max_length=200)
+    body = models.TextField(blank=True, null=True)
+    content_image = models.FileField(upload_to='content_images/', blank=True, null=True)
+    audio = models.FileField(upload_to='content_audio/', blank=True, null=True)
+    audio_file = models.FileField(upload_to="recordings/", null=True, blank=True)
+    video_link = models.URLField(blank=True, null=True)
+     
+    def __str__(self):
+        return f"{self.title}"
+    
+    
 class Score(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='scores', on_delete=models.CASCADE)
-    content = models.ForeignKey(Content, related_name='scores', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='scores', on_delete=models.CASCADE)
+    score_content = models.ForeignKey(Content, related_name='scores', on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
 
     def __str__(self):

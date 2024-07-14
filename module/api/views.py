@@ -50,8 +50,8 @@ class LessonListAPIView(ListAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ['unit']
-    search_fields = ['unit__title', 'title']
+    filterset_fields = ['module']
+    search_fields = ['module__title', 'title']
 
 class LessonDetailAPIView(RetrieveAPIView):
     queryset = Lesson.objects.all()

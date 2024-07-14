@@ -118,7 +118,7 @@ class UpdateProfileForm(forms.ModelForm):
         O = 'Other', 'Other'
         
         
-    avatar = forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control-file'}), label="", initial='./images/profile_image.gif')
+    avatar = forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control-file'}), label="", initial='../media/default.png')
     gender = forms.ChoiceField(label="Gender", choices=Gender.choices,  widget=forms.RadioSelect(attrs={'class': 'form-control'}))
     nativel = forms.ChoiceField(choices=[])
        
