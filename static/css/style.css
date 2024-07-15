@@ -432,8 +432,9 @@ nav {
     align-items: center;
     justify-content: center;
     /* background-image: url("../images/texture-2_1280.jpg"); */
-    background: rgb(4,72,171);
-    background: radial-gradient(circle, rgba(4,72,171,1) 0%, rgba(1,11,70,1) 74%, rgba(0,10,69,1) 100%);        
+    /* background: rgb(4,72,171);
+    background: radial-gradient(circle, rgba(4,72,171,1) 0%, rgba(1,11,70,1) 74%, rgba(0,10,69,1) 100%);         */
+    /* background-color: white; */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -448,7 +449,7 @@ nav {
 }
 
 .register__login__logo {
-    width: 130px;
+    width: 210px;
     object-fit: contain;
     cursor: pointer;
     position: absolute;
