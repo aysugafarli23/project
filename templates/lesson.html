@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block nav__title %}Lesson{% endblock nav__title %}
+
+{% block content %}
+<div class="modules__container">
+    <h2>{{ module.module_title }}</h2>
+    <div class="lesson-grid">
+        {% for lesson in lessons %}
+            <div class="lesson-card">
+                <h3>{{ lesson.lesson_title }}</h3>
+                <p>{{ lesson.lesson_description }}</p>
+                <a href="{% url 'modules:lessons_section' lesson.pk %}" class="btn btn-primary">Start Learning</a>
+            </div>
+        {% empty %}
+            <p>No lessons available.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+

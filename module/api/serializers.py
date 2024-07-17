@@ -6,7 +6,7 @@ class ContentSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Content
-        fields = ['id', 'content__lesson', 'content__section', 'content__title', 'body', 'content__image', 'audio', 'audio_file', 'video_link']
+        fields = ['id', 'content_lesson', 'content_section', 'content_title', 'body', 'content_image', 'audio', 'audio_file', 'video_link']
 
 class SectionSerializer(serializers.ModelSerializer):
 
@@ -15,14 +15,14 @@ class SectionSerializer(serializers.ModelSerializer):
         fields = ['id', 'section_title', 'section_lesson']
 
 class LessonSerializer(serializers.ModelSerializer):
-    lesson__sections = SectionSerializer(many=True, read_only=True)
+    lesson_sections = SectionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Lesson
         fields = ['id', 'lesson_module', 'lesson_title', 'lesson_sections']
         
 class ModuleSerializer(serializers.ModelSerializer):
-    module__lessons = LessonSerializer(many=True, read_only=True)
+    module_lessons = LessonSerializer(many=True, read_only=True)
 
     class Meta:
         model = Module

@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
 {% block nav__title %}
-    {{ lesson.title }}
+    {{ lesson.lesson_title }}
 {% endblock nav__title %}
 
 {% block content %}
     <div class="lesson__container">
         {% for section_content in section_contents %}
-        <h2>{{ section_content.section.title }}</h2>
+        <h2>{{ section_content.section.section_title }}</h2>
         <ul>
             {% for content in section_content.contents %}
-                <li>{{ content.title }}</li>
+                <li>{{ content.content_title }}</li>
             {% empty %}
                 <li>No contents available.</li>
             {% endfor %}

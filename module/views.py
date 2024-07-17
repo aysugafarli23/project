@@ -21,26 +21,41 @@ def modulesPage(request):
     else:
         form = ContactForm()
     current_url = resolve(request.path_info).url_name
+    
+    modules = Module.objects.all()
     context = {
         'current_url': current_url,
         'form': form,
+        'modules': modules,
     }
     return render(request, 'module.html', context)
 
 
-def moduleSectionPage(request, pk):
+def lessonsPage(request, pk):
     module = get_object_or_404(Module, pk=pk)
-    sections = module.sections.all()
+    lessons = Lesson.objects.filter(lesson_module=module)
+    
+    context = {
+        'module': module,
+        'lessons': lessons,        
+    }
+    
+    return render(request, 'lesson.html', context)
+
+
+def lessonSectionPage(request, pk):
+    lesson = get_object_or_404(Lesson, pk=pk)
+    sections = Section.objects.filter(section_lesson=lesson)
     section_contents = []
 
     for section in sections:
         section_contents.append({
             'section': section,
-            'contents': section.contents.all()
+            'contents': Content.objects.filter(content_section=section)
         })
 
     context = {
-        'module': module,
+        'lesson': lesson,
         'section_contents': section_contents,
     }
     return render(request, 'modulesections.html', context)

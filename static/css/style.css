@@ -393,38 +393,44 @@ nav {
 
 
 /*-------------------------------------module.html style ------------------------------------*/
-.lessons__container {
-    width: 80%;
-}
-
-.module {
-    margin: 150px;
-}
-
-.collapsible {
-    background-color: var(white);
-    color: var(--neutral-colors-black);
-    cursor: pointer;
-    padding: 18px;
+.module-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  
+  .module-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .module-card h2 {
+    font-weight: bold;
+    margin-top: 0;
+  }
+  
+  .module-card p {
+    font-size: 16px;
+    color: #666;
+  }
+  
+  .module-card a {
+    display: block;
     width: 100%;
-    border: none;
-    text-align: left;
-    outline: none;
-    font-size: 15px;
-}
-
-.content {
-    padding: 0 18px;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
-    background-color: #f1f1f1;
-}
-
-.lesson {
-    width: 100%;
-
-}
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #4CAF50;
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .module-card a:hover {
+    background-color: #3e8e41;
+  }
 
 /*-------------------------------------record_audio.html style ------------------------------------*/
 #btns img {

@@ -8,7 +8,7 @@ class Module(models.Model):
     module_image = models.FileField(upload_to="module_images/", blank=True, null=True)
 
     def __str__(self):
-        return f"{self.title}"
+        return f"{self.module_title}"
     
     
 class Lesson(models.Model):
@@ -16,7 +16,7 @@ class Lesson(models.Model):
     lesson_title = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"{self.module.title} - {self.title}"
+        return f"{self.lesson_module.module_title} - {self.lesson_title}"
 
 
 class Section(models.Model):
@@ -24,7 +24,7 @@ class Section(models.Model):
     section_lesson = models.ManyToManyField(Lesson)
     
     def __str__(self):
-        return f"{self.title}"
+        return f"{self.section_title}"
 
 
 class Content(models.Model):
@@ -38,7 +38,7 @@ class Content(models.Model):
     video_link = models.URLField(blank=True, null=True)
      
     def __str__(self):
-        return f"{self.title}"
+        return f"{self.content_title}"
     
     
 class Score(models.Model):
@@ -47,4 +47,4 @@ class Score(models.Model):
     score = models.IntegerField(default=0)
 
     def __str__(self):
-        return f'{self.user} - {self.content} - {self.score}'
+        return f'{self.user} - {self.score_content} - {self.score}'
