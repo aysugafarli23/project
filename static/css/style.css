@@ -122,19 +122,24 @@ nav {
 .nav__menu ul {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     font-size: 24px;
     gap: 25px;
 }
 
-.nav__link a span {
+.nav__link{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    text-transform: capitalize;
+}
+
+.nav__link span {
     color: var(--neutral-colors-black);
     text-align: center;
     font-weight: 500;
-    font-size: 20px;
-    position: absolute;
-    right: 145px;
-    top: 11px;
+    font-size: 18px;
 }
 
 .nav__link i,
