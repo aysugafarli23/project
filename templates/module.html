@@ -1,29 +1,36 @@
 {% extends 'base.html' %}
 
-{% block nav__title %}Modules{% endblock nav__title %}
+{% block nav__title %}
+  Modules
+{% endblock %}
 
 {% block content %}
-<div class="modules__container">
-    <div class="module-grid">
-        {% for module in modules %}
-          <div class="module-card">
-            <h2>{{ module.module_title }}</h2>
-            <p>{{ module.module_description }}</p>
-            <a href="{% url 'modules:lessons' module.pk %}" class="btn btn-primary">Start Learning</a>
-          </div>
-        {% empty %}
-          <p>No modules available.</p>
-        {% endfor %}
+<div class="module__container">
+  <div class="module__stones">
+    <h1>Modules</h1>
+    {% for module in modules %}
+      <div class="module__stone">
+        <a href="{% url 'modules:lessons' module.pk %}" class="stone__btn"><img src="{{module.module_image.url}}" alt="module__image"></a>
       </div>
+    {% endfor %}
+  </div>
+</div>
 
 
- </div>
+  {% comment %} <div class="modules__container">
+    <div class="module-grid">
+      {% for module in modules %}
+        <div class="module-card">
+          <h2>{{ module.module_title }}</h2>
+          <p>{{ module.module_description }}</p>
+          <a href="{% url 'modules:lessons' module.pk %}" class="btn btn-primary">Start Learning</a>
+        </div>
+      {% empty %}
+        <p>No modules available.</p>
+      {% endfor %}
+    </div>
+  </div> {% endcomment %}
+
 
 
 {% endblock %}
-
-
-
-
-
-

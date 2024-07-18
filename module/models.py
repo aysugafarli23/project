@@ -14,6 +14,8 @@ class Module(models.Model):
 class Lesson(models.Model):
     lesson_module = models.ForeignKey(Module, related_name='lessons', on_delete=models.CASCADE)
     lesson_title = models.CharField(max_length=255)
+    lesson_image = models.FileField(upload_to="lesson_images/", blank=True, null=True)
+    
 
     def __str__(self):
         return f"{self.lesson_module.module_title} - {self.lesson_title}"

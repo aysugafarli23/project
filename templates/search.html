@@ -21,8 +21,10 @@
   // 3. This function creates a widget after the API code downloads.
   var widget;
   function onYouglishAPIReady() {
+    console.log("API IS READY!");
     widget = new YG.Widget("widget-1", {
-      components: 8408 // search box & caption
+      components: 9, // search box & caption
+      backgroundColor: '#F1F1F5' // change this to your desired color
     });
   }
 

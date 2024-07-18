@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -99,6 +101,7 @@ nav {
     justify-content: flex-start;
     flex-flow: row nowrap;
     align-items: center;
+    z-index: 1000;
 }
 
 .nav__menu {
@@ -108,7 +111,6 @@ nav {
     width: 100%;
     transition: all .3s ease;
     background: inherit;
-    /* margin-left: 0; */
 }
 
 .nav__menu h2 {
@@ -391,46 +393,71 @@ nav {
     transform: translateY(120px);
 }
 
+#widget-1{
+    background-color:#F1F1F5 !important;
+}
+
 
 /*-------------------------------------module.html style ------------------------------------*/
-.module-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-  
-  .module-card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .module-card h2 {
-    font-weight: bold;
-    margin-top: 0;
-  }
-  
-  .module-card p {
-    font-size: 16px;
-    color: #666;
-  }
-  
-  .module-card a {
-    display: block;
-    width: 100%;
+.module__container{
+    display: flex;
+    justify-content: center;
+    align-items: center;   
+}
+
+.module__stones{
+    margin: 40px 0px; 
+    display: flex;
+    gap: 30px;
+    flex-direction: column;
+    z-index: 11;
+}
+
+.module__stones h1{
+    font-family: "Plus Jakarta Sans";
     text-align: center;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #4CAF50;
-    color: #fff;
-    text-decoration: none;
-  }
-  
-  .module-card a:hover {
-    background-color: #3e8e41;
-  }
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 54px;
+}
+
+.module__stone{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+
+  /* Even paragraphs */
+.module__stone:nth-of-type(2n) {
+    left: -50px;
+}
+
+.module__stone:nth-of-type(3n) {
+    left: -100px;
+}
+
+.module__stone a{
+    display: block;
+    width: 150px;
+    height: 150px;
+    transition: 200ms;
+}
+
+.module__stone a img{
+    width: 100%;
+    border-radius: 50%;
+}
+
+.module__stone:hover a{
+    width:160px ;
+}
+
+.module__stone:hover img{
+    
+    box-shadow: 0 0 10px var(--main-colors-green);
+}
 
 /*-------------------------------------record_audio.html style ------------------------------------*/
 #btns img {
@@ -442,8 +469,7 @@ nav {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* background: rgb(4,72,171);
-    background: radial-gradient(circle, rgba(4,72,171,1) 0%, rgba(1,11,70,1) 74%, rgba(0,10,69,1) 100%);         */
+    background: radial-gradient(circle, rgba(4,72,171,1) 0%, rgba(1,11,70,1) 74%, rgba(0,10,69,1) 100%);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -458,7 +484,7 @@ nav {
 }
 
 .register__login__logo {
-    width: 210px;
+    width: 230px;
     object-fit: contain;
     cursor: pointer;
     position: absolute;
@@ -524,6 +550,10 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
+    background: radial-gradient(circle, rgba(4,72,171,1) 0%, rgba(1,11,70,1) 74%, rgba(0,10,69,1) 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .login {
