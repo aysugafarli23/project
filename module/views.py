@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import resolve
 from django.contrib import messages
 from contact.forms import ContactForm  
 from openai import OpenAI
@@ -8,6 +7,10 @@ from .models import *
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import FileSystemStorage
+from .models import Word, CustomerRecording
+from openai import Client
+from django.core.files import File
+import re, os
 # Create your views here.
 
 def modulesPage(request):
@@ -95,11 +98,74 @@ def lessonSectionPage(request, pk):
 
 
 
-def record_audio(request):
-    return render(request, 'record_audio.html')
+# def record_audio(request):
+#     return render(request, 'record_audio.html')
+
+# @csrf_exempt
+# # @login_required
+# def upload_media(request):
+#     if request.method == 'POST':
+#         if 'media' not in request.FILES:
+#             return JsonResponse({'success': False, 'error': 'No media file found'}, status=400)
+        
+#         media_file = request.FILES['media']
+#         content_type = media_file.content_type
+#         content = Content.objects.create(
+#             title='Recorded Media',
+#             body='This is a recorded media file.',
+#             image=None,  # Assuming no image
+#             audio=media_file if content_type.startswith('audio/') else None,
+#             video=media_file if content_type.startswith('video/') else None
+#         )
+#         return JsonResponse({'success': True, 'content_id': content.id})
+    
+#     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=400)
+    
+
+
+# a view to generate the audio files for each word using OpenAI
+def generate_speech(request):
+    words = Word.objects.all()
+    client = Client(api_key="sk-proj-8tsKt51ax7c9AoOO3RYST3BlbkFJkVGybZPjPoHTxK1LZXIm")
+    for word in words:
+        filename = re.sub(r'[^\w\s-]', '', word.text).replace(' ', '_')  # Replace invalid characters with underscores
+        speech_file_path = Path(__file__).parent / f"words_audio/{filename}_alloy.mp3"  # Add word ID to filename to avoid overwrites
+        
+        with client.audio.speech.with_streaming_response.create(
+            model="tts-1",
+            voice="alloy",
+            input=word.text
+        ) as response:
+            response.stream_to_file(str(speech_file_path))  # Stream to the file path
+
+        with open(speech_file_path, 'rb') as f:
+            word.audio_file_alloy.save(speech_file_path.name, File(f), save=True)
+            
+    for word in words:
+        filename = re.sub(r'[^\w\s-]', '', word.text).replace(' ', '_')  # Replace invalid characters with underscores
+        speech_file_path = Path(__file__).parent / f"words_audio/{filename}_nova.mp3"  # Add word ID to filename to avoid overwrites
+        
+        with client.audio.speech.with_streaming_response.create(
+            model="tts-1",
+            voice="nova",
+            input=word.text
+        ) as response:
+            response.stream_to_file(str(speech_file_path))  # Stream to the file path
+
+        with open(speech_file_path, 'rb') as f:
+            word.audio_file_nova.save(speech_file_path.name, File(f), save=True)
+           
+    
+    return render(request, 'words.html', {'words': words})
+
+
+
+# a view to handle customer recordings
+def record_audio(request, word_id):
+    word = Word.objects.get(id=word_id)
+    return render(request, 'record_audio.html', {'word': word})
 
 @csrf_exempt
-# @login_required
 def upload_media(request):
     if request.method == 'POST':
         if 'media' not in request.FILES:
@@ -107,15 +173,12 @@ def upload_media(request):
         
         media_file = request.FILES['media']
         content_type = media_file.content_type
-        content = Content.objects.create(
-            title='Recorded Media',
-            body='This is a recorded media file.',
-            image=None,  # Assuming no image
-            audio=media_file if content_type.startswith('audio/') else None,
-            video=media_file if content_type.startswith('video/') else None
+        word_id = request.POST.get('word_id')
+        word = Word.objects.get(id=word_id)
+        customer_recording = CustomerRecording.objects.create(
+            audio_file=media_file,
+            word=word
         )
-        return JsonResponse({'success': True, 'content_id': content.id})
+        return JsonResponse({'success': True, 'content_id': customer_recording.id})
     
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=400)
-    
- 

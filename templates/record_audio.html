@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% comment %} {% extends "base.html" %}
 {% load static %}
 
 {% block nav__title %}
@@ -15,4 +15,16 @@ Record the Text Below
 <div>
   <ul  class="list-unstyled" id='ul'></ul>
 </div>
-{% endblock content %}
+{% endblock content %} {% endcomment %}
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Record Your Audio</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="word_id" value="{{ word.id }}">
+    <input type="file" name="media">
+    <button type="submit">Record and Upload</button>
+  </form>
+{% endblock %}

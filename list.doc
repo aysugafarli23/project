@@ -23,3 +23,19 @@ Priority:
 -ContactForum
  --Email sending
  --Recaptcha
+
+
+---------------------------
+  {% comment %} <div class="modules__container">
+    <div class="module-grid">
+      {% for module in modules %}
+        <div class="module-card">
+          <h2>{{ module.module_title }}</h2>
+          <p>{{ module.module_description }}</p>
+          <a href="{% url 'modules:lessons' module.pk %}" class="btn btn-primary">Start Learning</a>
+        </div>
+      {% empty %}
+        <p>No modules available.</p>
+      {% endfor %}
+    </div>
+  </div> {% endcomment %}

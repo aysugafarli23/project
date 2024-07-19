@@ -50,3 +50,17 @@ class Score(models.Model):
 
     def __str__(self):
         return f'{self.user} - {self.score_content} - {self.score}'
+
+class Word(models.Model):
+    text = models.CharField(max_length=255)
+    audio_file_alloy = models.FileField(upload_to='words_audio/', blank=True, null=True)
+    audio_file_nova = models.FileField(upload_to='words_audio/', blank=True, null=True)
+    content = models.ForeignKey(Content, on_delete=models.CASCADE, related_name='words')
+    
+    def __str__(self):
+       return f"{self.text}"
+
+class CustomerRecording(models.Model):
+    audio_file = models.FileField(upload_to='customer_recordings/')
+    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
