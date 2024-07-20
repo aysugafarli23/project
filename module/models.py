@@ -35,8 +35,6 @@ class Content(models.Model):
     content_title = models.CharField(max_length=200)
     body = models.TextField(blank=True, null=True)
     content_image = models.FileField(upload_to='content_images/', blank=True, null=True)
-    audio = models.FileField(upload_to='content_audio/', blank=True, null=True)
-    audio_file = models.FileField(upload_to="recordings/", null=True, blank=True)
     video_link = models.URLField(blank=True, null=True)
      
     def __str__(self):

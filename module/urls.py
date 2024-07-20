@@ -6,9 +6,7 @@ app_name = "modules"
 urlpatterns = [   
     path("<pk>/lessons/", lessonsPage , name="lessons"), 
     path("lessons/<pk>/", lessonSectionPage , name="lessons_section"),
-    path('upload_media/', upload_media, name='upload_media'),
     path('words/', generate_speech, name='generate_speech'),
-    path('record_audio/<int:word_id>/', record_audio, name='record_audio'),
-    
-
+    path('record_audio/<int:word_id>/', WordView.as_view(), name='record_audio'),
+    path('compare_audio/<int:word_id>/', compare_audio, name='compare_audio'),
 ]

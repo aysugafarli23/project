@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block nav__title %}Listen and Record{% endblock %}
+
+{% block content %}
+    <div class="listen__record__container">
+        <div class="listen__record__content">
+            <div class="listen__record__word"><h1>{{ word.text }}</h1></div>
+            <div class="listen__record__recordings">
+                <div class="alloy__recordings"><audio controls>
+                        <source src="{{ word.audio_file_alloy.url }}" type="audio/mp3">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+                <div class="nova__recordings">
+                    <audio controls>
+                        <source src="{{ word.audio_file_nova.url }}" type="audio/mp3">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+            </div>
+            <div class="listen__record__btns">
+                {% if previous_word_id %}
+                <button class="btn previous__btn" onclick="window.location.href='{% url 'modules:record_audio' previous_word_id %}'">Previous</button>
+                {% endif %}
+                <button class="btn record__btn" id="recordButton" onclick="toggleRecording()">Record</button>
+                {% if next_word_id %}
+                <button class="btn next__btn" onclick="window.location.href='{% url 'modules:record_audio' next_word_id %}'">Next</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="compareModal" tabindex="-1" aria-labelledby="compareModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="compareModalLabel">Compare Audio</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="compareModalBody">
+                    <!-- Comparison content will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Try Again</button>
+                    <button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'modules:record_audio' next_word_id %}'">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+

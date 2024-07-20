@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.urls import resolve
 from contact.forms import ContactForm  
 from openai import OpenAI
 from pathlib import Path
@@ -11,6 +12,7 @@ from .models import Word, CustomerRecording
 from openai import Client
 from django.core.files import File
 import re, os
+from django.views import View
 # Create your views here.
 
 def modulesPage(request):
@@ -64,64 +66,6 @@ def lessonSectionPage(request, pk):
     return render(request, 'modulesections.html', context)
 
 
-# def generate_speech():
-#     client=OpenAI(api_key = "sk-proj-8tsKt51ax7c9AoOO3RYST3BlbkFJkVGybZPjPoHTxK1LZXIm")
-#     speech_file_path = Path(__file__).parent / "speech.mp3"
-#     speech_file_path = Path(__file__).parent / "speech2.mp3"
-
-#     with client.audio.speech.with_streaming_response.create(
-#         model="tts-1",
-#         voice="alloy",
-#         input="I see skies of blue and clouds of white\nThe bright blessed days, the dark sacred nights\nAnd I think to myself\nWhat a wonderful world"
-#     ) as response:
-#         response.stream_to_file(speech_file_path)
-        
-#     with client.audio.speech.with_streaming_response.create(
-#         model="tts-1",
-#         voice="echo",
-#         input="Okay guys we'll learn English"
-#     ) as response:
-#         response.stream_to_file(speech_file_path)
-        
-# generate_speech()
-
-#Still not applied for now
-# def calculate_cost(text_string, model_id):
-#     cost_tier = {
-#         'tts-1': 0.015,
-#         'tts-1-hd': 0.03
-#     }
-#     cost_unit = cost_tier.get(model_id, None)
-#     if cost_unit is None:
-#         return None
-#     return (cost_unit * len(text_string)) / 1000
-
-
-
-# def record_audio(request):
-#     return render(request, 'record_audio.html')
-
-# @csrf_exempt
-# # @login_required
-# def upload_media(request):
-#     if request.method == 'POST':
-#         if 'media' not in request.FILES:
-#             return JsonResponse({'success': False, 'error': 'No media file found'}, status=400)
-        
-#         media_file = request.FILES['media']
-#         content_type = media_file.content_type
-#         content = Content.objects.create(
-#             title='Recorded Media',
-#             body='This is a recorded media file.',
-#             image=None,  # Assuming no image
-#             audio=media_file if content_type.startswith('audio/') else None,
-#             video=media_file if content_type.startswith('video/') else None
-#         )
-#         return JsonResponse({'success': True, 'content_id': content.id})
-    
-#     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=400)
-    
-
 
 # a view to generate the audio files for each word using OpenAI
 def generate_speech(request):
@@ -159,26 +103,41 @@ def generate_speech(request):
     return render(request, 'words.html', {'words': words})
 
 
+class WordView(View):
+    template_name = 'word_detail.html'
 
-# a view to handle customer recordings
-def record_audio(request, word_id):
-    word = Word.objects.get(id=word_id)
-    return render(request, 'record_audio.html', {'word': word})
+    def get(self, request, word_id):
+        word = get_object_or_404(Word, id=word_id)
+        next_word = Word.objects.filter(id__gt=word_id).order_by('id').first()
+        previous_word = Word.objects.filter(id__lt=word_id).order_by('-id').first()
+        next_word_id = next_word.id if next_word else None
+        previous_word_id = previous_word.id if previous_word else None
+        return render(request, self.template_name, {
+            'word': word,
+            'next_word_id': next_word_id,
+            'previous_word_id': previous_word_id
+        })
 
-@csrf_exempt
-def upload_media(request):
-    if request.method == 'POST':
-        if 'media' not in request.FILES:
-            return JsonResponse({'success': False, 'error': 'No media file found'}, status=400)
-        
-        media_file = request.FILES['media']
-        content_type = media_file.content_type
-        word_id = request.POST.get('word_id')
-        word = Word.objects.get(id=word_id)
-        customer_recording = CustomerRecording.objects.create(
-            audio_file=media_file,
-            word=word
-        )
-        return JsonResponse({'success': True, 'content_id': customer_recording.id})
-    
-    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=400)
+
+    @csrf_exempt
+    def post(self, request, word_id):
+        word = get_object_or_404(Word, id=word_id)
+        if 'media' in request.FILES:
+            media_file = request.FILES['media']
+            customer_recording = CustomerRecording.objects.create(
+                audio_file=media_file,
+                word=word
+            )
+            return JsonResponse({'success': True, 'recording_id': customer_recording.id})
+        return JsonResponse({'success': False, 'error': 'No media file found'}, status=400)
+
+def compare_audio(request, word_id):
+    word = get_object_or_404(Word, id=word_id)
+    recordings = CustomerRecording.objects.filter(word=word)
+    next_word = Word.objects.filter(id__gt=word_id).order_by('id').first()
+    next_word_id = next_word.id if next_word else None
+    return render(request, 'compare_audio.html', {
+        'word': word,
+        'recordings': recordings,
+        'next_word_id': next_word_id
+    })

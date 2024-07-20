@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Compare Audio</title>
+</head>
+<body>
+    <h1>Compare Audio for {{ word.text }}</h1>
+    <h2>Your Recording</h2>
+    {% for recording in recordings %}
+        <audio controls>
+            <source src="{{ recording.audio_file.url }}" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+    {% endfor %}
+    <h2>Native Recording</h2>
+    <audio controls>
+        <source src="{{ word.audio_file_alloy.url }}" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+    <audio controls>
+        <source src="{{ word.audio_file_nova.url }}" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>    
+    {% comment %} <button onclick="window.location.href='{% url 'modules:record_audio' word.id %}'">Try Again</button>
+    {% if next_word_id %}
+        <button onclick="window.location.href='{% url 'modules:record_audio' next_word_id %}'">Next</button>
+    {% else %}
+        <button disabled>No More Words</button>
+    {% endif %} {% endcomment %}
+</body>
+</html>
