@@ -13,6 +13,7 @@ from openai import Client
 from django.core.files import File
 import re, os
 from django.views import View
+from django.utils.decorators import method_decorator
 # Create your views here.
 
 def modulesPage(request):
@@ -103,6 +104,7 @@ def generate_speech(request):
     return render(request, 'words.html', {'words': words})
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class WordView(View):
     template_name = 'word_detail.html'
 
@@ -118,11 +120,13 @@ class WordView(View):
             'previous_word_id': previous_word_id
         })
 
-
-    @csrf_exempt
     def post(self, request, word_id):
         word = get_object_or_404(Word, id=word_id)
         if 'media' in request.FILES:
+            # Delete the previous recording
+            CustomerRecording.objects.filter(word=word).delete()
+
+            # Save the new recording
             media_file = request.FILES['media']
             customer_recording = CustomerRecording.objects.create(
                 audio_file=media_file,

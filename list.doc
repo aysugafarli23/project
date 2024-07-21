@@ -4,6 +4,10 @@ Priority:
  **--Chatgpt API can be used maybe instead of YouGlish API
 
 -Modules
+**A video with complete sentences created by OpenAI
+***OpenAI assessment for customer recordings
+*** Game integration plus change the voice to OpenAI
+
  **--UI
  **--ARRANGE and fulfill the content
  **-- For listening add both men and women voices with OpenAI
@@ -13,7 +17,6 @@ Priority:
  --RECORDING
 
 -Profile
-**-- 403 Page- When the username or password is wrong for the login
  **--Term & Conditions Page
  --Contact Form Function
  *--Login Page=>Forgot Password? Link

@@ -8,25 +8,55 @@
         <div class="listen__record__content">
             <div class="listen__record__word"><h1>{{ word.text }}</h1></div>
             <div class="listen__record__recordings">
-                <div class="alloy__recordings"><audio controls>
-                        <source src="{{ word.audio_file_alloy.url }}" type="audio/mp3">
-                        Your browser does not support the audio element.
-                    </audio>
+                 <!-- Alloy -->
+            <div class="audio-player" id="audio-player-alloy">
+                <div class="icon-container">
+                    <img src="{% static './images/alloy.png' %}" alt="man-avatar">
                 </div>
-                <div class="nova__recordings">
-                    <audio controls>
-                        <source src="{{ word.audio_file_nova.url }}" type="audio/mp3">
-                        Your browser does not support the audio element.
-                    </audio>
+                <audio id="audio-alloy">
+                    <source src="{{ word.audio_file_alloy.url }}" type="audio/mp3">
+                    Your browser does not support the audio element.
+                </audio>
+                <div class="controls">
+                    <button class="player-button" onclick="togglePlayPause('audio-alloy', this)">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                    <input type="range" class="timeline" id="timeline-alloy" max="100" value="0" onchange="seekAudio('audio-alloy', 'timeline-alloy')">
+                    <button class="sound-button">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </button>
                 </div>
+            </div>
+
+            <!-- Nova -->
+            <div class="audio-player" id="audio-player-nova">
+                <div class="icon-container">
+                    <img src="{% static './images/nova.png' %}" alt="man-avatar">
+                </div>
+                <audio id="audio-nova">
+                    <source src="{{ word.audio_file_nova.url }}" type="audio/mp3">
+                    Your browser does not support the audio element.
+                </audio>
+                <div class="controls">
+                    <button class="player-button" onclick="togglePlayPause('audio-nova', this)">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                    <input type="range" class="timeline" id="timeline-nova" max="100" value="0" onchange="seekAudio('audio-nova', 'timeline-nova')">
+                    <button class="sound-button">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </button>
+                </div>
+            </div>
+
+                
             </div>
             <div class="listen__record__btns">
                 {% if previous_word_id %}
-                <button class="btn previous__btn" onclick="window.location.href='{% url 'modules:record_audio' previous_word_id %}'">Previous</button>
+                <button class="btn previous__btn" onclick="window.location.href='{% url 'modules:record_audio' previous_word_id %}'"><span><i class="fa-solid fa-chevron-left"></i></span> Previous</button>
                 {% endif %}
-                <button class="btn record__btn" id="recordButton" onclick="toggleRecording()">Record</button>
+                <button class="btn record__btn" id="recordButton" onclick="toggleRecording()"><span><i class="fa-solid fa-microphone"></i></span> Record</button>
                 {% if next_word_id %}
-                <button class="btn next__btn" onclick="window.location.href='{% url 'modules:record_audio' next_word_id %}'">Next</button>
+                <button class="btn next__btn" onclick="window.location.href='{% url 'modules:record_audio' next_word_id %}'">Next <span><i class="fa-solid fa-chevron-right"></i></span></button>
                 {% endif %}
             </div>
         </div>
@@ -50,11 +80,12 @@
                     <!-- Comparison content will be loaded here -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Try Again</button>
-                    <button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'modules:record_audio' next_word_id %}'">Next</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><span><i class="fa-solid fa-arrow-rotate-left"></i></span> Try Again</button>
+                    <button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'modules:record_audio' next_word_id %}'">Next <span><i class="fa-solid fa-chevron-right"></i></span></button>
                 </div>
             </div>
         </div>
     </div>
-{% endblock content %}
 
+
+{% endblock content %}
