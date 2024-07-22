@@ -1,28 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Compare Audio</title>
     {% load static %}
-</head>
-<body>
+  </head>
+  <body>
     <p>Listen to your voice and compare to native voice {{ word.text }}</p>
-    <h4>Your Voice <span><img src="{% static './images/sound.png' %}" alt=""></span></h4>
+    <h4>Your Voice <span><img src="{% static './images/sound.png' %}" alt="" /></span></h4>
     {% for recording in recordings %}
-        <audio controls>
-            <source src="{{ recording.audio_file.url }}" type="audio/mp3">
-            Your browser does not support the audio element.
-        </audio>
+      <audio controls>
+        <source src="{{ recording.audio_file.url }}" type="audio/mp3" />Your browser does not support the audio element.
+      </audio>
     {% endfor %}
-    <h4>Coach Voice <span><img src="{% static './images/coach.png' %}" alt=""></span></h4>
+    <h4>Coach Voice <span><img src="{% static './images/coach.png' %}" alt="" /></span></h4>
     <audio controls>
-        <source src="{{ word.audio_file_alloy.url }}" type="audio/mp3">
-        Your browser does not support the audio element.
+      <source src="{{ word.audio_file_alloy.url }}" type="audio/mp3" />Your browser does not support the audio element.
     </audio>
     <audio controls>
-        <source src="{{ word.audio_file_nova.url }}" type="audio/mp3">
-        Your browser does not support the audio element.
-    </audio>    
-    
-</body>
+      <source src="{{ word.audio_file_nova.url }}" type="audio/mp3" />Your browser does not support the audio element.
+    </audio>
+  </body>
 </html>

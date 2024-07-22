@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- pronunciation_assessment.html -->
+<h1>Pronunciation Assessment for "{{ word.text }}"</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="media" accept="audio/*" required>
+    <button type="submit">Upload and Assess</button>
+</form>
+
+{% if transcript %}
+    <p>Transcript: {{ transcript }}</p>
+    <p>Nativeness Percentage: {{ native_percentage }}%</p>
+    <p>Feedback: {{ feedback }}</p>
+
+    <h2>Pronunciation Graph</h2>
+    <div style="display: flex;">
+        {% for letter, color in graph_data %}
+            <div style="width: 20px; height: 20px; background-color: {{ color }}; margin: 2px;">
+                {{ letter }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock content %}

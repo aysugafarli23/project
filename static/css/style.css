@@ -449,7 +449,7 @@ nav {
     transition: 200ms;
 }
 
-.btn:hover{
+.btn:hover {
     color: var(--neutral-colors-white);
     box-shadow: 0 0 10px var(--main-colors-green);
 }
@@ -782,10 +782,11 @@ h2 {
     background-color: var(--main-colors-green);
 }
 
-#compareModalBody{
-    margin-left:10%;
+#compareModalBody {
+    margin-left: 10%;
     text-align: center;
 }
+
 /*---------------------Audio Player--------------------*/
 .audio-player {
     --player-button-width: 3em;
@@ -808,15 +809,15 @@ h2 {
     align-items: center;
 }
 
-.icon-container img{
+.icon-container img {
     width: 100%;
 }
-  
+
 .audio-icon {
-     width: 90%;
-     height: 90%;
+    width: 90%;
+    height: 90%;
 }
-  
+
 .controls {
     display: flex;
     flex-direction: row;
@@ -824,7 +825,7 @@ h2 {
     width: 100%;
     margin-top: 10px;
 }
-  
+
 .player-button {
     background-color: transparent;
     border: 0;
@@ -834,7 +835,7 @@ h2 {
     padding: 0;
     color: var(--neutral-colors-white);
 }
-  
+
 .timeline {
     -webkit-appearance: none;
     width: calc(100% - (var(--player-button-width) + var(--sound-button-width) + var(--space)));
@@ -846,7 +847,7 @@ h2 {
     background-repeat: no-repeat;
     margin-right: var(--space);
 }
-  
+
 .timeline::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 1em;
@@ -857,7 +858,7 @@ h2 {
     transition: all .1s;
     background-color: var(--main-colors-sapphire);
 }
-  
+
 .timeline::-moz-range-thumb {
     -webkit-appearance: none;
     width: 1em;
@@ -868,7 +869,7 @@ h2 {
     transition: all .1s;
     background-color: var(--main-colors-sapphire);
 }
-  
+
 .timeline::-ms-thumb {
     -webkit-appearance: none;
     width: 1em;
@@ -879,52 +880,52 @@ h2 {
     transition: all .1s;
     background-color: var(--main-colors-sapphire);
 }
-  
+
 .timeline::-webkit-slider-thumb:hover {
     background-color: var(--main-colors-sapphire);
 }
-  
+
 .timeline:hover::-webkit-slider-thumb {
     opacity: 1;
 }
-  
+
 .timeline::-moz-range-thumb:hover {
     background-color: var(--main-colors-sapphire);
 }
-  
+
 .timeline:hover::-moz-range-thumb {
     opacity: 1;
 }
-  
+
 .timeline::-ms-thumb:hover {
     background-color: var(--main-colors-sapphire);
 }
-  
+
 .timeline:hover::-ms-thumb {
     opacity: 1;
 }
-  
+
 .timeline::-webkit-slider-runnable-track {
     -webkit-appearance: none;
     box-shadow: none;
     border: none;
     background: transparent;
 }
-  
+
 .timeline::-moz-range-track {
     -webkit-appearance: none;
     box-shadow: none;
     border: none;
     background: transparent;
 }
-  
+
 .timeline::-ms-track {
     -webkit-appearance: none;
     box-shadow: none;
     border: none;
     background: transparent;
 }
-  
+
 .sound-button {
     background-color: transparent;
     border: 0;

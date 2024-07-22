@@ -9,4 +9,5 @@ urlpatterns = [
     path('words/', generate_speech, name='generate_speech'),
     path('record_audio/<int:word_id>/', WordView.as_view(), name='record_audio'),
     path('compare_audio/<int:word_id>/', compare_audio, name='compare_audio'),
+    path('assess_pronunciation/<int:word_id>/', PronunciationAssessmentView.as_view(), name='assess_pronunciation')
 ]
