@@ -17,137 +17,139 @@
     {% endblock head %}
   </head>
 
-  <body>
-    <div class="container__general" id="{% block container_id %}{% endblock container_id %}">
-      {% include "container__general__content.html" %}
-      {% block content %}
+   <body>
+        <div class="container__general" id="{% block container_id %}{% endblock container_id %}">
+        {% include "container__general__content.html" %}
+        {% block content %}
 
-      {% endblock %}
-    </div>
+        {% endblock %}
+        </div>
+        
+     </div>
+        
+        <script src="{% static 'js/contact.js' %}"></script>
+        <script src="{% static 'js/module.js' %}" ></script>
+        <script src="{% static 'js/profile.js' %}"></script>
+        <script src="{% static 'js/record_audio.js' %}"></script>
+        <script src="https://youglish.com/public/emb/widget.js"></script>
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <!-- A plugin for password show/hide  -->
+        <script src="https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js"></script>
     
-  </div>
-    
-    <script src="{% static 'js/contact.js' %}"></script>
-    <script src="{% static 'js/module.js' %}" ></script>
-    <script src="{% static 'js/profile.js' %}"></script>
-    <script src="{% static 'js/record_audio.js' %}"></script>
-    <script src="https://youglish.com/public/emb/widget.js"></script>
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-   <!-- A plugin for password show/hide  -->
-   <script src="https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js"></script>
-   
 
-   {% comment %} Listen, Record and Compare Page {% endcomment %}
-   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script>
-    let mediaRecorder;
-    let audioChunks = [];
-    let isRecording = false;
-    const wordId = {{ word.id }};
+       {% comment %} Listen, Record and Compare Page {% endcomment %}
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            let mediaRecorder;
+            let audioChunks = [];
+            let isRecording = false;
+            const wordId = {{ word.id }};
 
-    function toggleRecording() {
-        if (isRecording) {
-            stopRecording();
-        } else {
-            startRecording();
-        }
-    }
+            function toggleRecording() {
+                if (isRecording) {
+                    stopRecording();
+                } else {
+                    startRecording();
+                }
+            }
 
-    function startRecording() {
-        // Clear previous audio chunks
-        audioChunks = [];
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(stream => {
-                mediaRecorder = new MediaRecorder(stream);
-                mediaRecorder.start();
-                mediaRecorder.ondataavailable = event => {
-                    audioChunks.push(event.data);
-                };
-                mediaRecorder.onstop = () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
-                    const formData = new FormData();
-                    formData.append('media', audioBlob);
-                    fetch(`/modules/record_audio/${wordId}/`, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRFToken': '{{ csrf_token }}'
-                        }
-                    }).then(response => response.json())
-                      .then(data => {
-                          if (data.success) {
-                              $('#compareModal').modal('show');
-                              loadComparisonData();
-                          }
-                      })
-                      .catch(error => console.error('Error:', error));
-                };
-                isRecording = true;
-                document.getElementById('recordButton').innerHTML = '<span><i class="fa-solid fa-stop"></i></span> Stop';
-            })
-            .catch(error => console.error('Error accessing media devices.', error));
-    }
+            function startRecording() {
+                // Clear previous audio chunks
+                audioChunks = [];
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(stream => {
+                        mediaRecorder = new MediaRecorder(stream);
+                        mediaRecorder.start();
+                        mediaRecorder.ondataavailable = event => {
+                            audioChunks.push(event.data);
+                        };
+                        mediaRecorder.onstop = () => {
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                            const formData = new FormData();
+                            formData.append('media', audioBlob);
+                            fetch(`/modules/record_audio/${wordId}/`, {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-CSRFToken': '{{ csrf_token }}'
+                                }
+                            }).then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    $('#compareModal').modal('show');
+                                    loadComparisonData();
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
+                        };
+                        isRecording = true;
+                        document.getElementById('recordButton').innerHTML = '<span><i class="fa-solid fa-stop"></i></span> Stop';
+                    })
+                    .catch(error => console.error('Error accessing media devices.', error));
+            }
 
-    function stopRecording() {
-        mediaRecorder.stop();
-        isRecording = false;
-        document.getElementById('recordButton').innerHTML = '<span><i class="fa-solid fa-microphone"></i></span> Record';
-    }
+            function stopRecording() {
+                mediaRecorder.stop();
+                isRecording = false;
+                document.getElementById('recordButton').innerHTML = '<span><i class="fa-solid fa-microphone"></i></span> Record';
+            }
 
-    function loadComparisonData() {
-        fetch(`/modules/compare_audio/${wordId}/`)
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('compareModalBody').innerHTML = html;
-            })
-            .catch(error => console.error('Error loading comparison data.', error));
-    }
+            function loadComparisonData() {
+                fetch(`/modules/compare_audio/${wordId}/`)
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('compareModalBody').innerHTML = html;
+                    })
+                    .catch(error => console.error('Error loading comparison data.', error));
+            }
 
-    function toggleAudio(audio, button) {
-        if (audio.paused) {
-            audio.play();
-            button.innerHTML = '<i class="fa-solid fa-pause"></i>';
-        } else {
-            audio.pause();
-            button.innerHTML = '<i class="fa-solid fa-play"></i>';
-        }
-    }
+            function toggleAudio(audio, button) {
+                if (audio.paused) {
+                    audio.play();
+                    button.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                } else {
+                    audio.pause();
+                    button.innerHTML = '<i class="fa-solid fa-play"></i>';
+                }
+            }
 
-    function changeTimelinePosition(audio, timeline) {
-        const percentagePosition = (100 * audio.currentTime) / audio.duration;
-        timeline.style.backgroundSize = `${percentagePosition}% 100%`;
-        timeline.value = percentagePosition;
-    }
+            function changeTimelinePosition(audio, timeline) {
+                const percentagePosition = (100 * audio.currentTime) / audio.duration;
+                timeline.style.backgroundSize = `${percentagePosition}% 100%`;
+                timeline.value = percentagePosition;
+            }
 
-    function audioEnded(button) {
-        button.innerHTML = '<i class="fa-solid fa-play"></i>';
-    }
+            function audioEnded(button) {
+                button.innerHTML = '<i class="fa-solid fa-play"></i>';
+            }
 
-    function changeSeek(audio, timeline) {
-        const time = (timeline.value * audio.duration) / 100;
-        audio.currentTime = time;
-    }
+            function changeSeek(audio, timeline) {
+                const time = (timeline.value * audio.duration) / 100;
+                audio.currentTime = time;
+            }
 
-    function toggleSound(audio, button) {
-        audio.muted = !audio.muted;
-        button.innerHTML = audio.muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
-    }
+            function toggleSound(audio, button) {
+                audio.muted = !audio.muted;
+                button.innerHTML = audio.muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+            }
 
-    document.querySelectorAll('.audio-player').forEach(player => {
-        const audio = player.querySelector('audio');
-        const playButton = player.querySelector('.player-button');
-        const timeline = player.querySelector('.timeline');
-        const soundButton = player.querySelector('.sound-button');
+            document.querySelectorAll('.audio-player').forEach(player => {
+                const audio = player.querySelector('audio');
+                const playButton = player.querySelector('.player-button');
+                const timeline = player.querySelector('.timeline');
+                const soundButton = player.querySelector('.sound-button');
 
-        playButton.addEventListener('click', () => toggleAudio(audio, playButton));
-        audio.ontimeupdate = () => changeTimelinePosition(audio, timeline);
-        audio.onended = () => audioEnded(playButton);
-        timeline.addEventListener('input', () => changeSeek(audio, timeline));
-        soundButton.addEventListener('click', () => toggleSound(audio, soundButton));
-    });
-</script>
+                playButton.addEventListener('click', () => toggleAudio(audio, playButton));
+                audio.ontimeupdate = () => changeTimelinePosition(audio, timeline);
+                audio.onended = () => audioEnded(playButton);
+                timeline.addEventListener('input', () => changeSeek(audio, timeline));
+                soundButton.addEventListener('click', () => toggleSound(audio, soundButton));
+            });
+        </script>
+  </body>
+</html>

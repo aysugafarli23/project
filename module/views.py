@@ -13,10 +13,16 @@ import re, os
 from django.views import View
 from django.utils.decorators import method_decorator
 from openai import OpenAI
+import openai
+from language_tool_python import LanguageTool
+import logging
+from django.conf import settings
+from LangHelper.Assess import assess_transcription as langhelper_assess_transcription
 
-client = OpenAI(api_key="sk-proj-8tsKt51ax7c9AoOO3RYST3BlbkFJkVGybZPjPoHTxK1LZXIm")
+
+
+
 # Create your views here.
-
 def modulesPage(request):
      # Contact form logic
     if request.method == 'POST':
@@ -147,116 +153,82 @@ def compare_audio(request, word_id):
         'recordings': recordings,
         'next_word_id': next_word_id
     })
+    
 
 # AI Assessment on user recordings
-def transcribe_audio(audio_file_path):
-    with open(audio_file_path, 'rb') as audio_file:
-        response = client.audio.transcribe(model="whisper-1",
-        file=audio_file)
-    return response.text
+# client = OpenAI(api_key="sk-proj-8tsKt51ax7c9AoOO3RYST3BlbkFJkVGybZPjPoHTxK1LZXIm")
 
-def calculate_native_percentage(transcript, target_text):
-    transcript_words = set(transcript.lower().split())
-    target_words = set(target_text.lower().split())
-    matching_words = transcript_words & target_words
-    native_percentage = (len(matching_words) / len(target_words)) * 100
-    return native_percentage
+# def transcribe_audio(audio_file_path):
+#     with open(audio_file_path, 'rb') as audio_file:
+#         response = client.audio.transcriptions.create(
+#             file=audio_file,
+#             model="whisper-1",
+#             language="en",
+#             temperature=0,
+#             response_format="text",
+#         )
+      
+#         transcription = response["text"]
+#         return transcription
 
-def generate_feedback(native_percentage):
-    if native_percentage > 90:
-        return "Excellent pronunciation!"
-    elif native_percentage > 75:
-        return "Good job, but there's room for improvement."
-    elif native_percentage > 50:
-        return "Fair attempt, keep practicing."
-    else:
-        return "Keep practicing, you'll get better!"
-
-def generate_graph_data(transcript, target_text):
-    target_letters = list(target_text)
-    transcript_letters = list(transcript)
-    graph_data = []
-
-    for i, letter in enumerate(target_letters):
-        if i < len(transcript_letters) and transcript_letters[i].lower() == letter.lower():
-            graph_data.append((letter, 'green'))
-        else:
-            graph_data.append((letter, 'red'))
-
-    return graph_data
+# def assess_transcription(transcription, reference_text):
+#     return langhelper_assess_transcription(transcription, reference_text)
 
 
-def transcribe_audio(audio_file_path):
-    with open(audio_file_path, 'rb') as audio_file:
-        response = client.audio.transcribe(model="whisper-1",
-        file=audio_file)
-    return response.text
+# logger = logging.getLogger(__name__)
 
-def calculate_native_percentage(transcript, target_text):
-    transcript_words = set(transcript.lower().split())
-    target_words = set(target_text.lower().split())
-    matching_words = transcript_words & target_words
-    native_percentage = (len(matching_words) / len(target_words)) * 100
-    return native_percentage
+# class PronunciationAssessmentView(View):
+#     def post(self, request, word_id):
+#         word = get_object_or_404(Word, id=int(word_id))
+#         logger.debug("Word retrieved: %s", word.text)
 
-def generate_feedback(native_percentage):
-    if native_percentage > 90:
-        return "Excellent pronunciation!"
-    elif native_percentage > 75:
-        return "Good job, but there's room for improvement."
-    elif native_percentage > 50:
-        return "Fair attempt, keep practicing."
-    else:
-        return "Keep practicing, you'll get better!"
+#         if 'media' in request.FILES:
+#             media_file = request.FILES['media']
+#             logger.debug("Media file received: %s", media_file.name)
 
-def generate_graph_data(transcript, target_text):
-    target_letters = list(target_text)
-    transcript_letters = list(transcript)
-    graph_data = []
+#             customer_recording = CustomerRecording.objects.create(
+#                 audio_file=media_file,
+#                 word=word
+#             )
+#             logger.debug("CustomerRecording created: %s", customer_recording.id)
 
-    for i, letter in enumerate(target_letters):
-        if i < len(transcript_letters) and transcript_letters[i].lower() == letter.lower():
-            graph_data.append((letter, 'green'))
-        else:
-            graph_data.append((letter, 'red'))
+#             file_path = customer_recording.audio_file.path
+#             logger.debug("File path: %s", file_path)
 
-    return graph_data
+#             try:
+#                 transcription = transcribe_audio(file_path)
+#                 logger.debug("Transcription: %s", transcription)
 
-class PronunciationAssessmentView(View):
-    template_name = 'pronunciation_assessment.html'
+#                 assessment = assess_transcription(transcription, word.text)
+#                 logger.debug("Assessment: %s", assessment)
 
-    def get(self, request, word_id):
-        word = get_object_or_404(Word, id=word_id)
-        return render(request, self.template_name, {'word': word})
+#                 if not isinstance(assessment, dict):
+#                     logger.error("Assessment is not a dictionary")
+#                     return JsonResponse({'success': False, 'error': 'Invalid assessment response format'}, status=500)
 
-    def post(self, request, word_id):
-        word = get_object_or_404(Word, id=word_id)
-        if 'media' in request.FILES:
-            media_file = request.FILES['media']
-            customer_recording = CustomerRecording.objects.create(
-                audio_file=media_file,
-                word=word
-            )
+#                 expected_keys = ['pronunciation_score', 'accuracy_score', 'fluency_score']
+#                 for key in expected_keys:
+#                     if key not in assessment:
+#                         logger.error("Missing key in assessment response: %s", key)
+#                         return JsonResponse({'success': False, 'error': f'Missing key in assessment response: {key}'}, status=500)
 
-            # Transcribe the audio
-            transcript = transcribe_audio(customer_recording.audio_file.path)
+#                 response_data = {
+#                     'success': True,
+#                     'assessment': {
+#                         'pronunciation_score': assessment['pronunciation_score'],
+#                         'accuracy_score': assessment['accuracy_score'],
+#                         'fluency_score': assessment['fluency_score'],
+#                     }
+#                 }
+#                 logger.debug("Response Data: %s", response_data)
+#                 return JsonResponse(response_data)
+#             except Exception as e:
+#                 logger.error("Error during assessment: %s", str(e))
+#                 return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
-            # Calculate nativeness percentage
-            native_percentage = calculate_native_percentage(transcript, word.text)
+#         logger.error("No media file found in request")
+#         return JsonResponse({'success': False, 'error': 'No media file found'}, status=400)
 
-            # Generate feedback
-            feedback = generate_feedback(native_percentage)
-
-            # Generate graph data
-            graph_data = generate_graph_data(transcript, word.text)
-
-            context = {
-                'word': word,
-                'transcript': transcript,
-                'native_percentage': native_percentage,
-                'feedback': feedback,
-                'graph_data': graph_data
-            }
-            return render(request, self.template_name, context)
-
-        return JsonResponse({'success': False, 'error': 'No media file found'}, status=400)
+#     def get(self, request, word_id):
+#         word = get_object_or_404(Word, id=word_id)
+#         return render(request, 'pronunciation_assessment.html', {'word': word})
