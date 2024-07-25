@@ -636,7 +636,7 @@ h2 {
 
 .form-content .round {
     position: absolute;
-    top: 200px;
+    top: 225px;
     transform: translateX(230px);
     background-color: var(--main-colors-sapphire);
     width: 32px;

@@ -105,12 +105,12 @@ function gameOver(){
     const formData = new FormData();
     formData.append('new_score', elapsedTime);
 
-    fetch('/game/gameover/', {
+    fetch('/modules/game/gameover/', {
         method: 'POST',
         body: formData,
         headers: { 'X-CSRFToken': csrftoken }})
     .then(() => {
-        window.location.href = '/game/gameover/';
+        window.location.href = '/modules/game/gameover/';
     });
 }
 
