@@ -28,9 +28,4 @@ urlpatterns = [
     path("contents/update/<pk>/", ContentUpdateAPIView.as_view(), name="content-update"),
     path("contents/delete/<pk>/", ContentDeleteAPIView.as_view(), name="content-delete"),
 
-    path("scores/create/", ScoreCreateAPIView.as_view(), name="score-create"),
-    path("scores/list/", ScoreListAPIView.as_view(), name="score-list"),
-    path("scores/detail/<pk>/", ScoreDetailAPIView.as_view(), name="score-detail"),
-    path("scores/update/<pk>/", ScoreUpdateAPIView.as_view(), name="score-update"),
-    path("scores/delete/<pk>/", ScoreDeleteAPIView.as_view(), name="score-delete"),
 ]

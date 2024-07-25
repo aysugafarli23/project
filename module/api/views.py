@@ -6,8 +6,8 @@ from rest_framework.generics import (
     UpdateAPIView,
     CreateAPIView
 )
-from .serializers import ModuleSerializer, LessonSerializer, SectionSerializer, ContentSerializer, ScoreSerializer
-from ..models import Module, Lesson, Section, Content, Score
+from .serializers import ModuleSerializer, LessonSerializer, SectionSerializer, ContentSerializer
+from ..models import Module, Lesson, Section, Content
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -126,30 +126,3 @@ class ContentUpdateAPIView(UpdateAPIView):
     def perform_update(self, serializer):
         serializer.save(user = self.request.user)
 
-
-class ScoreCreateAPIView(CreateAPIView):
-    queryset = Score.objects.all()
-    serializer_class = ScoreSerializer
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-class ScoreListAPIView(ListAPIView):
-    queryset = Score.objects.all()
-    serializer_class = ScoreSerializer
-
-class ScoreDetailAPIView(RetrieveAPIView):
-    queryset = Score.objects.all()
-    serializer_class = ScoreSerializer
-    lookup_field = "pk"
-
-class ScoreDeleteAPIView(DestroyAPIView):
-    queryset = Score.objects.all()
-    serializer_class = ScoreSerializer
-    lookup_field = "pk"
-
-class ScoreUpdateAPIView(UpdateAPIView):
-    queryset = Score.objects.all()
-    serializer_class = ScoreSerializer
-    lookup_field = "pk"
-    def perform_update(self, serializer):
-        serializer.save(user=self.request.user)

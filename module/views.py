@@ -17,7 +17,7 @@ import openai
 from language_tool_python import LanguageTool
 import logging
 from django.conf import settings
-from LangHelper.Assess import assess_transcription as langhelper_assess_transcription
+# from LangHelper.Assess import assess_transcription as langhelper_assess_transcription
 
 
 

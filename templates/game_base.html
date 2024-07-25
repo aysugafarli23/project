@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+            My site
+        {% endblock title %}
+    </title>
+    <link rel="stylesheet" href="{% static 'css/game.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Match</div>
+        <div class="timer" id="timer">00:00</div>
+        <div class="nav-buttons">
+            <button class="music-button" onclick="playMusic()">
+                <audio id="music" src="{% static 'matching_game_music.mp3' %}"></audio>
+                <i class="fa-solid fa-volume-high hidden" id="icon-play"></i>
+                <i class="fa-solid fa-volume-xmark" id="icon-mute"></i>
+            </button>
+            <button onclick="OptionsAlert()">Options</button>
+            <a href="http://127.0.0.1:8000/modules/"><button class="close-button"><i class="fa-solid fa-xmark"></i></button></a>
+        </div>
+    </nav>
+
+    {% block main %}
+
+    <div id="game-board" class="board">
+        <div class="voices"></div>
+        <div class="words"></div>
+    </div>
+
+    {% endblock main %}
+    
+    <script src="{% static 'js/game.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

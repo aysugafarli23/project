@@ -41,13 +41,6 @@ class Content(models.Model):
         return f"{self.content_title}"
     
     
-class Score(models.Model):
-    user = models.ForeignKey(User, related_name='scores', on_delete=models.CASCADE)
-    score_content = models.ForeignKey(Content, related_name='scores', on_delete=models.CASCADE)
-    score = models.IntegerField(default=0)
-
-    def __str__(self):
-        return f'{self.user} - {self.score_content} - {self.score}'
 
 class Word(models.Model):
     text = models.TextField()

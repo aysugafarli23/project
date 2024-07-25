@@ -1,127 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Assessment Result</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body>
-  <h1>{{ word.text }}</h1>
-  <p>Details about the word...</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Assessment Result</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  </head>
+  <body>
+    <h1>{{ word.text }}</h1>
+    <p>Details about the word...</p>
 
-  <div class="listen__record__btns">
-    {% if previous_word_id %}
-      <button class="btn previous__btn" onclick="window.location.href='{% url 'modules:record_audio' previous_word_id %}'"><span><i class="fa-solid fa-chevron-left"></i></span> Previous</button>
-    {% endif %}
-    <button class="btn record__btn" id="recordButton" onclick="toggleRecording()"><span><i class="fa-solid fa-microphone"></i></span> Record</button>
-    <button class="btn stop__btn" id="stopButton" onclick="stopRecording()" style="display:none;"><span><i class="fa-solid fa-stop"></i></span> Stop</button>
-    {% if next_word_id %}
-      <button class="btn next__btn" onclick="window.location.href='{% url 'modules:record_audio' next_word_id %}'">Next <span><i class="fa-solid fa-chevron-right"></i></span></button>
-    {% endif %}
-  </div>
+    <div class="listen__record__btns">
+      {% if previous_word_id %}
+        <button class="btn previous__btn" onclick="window.location.href='{% url 'modules:record_audio' previous_word_id %}'"><span><i class="fa-solid fa-chevron-left"></i></span> Previous</button>
+      {% endif %}
+      <button class="btn record__btn" id="recordButton" onclick="toggleRecording()"><span><i class="fa-solid fa-microphone"></i></span> Record</button>
+      <button class="btn stop__btn" id="stopButton" onclick="stopRecording()" style="display:none;"><span><i class="fa-solid fa-stop"></i></span> Stop</button>
+      {% if next_word_id %}
+        <button class="btn next__btn" onclick="window.location.href='{% url 'modules:record_audio' next_word_id %}'">Next <span><i class="fa-solid fa-chevron-right"></i></span></button>
+      {% endif %}
+    </div>
 
-  <!-- Modal for displaying assessment results -->
-  <div class="modal fade" id="assessmentModal" tabindex="-1" aria-labelledby="assessmentModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="assessmentModalLabel">AI Assessment Result</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <h1>Assessment Result</h1>
-          <div>
-            <canvas id="pronunciationChart"></canvas>
+    <!-- Modal for displaying assessment results -->
+    <div class="modal fade" id="assessmentModal" tabindex="-1" aria-labelledby="assessmentModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="assessmentModalLabel">AI Assessment Result</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <h1>Assessment Result</h1>
+            <div>
+              <canvas id="pronunciationChart"></canvas>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script>
-    let mediaRecorder;
-    let audioChunks = [];
-
-    function toggleRecording() {
+    <script>
+      let mediaRecorder
+      let audioChunks = []
+      
+      function toggleRecording() {
         if (mediaRecorder && mediaRecorder.state === 'recording') {
-            stopRecording();
+          stopRecording()
         } else {
-            startRecording();
+          startRecording()
         }
-    }
-
-    function startRecording() {
+      }
+      
+      function startRecording() {
         navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-            mediaRecorder = new MediaRecorder(stream);
-            mediaRecorder.start();
-
-            mediaRecorder.ondataavailable = (event) => {
-                audioChunks.push(event.data);
-            };
-
-            mediaRecorder.onstop = () => {
-                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                audioChunks = [];
-                submitRecording(audioBlob);
-            };
-
-            document.getElementById('recordButton').style.display = 'none';
-            document.getElementById('stopButton').style.display = 'block';
-        });
-    }
-
-    function stopRecording() {
-        mediaRecorder.stop();
-        document.getElementById('recordButton').style.display = 'block';
-        document.getElementById('stopButton').style.display = 'none';
-    }
-
-    function submitRecording(audioBlob) {
-        const formData = new FormData();
-        formData.append('media', audioBlob, 'recording.wav');
-        formData.append('csrfmiddlewaretoken', '{{ csrf_token|escapejs }}');
-
+          mediaRecorder = new MediaRecorder(stream)
+          mediaRecorder.start()
+      
+          mediaRecorder.ondataavailable = (event) => {
+            audioChunks.push(event.data)
+          }
+      
+          mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' })
+            audioChunks = []
+            submitRecording(audioBlob)
+          }
+      
+          document.getElementById('recordButton').style.display = 'none'
+          document.getElementById('stopButton').style.display = 'block'
+        })
+      }
+      
+      function stopRecording() {
+        mediaRecorder.stop()
+        document.getElementById('recordButton').style.display = 'block'
+        document.getElementById('stopButton').style.display = 'none'
+      }
+      
+      function submitRecording(audioBlob) {
+        const formData = new FormData()
+        formData.append('media', audioBlob, 'recording.wav')
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token|escapejs }}')
+      
         fetch("{% url 'modules:pronunciation_assessment' word.id %}", {
-            method: 'POST',
-            body: formData
+          method: 'POST',
+          body: formData
         })
-        .then((response) => response.json())
-        .then((data) => {
+          .then((response) => response.json())
+          .then((data) => {
             if (data.success) {
-                const assessment = data.assessment;
-
-                const pronunciationData = {
-                    labels: ['Pronunciation', 'Accuracy', 'Fluency'],
-                    datasets: [{
-                        data: [
-                            parseFloat(assessment.pronunciation_score),
-                            parseFloat(assessment.accuracy_score),
-                            parseFloat(assessment.fluency_score)
-                        ],
-                        backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56']
-                    }]
-                };
-
-                const configPronunciation = {
-                    type: 'doughnut',
-                    data: pronunciationData,
-                    options: {}
-                };
-
-                new Chart(document.getElementById('pronunciationChart'), configPronunciation);
-
-                new bootstrap.Modal(document.getElementById('assessmentModal')).show();
+              const assessment = data.assessment
+      
+              const pronunciationData = {
+                labels: ['Pronunciation', 'Accuracy', 'Fluency'],
+                datasets: [
+                  {
+                    data: [parseFloat(assessment.pronunciation_score), parseFloat(assessment.accuracy_score), parseFloat(assessment.fluency_score)],
+                    backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56']
+                  }
+                ]
+              }
+      
+              const configPronunciation = {
+                type: 'doughnut',
+                data: pronunciationData,
+                options: {}
+              }
+      
+              new Chart(document.getElementById('pronunciationChart'), configPronunciation)
+      
+              new bootstrap.Modal(document.getElementById('assessmentModal')).show()
             } else {
-                alert(data.error);
+              alert(data.error)
             }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-    }
-  </script>
-</body>
+          })
+          .catch((error) => {
+            console.error('Error:', error)
+          })
+      }
+    </script>
+  </body>
 </html>

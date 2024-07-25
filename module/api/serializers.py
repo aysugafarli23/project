@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Content, Section, Module, Lesson, Score
+from ..models import Content, Section, Module, Lesson
 
 class ContentSerializer(serializers.ModelSerializer):
     
@@ -28,7 +28,3 @@ class ModuleSerializer(serializers.ModelSerializer):
         model = Module
         fields = ['id', 'module_title','module_image', 'module_lessons']
         
-class ScoreSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Score
-        fields = ['section_title', 'section_lesson']

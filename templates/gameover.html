@@ -1,0 +1,44 @@
+{% extends "game_base.html" %}
+{% load static %}
+
+{% block title %}
+    Game over
+{% endblock title %}
+
+{% block main %}
+
+<div id="gameover">  
+    <div class="container">
+        <div class="congrats">
+            <div>
+                <h2>Nice Work! Can you <br>match even faster?</h2>
+                <p>Try and beat your best time of <span id="bestTime">{{best_user_score.seconds}}</span> seconds</p>
+            </div>
+            <img class="congrats-img" src="{% static 'media/congrats.png' %}" alt="">
+        </div>
+        <div>
+            <h3>The top 5</h3>
+            <div class="scores">
+                {% for score in top_5_scores %}
+                    <div class="score">
+                        <div class="user-detail">
+                            <p>1</p>
+                            <img class="user-image" src="{{score.user.image}}" alt="Img">
+                            <p class="user-name">{{score.user.username}}</p>
+                        </div>
+                        <div>
+                            <p class="user-score">{{score.seconds}} seconds</p>
+                        </div>
+                    </div>
+                {% endfor %}
+                
+            </div>
+        </div>
+    </div>
+</div>
+<div class="fixed-footer">
+    <button class="sharescore-btn" onclick="copyScore()">Share your score</button>
+    <a href="{% url 'modules:matchvoice' %}"><button class="playagain-btn">Play again</button></a>
+</div>
+
+{% endblock main %}
