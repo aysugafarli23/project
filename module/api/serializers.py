@@ -6,7 +6,7 @@ class ContentSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Content
-        fields = ['id', 'content_lesson', 'content_section', 'content_title', 'body', 'content_image', 'video_link']
+        fields = ['id', 'content_section', 'content_title', 'body', 'content_image', 'video_link']
 
 class SectionSerializer(serializers.ModelSerializer):
 

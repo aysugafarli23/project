@@ -1,24 +1,55 @@
 {% extends 'base.html' %}
 
-{% block nav__title %}Lessons{% endblock nav__title %}
+{% block nav__title %}
+  Lessons
+{% endblock %}
 
 {% block content %}
+  <div class="lesson__container">
+    <h1>{{ module.module_title }}</h1>
+    {% for lesson in lessons %}
+      <div class="lesson__title">
+          <h3>{{ lesson.lesson_title }}</h3>
+      </div>
+      <div class="section__container">
+        {% for item in section_contents %}
+          {% if item.lesson == lesson %}
+            <h5>{{ item.section.section_title }}</h5>
+            <div class="content__stones">
+              {% for content in item.contents %}
+                <div class="content__stone">
+                  <a href="#"><img src="{{ content.content_image.url }}" alt="content-image" /></a>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
 
-<div class="module__container">
+  {% comment %} <div class="module__container">
     <div class="module__stones">
       <h1>Lessons</h1>
       {% for lesson in lessons %}
-        <div class="module__stone">
-          <a href="{% url 'modules:lessons_section' lesson.pk %}" class="stone__btn"><img src="{{lesson.lesson_image.url}}" alt="lesson_image"></a>
+        <div>
+          <a href="{% url 'modules:lessons' lesson.pk %}" class="stone__btn">{{ lesson.lesson_title }}</a>
+        </div>
+        <!-- New Code -->
+        <div class="module__stones">
+          {% for section_content in section_contents %}
+            <h2>{{ section_content.section.section_title }}</h2>
+            {% for content in section_content.contents %}
+              <div>{{ content.content_title }}</div>
+              <div class="module__stone">
+                <img src="{{ content.content_image.url }}" alt="content-image" />
+              </div>
+            {% empty %}
+              <div>No contents available.</div>
+            {% endfor %}
+          {% endfor %}
         </div>
       {% endfor %}
     </div>
-  </div>
-
+  </div> {% endcomment %}
 {% endblock %}
-
-
-
-
-
-

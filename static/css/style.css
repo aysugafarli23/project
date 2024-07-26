@@ -701,6 +701,7 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     position: relative;
 }
 
@@ -733,6 +734,111 @@ h2 {
 .module__stone:hover img {
     box-shadow: 0 0 10px var(--main-colors-green);
 }
+
+/*-------------------------------------lesson.html style ------------------------------------*/
+.lesson__container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    padding: 20px 0px;
+}
+
+.lesson__title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 817px;
+    background: var(--main-colors-blue);
+    color: white;
+    border-radius: 45px;
+    height: 70px;
+}
+
+.section__container{
+    margin-top: 30px;
+}
+
+.content__stones {
+    margin: 40px 0px;
+    display: flex;
+    gap: 30px;
+    flex-direction: column;
+    z-index: 11;
+}
+
+.content__stones h1 {
+    font-family: "Plus Jakarta Sans";
+    text-align: center;
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 54px;
+}
+
+.content__stone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+}
+
+
+/* Even paragraphs */
+.content__stone:nth-of-type(2n) {
+    left: -50px;
+}
+
+.content__stone:nth-of-type(3n) {
+    left: -100px;
+}
+
+.content__stone a {
+    display: block;
+    width: 150px;
+    height: 150px;
+    transition: 200ms;
+}
+
+.content__stone a img {
+    width: 100%;
+    border-radius: 50%;
+}
+
+.content__stone:hover a {
+    width: 160px;
+}
+
+.content__stone:hover img {
+    box-shadow: 0 0 10px var(--main-colors-green);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*-------------------------------------word_detail.html style ------------------------------------*/

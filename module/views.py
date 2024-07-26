@@ -9,16 +9,12 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Word, CustomerRecording
 from openai import Client
 from django.core.files import File
-import re, os
+import re
 from django.views import View
 from django.utils.decorators import method_decorator
 from openai import OpenAI
 import openai
-from language_tool_python import LanguageTool
-import logging
-from django.conf import settings
-# from LangHelper.Assess import assess_transcription as langhelper_assess_transcription
-
+import tempfile
 
 
 
@@ -47,32 +43,28 @@ def modulesPage(request):
 def lessonsPage(request, pk):
     module = get_object_or_404(Module, pk=pk)
     lessons = Lesson.objects.filter(lesson_module=module)
+    
+    # Initializing section_contents
+    section_contents = []
+    
+    for lesson in lessons:
+        sections = Section.objects.filter(section_lesson=lesson)
+        
+        for section in sections:
+            section_contents.append({
+                'lesson': lesson,
+                'section': section,
+                'contents': Content.objects.filter(content_section=section)
+            })
 
     context = {
         'module': module,
-        'lessons': lessons,        
-    }
-
-    return render(request, 'lesson.html', context)
-
-
-def lessonSectionPage(request, pk):
-    lesson = get_object_or_404(Lesson, pk=pk)
-    sections = Section.objects.filter(section_lesson=lesson)
-    section_contents = []
-
-    for section in sections:
-        section_contents.append({
-            'section': section,
-            'contents': Content.objects.filter(content_section=section)
-        })
-
-    context = {
-        'lesson': lesson,
+        'lessons': lessons,
         'section_contents': section_contents,
     }
-    return render(request, 'modulesections.html', context)
 
+
+    return render(request, 'lesson.html', context)
 
 
 # a view to generate the audio files for each word using OpenAI
@@ -156,79 +148,28 @@ def compare_audio(request, word_id):
     
 
 # AI Assessment on user recordings
-# client = OpenAI(api_key="sk-proj-8tsKt51ax7c9AoOO3RYST3BlbkFJkVGybZPjPoHTxK1LZXIm")
 
-# def transcribe_audio(audio_file_path):
-#     with open(audio_file_path, 'rb') as audio_file:
-#         response = client.audio.transcriptions.create(
-#             file=audio_file,
-#             model="whisper-1",
-#             language="en",
-#             temperature=0,
-#             response_format="text",
-#         )
-      
-#         transcription = response["text"]
-#         return transcription
+class SpeechToTextView(View):
+    def get(self, request):
+        return render(request, 'speech_to_text.html')
 
-# def assess_transcription(transcription, reference_text):
-#     return langhelper_assess_transcription(transcription, reference_text)
+class SpeechRecognitionView(View):
+    def post(self, request):
+        if request.method == 'POST' and request.FILES.get('audio'):
+            audio_file = request.FILES['audio']
+            
+            # Save the audio file to a temporary file
+            with tempfile.NamedTemporaryFile(delete=False) as temp_audio_file:
+                for chunk in audio_file.chunks():
+                    temp_audio_file.write(chunk)
+                temp_audio_file_path = temp_audio_file.name
 
+            # Transcribe the audio using Whisper API
+            with open(temp_audio_file_path, 'rb') as audio:
+                response = openai.Audio.transcribe("whisper-1", file=audio, language="en")
+            
+            transcript = response.get('text', '')
 
-# logger = logging.getLogger(__name__)
-
-# class PronunciationAssessmentView(View):
-#     def post(self, request, word_id):
-#         word = get_object_or_404(Word, id=int(word_id))
-#         logger.debug("Word retrieved: %s", word.text)
-
-#         if 'media' in request.FILES:
-#             media_file = request.FILES['media']
-#             logger.debug("Media file received: %s", media_file.name)
-
-#             customer_recording = CustomerRecording.objects.create(
-#                 audio_file=media_file,
-#                 word=word
-#             )
-#             logger.debug("CustomerRecording created: %s", customer_recording.id)
-
-#             file_path = customer_recording.audio_file.path
-#             logger.debug("File path: %s", file_path)
-
-#             try:
-#                 transcription = transcribe_audio(file_path)
-#                 logger.debug("Transcription: %s", transcription)
-
-#                 assessment = assess_transcription(transcription, word.text)
-#                 logger.debug("Assessment: %s", assessment)
-
-#                 if not isinstance(assessment, dict):
-#                     logger.error("Assessment is not a dictionary")
-#                     return JsonResponse({'success': False, 'error': 'Invalid assessment response format'}, status=500)
-
-#                 expected_keys = ['pronunciation_score', 'accuracy_score', 'fluency_score']
-#                 for key in expected_keys:
-#                     if key not in assessment:
-#                         logger.error("Missing key in assessment response: %s", key)
-#                         return JsonResponse({'success': False, 'error': f'Missing key in assessment response: {key}'}, status=500)
-
-#                 response_data = {
-#                     'success': True,
-#                     'assessment': {
-#                         'pronunciation_score': assessment['pronunciation_score'],
-#                         'accuracy_score': assessment['accuracy_score'],
-#                         'fluency_score': assessment['fluency_score'],
-#                     }
-#                 }
-#                 logger.debug("Response Data: %s", response_data)
-#                 return JsonResponse(response_data)
-#             except Exception as e:
-#                 logger.error("Error during assessment: %s", str(e))
-#                 return JsonResponse({'success': False, 'error': str(e)}, status=500)
-
-#         logger.error("No media file found in request")
-#         return JsonResponse({'success': False, 'error': 'No media file found'}, status=400)
-
-#     def get(self, request, word_id):
-#         word = get_object_or_404(Word, id=word_id)
-#         return render(request, 'pronunciation_assessment.html', {'word': word})
+            return JsonResponse({'transcript': transcript})
+        
+        return JsonResponse({'error': 'Invalid request'}, status=400)
