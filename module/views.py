@@ -4,7 +4,7 @@ from django.urls import resolve
 from contact.forms import ContactForm  
 from pathlib import Path
 from .models import *
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Word, CustomerRecording
 from openai import Client
@@ -14,8 +14,11 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from openai import OpenAI
 import openai
-import tempfile
-
+from pydub import AudioSegment
+from io import BytesIO
+import numpy as np
+from scipy.io import wavfile
+import json
 
 
 # Create your views here.
@@ -148,4 +151,63 @@ def compare_audio(request, word_id):
     
 
 # AI Assessment on user recordings
+# Audio recording parameters
 
+# import sys
+# Audio recording parameters
+
+client = OpenAI(api_key="sk-proj-8tsKt51ax7c9AoOO3RYST3BlbkFJkVGybZPjPoHTxK1LZXIm")
+
+class SpeechRecognitionView(View):
+    def get(self, request, word_id):
+        # Render the template or return an appropriate response
+        return HttpResponse("Speech to Text page")
+
+    def post(self, request, word_id):
+        if 'media' not in request.FILES:
+            return JsonResponse({"error": "No media file uploaded"}, status=400)
+        
+        audio_file = request.FILES['media']
+        audio_data = BytesIO(audio_file.read())
+        
+        # Convert audio data to WAV format using pydub
+        audio = AudioSegment.from_file(audio_data, format="webm")
+        audio_wav = BytesIO()
+        audio.export(audio_wav, format="wav")
+        audio_wav.seek(0)
+        
+        # Read WAV data using scipy
+        sample_rate, data = wavfile.read(audio_wav)
+        
+        # Analyze the audio using custom criteria (e.g., volume, pitch)
+        analysis_results = self.analyze_audio(data, sample_rate)
+        
+        # Generate feedback based on analysis results
+        feedback = self.generate_feedback(analysis_results)
+        
+        return JsonResponse({
+            "transcript": "Transcription is not required as per your instructions",
+            "analysis": analysis_results,
+            "feedback": feedback
+        })
+    
+    def analyze_audio(self, data, sample_rate):
+        # Example analysis: calculate the RMS volume
+        rms = np.sqrt(np.mean(np.square(data)))
+        
+        # Dummy analysis result (replace with actual analysis)
+        analysis = {'RMS': rms}
+        return analysis
+
+    def generate_feedback(self, analysis):
+        # Example feedback based on RMS volume
+        rms = analysis['RMS']
+        
+        if rms < 0.1:
+            feedback = 'Try to speak louder!'
+        elif rms > 0.5:
+            feedback = 'You are speaking too loudly!'
+        else:
+            feedback = 'Your volume is perfect!'
+        
+        return feedback
