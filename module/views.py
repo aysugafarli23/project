@@ -149,27 +149,3 @@ def compare_audio(request, word_id):
 
 # AI Assessment on user recordings
 
-class SpeechToTextView(View):
-    def get(self, request):
-        return render(request, 'speech_to_text.html')
-
-class SpeechRecognitionView(View):
-    def post(self, request):
-        if request.method == 'POST' and request.FILES.get('audio'):
-            audio_file = request.FILES['audio']
-            
-            # Save the audio file to a temporary file
-            with tempfile.NamedTemporaryFile(delete=False) as temp_audio_file:
-                for chunk in audio_file.chunks():
-                    temp_audio_file.write(chunk)
-                temp_audio_file_path = temp_audio_file.name
-
-            # Transcribe the audio using Whisper API
-            with open(temp_audio_file_path, 'rb') as audio:
-                response = openai.Audio.transcribe("whisper-1", file=audio, language="en")
-            
-            transcript = response.get('text', '')
-
-            return JsonResponse({'transcript': transcript})
-        
-        return JsonResponse({'error': 'Invalid request'}, status=400)

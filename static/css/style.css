@@ -348,7 +348,7 @@ nav {
     margin: 0px 0px 3px 16px;
 }
 
-.search__button:focus{
+.search__button:focus {
     outline: 0 !important;
 }
 
