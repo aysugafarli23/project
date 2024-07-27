@@ -4,17 +4,17 @@
       <a href="{% url "modules" %}"><img src="/static/images/Logo.svg" alt="Logo" /></a>
     </div>
     <div class="nav__links">
-      <dir class="nav__item {% if current_url == 'modules' %}active{% endif %}">
-        <a href="{% url 'modules' %}"><img src="/static/images/modules-icon-{% if current_url == 'modules' %}active{% else %}deactive{% endif %}.svg"alt="Modules" />
-        </a><span>Modules</span>
+      <dir class="nav__item">
+        <a href="{% url 'modules' %}"><i class="fa-solid fa-house"></i>
+        </a><div>Modules</div>
       </dir>
-      <dir class=" nav__item {% if current_url == 'dictionary' %}active{% endif %}">
-        <a href="{% url 'dictionary' %}"><img src="/static/images/dictionary-icon-{% if current_url == 'dictionary' or current_url == 'search' %}active{% else %}deactive{% endif %}.svg" alt="Dictionary" />
-        </a><span>Dictionary</span>
+      <dir class=" nav__item">
+        <a href="{% url 'dictionary' %}"><i class="fa-solid fa-spell-check"></i>
+        </a><div>Dictionary</div>
       </dir>
-      <dir class="nav__item {% if current_url == 'profile' %}active{% endif %}">
-        <a href="{% url 'profile' %}"><img src="/static/images/profile-icon-{% if current_url == 'profile' %}active{% else %}deactive{% endif %}.svg" alt="Profile" />
-        </a><span>Profile</span>
+      <dir class="nav__item">
+        <a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i>
+        </a><div>Profile</div>
       </dir>
     </div>
   </div>

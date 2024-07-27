@@ -73,8 +73,8 @@ body {
 }
 
 
-.nav__links .active {
-    color: var(--sapphire);
+.nav__item a:focus {
+    color: var(--main-colors-green);
 }
 
 .nav__item {
@@ -83,12 +83,6 @@ body {
     margin: 0 0 10px;
     padding: 17px 0 9px;
     cursor: pointer;
-}
-
-.nav__links img {
-    width: 33px;
-    height: 33px;
-    margin-bottom: 5px;
 }
 
 /* Nav menu style codes */
@@ -278,6 +272,10 @@ nav {
     margin: 0 auto;
 }
 
+.dict__body {
+    height: 500px;
+}
+
 .dict__header {
     text-align: center;
 }
@@ -303,6 +301,8 @@ nav {
 .dict__searchHolder {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
 }
 
 .dict__input {
@@ -324,7 +324,7 @@ nav {
 }
 
 #searchInput:focus {
-    color: #212529;
+    color: var(--neutral-colors-black);
     background-color: #fff;
     border-color: #86b7fe;
     outline: 0;
@@ -335,60 +335,35 @@ nav {
     transform: translateX(20px);
 }
 
-.searchBtn {
+.search__button {
     outline: none;
     border: none;
     border-radius: 28px;
     background-image: linear-gradient(to bottom, #42cf59, #34a77e);
-    border-color: var(--primaryBorder);
     box-shadow: inset 1px -4px 5px 0px rgba(0, 0, 0, 0.2);
     color: var(--neutral-colors-white);
-    padding: 18px 20px;
+    padding: 12px 20px;
     font-size: 16px;
     cursor: pointer;
     margin: 0px 0px 3px 16px;
 }
 
-.searchBtn:hover {
+.search__button:focus{
+    outline: 0 !important;
+}
+
+.search__button:hover {
     background-image: linear-gradient(180deg, #34a77e -26%, #289467 115%);
-    border-color: var(--primaryBorder);
+    border-color: var(--main-colors-green);
     border-width: 3px 0 0;
     color: var(--neutral-colors-white);
 }
 
-#suggest {
-    font-size: 13px !important;
-    color: var(--neutral-colors-black);
-    margin-top: 20vh;
-    margin-bottom: 20px;
+#widget-1 {
+    width: 100%;
+    margin-top: 40px;
 }
 
-.dict__items {
-    margin-top: 5px;
-    display: flex;
-}
-
-.dict__item {
-    font-size: 14px;
-    font-weight: 300;
-    color: var(--neutral-colors-black);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 150px;
-    height: 48px;
-    border-radius: 27px;
-    background-image: linear-gradient(180deg, var(--neutral-colors-white) -26%, #f8f9fa 115%);
-    cursor: pointer;
-    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, .25);
-    margin: 6px;
-}
-
-.dict__item button {
-    outline: none;
-    border: none;
-    background-color: var(--neutral-colors-white);
-}
 
 
 /*-------------------------------------search.html style-------------------------------------*/
@@ -736,7 +711,7 @@ h2 {
 }
 
 /*-------------------------------------lesson.html style ------------------------------------*/
-.lesson__container{
+.lesson__container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -746,7 +721,7 @@ h2 {
     padding: 20px 0px;
 }
 
-.lesson__title{
+.lesson__title {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -757,7 +732,7 @@ h2 {
     height: 70px;
 }
 
-.section__container{
+.section__container {
     margin-top: 30px;
 }
 
