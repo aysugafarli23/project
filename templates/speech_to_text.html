@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block nav__title %}
+  AI Coach
+{% endblock %}
+
+{% block content %}
+  <div class="listen__record__container">
+    <div class="listen__record__content">
+      <div class="listen__record__word">
+        <h1>{{ word.text }}</h1>
+      </div>
+      <div class="listen__record__btns">
+        {% if previous_word_id %}
+          <button class="btn previous__btn" onclick="window.location.href='{% url 'modules:speech_recognition' previous_word_id %}'"><span><i class="fa-solid fa-chevron-left"></i></span> Previous</button>
+        {% endif %}
+        <button class="btn record__btn" id="recordButtonAssess"><span><i class="fa-solid fa-microphone"></i></span> Read the word</button>
+        {% if next_word_id %}
+          <button class="btn next__btn" onclick="window.location.href='{% url 'modules:speech_recognition' next_word_id %}'">Next <span><i class="fa-solid fa-chevron-right"></i></span></button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="assessModal" tabindex="-1" aria-labelledby="assessModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="assessModalLabel">assess Audio</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body" id="assessModalBody">
+          <!-- Comparison content will be loaded here -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal"><span><i class="fa-solid fa-arrow-rotate-left"></i></span> Try Again</button>
+          <button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'modules:speech_recognition' next_word_id %}'">Next <span><i class="fa-solid fa-chevron-right"></i></span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js__content %}
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let mediaRecorderAssess;
+      let audioChunksAssess = [];
+      let isRecordingAssess = false;
+      const wordIdAssess = {{ word.id }};
+  
+      function toggleRecording() {
+          if (isRecordingAssess) {
+              stopRecording();
+          } else {
+              startRecording();
+          }
+      }
+  
+      function startRecording() {
+          console.log("Starting recording...");
+          audioChunksAssess = [];
+          navigator.mediaDevices.getUserMedia({ audio: true })
+              .then(stream => {
+                  mediaRecorderAssess = new MediaRecorder(stream);
+                  mediaRecorderAssess.start();
+                  mediaRecorderAssess.ondataavailable = event => {
+                      audioChunksAssess.push(event.data);
+                  };
+                  mediaRecorderAssess.onstop = () => {
+                      console.log("Recording stopped, sending data...");
+                      const audioBlob = new Blob(audioChunksAssess, { type: 'audio/mp3' });
+                      const formData = new FormData();
+                      formData.append('media', audioBlob);
+                      fetch(`/modules/speech_recognition/${wordIdAssess}/`, {
+                          method: 'POST',
+                          body: formData,
+                          headers: {
+                              'X-CSRFToken': '{{ csrf_token }}'
+                          }
+                      }).then(response => response.json())
+                      .then(data => {
+                          console.log("Server response:", data);
+                          if (data.success) {
+                              console.log("Showing modal...");
+                              $('#assessModal').modal('show');
+                              loadComparisonData();
+                          } else {
+                              console.error("Error message from server:", data.message);
+                              alert(data.message || 'An error occurred');
+                          }
+                      })
+                      .catch(error => console.error('Error:', error));
+                  };
+                  isRecordingAssess = true;
+                  document.getElementById('recordButtonAssess').innerHTML = '<span><i class="fa-solid fa-stop"></i></span> Stop';
+              })
+              .catch(error => {
+                  console.error('Error accessing media devices:', error);
+                  alert('Error accessing media devices.');
+              });
+      }
+  
+      function stopRecording() {
+          console.log("Stopping recording...");
+          mediaRecorderAssess.stop();
+          isRecordingAssess = false;
+          document.getElementById('recordButtonAssess').innerHTML = '<span><i class="fa-solid fa-microphone"></i></span> Record';
+      }
+  
+      function loadComparisonData() {
+          console.log("Loading comparison data...");
+          fetch(`/modules/assess_audio/${wordIdAssess}/`)
+              .then(response => response.text())
+              .then(html => {
+                  console.log("Loaded comparison data:", html);
+                  document.getElementById('assessModalBody').innerHTML = html;
+              })
+              .catch(error => console.error('Error loading comparison data:', error));
+      }
+  
+      document.getElementById('recordButtonAssess').addEventListener('click', toggleRecording);
+  });
+  
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+{% endblock %}

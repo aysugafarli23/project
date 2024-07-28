@@ -5,11 +5,11 @@ from contact.forms import ContactForm
 from pathlib import Path
 from .models import *
 from django.http import JsonResponse, HttpResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from .models import Word, CustomerRecording
 from openai import Client
 from django.core.files import File
-import re
+import re, os, tempfile
 from django.views import View
 from django.utils.decorators import method_decorator
 from openai import OpenAI
@@ -19,6 +19,15 @@ from io import BytesIO
 import numpy as np
 from scipy.io import wavfile
 import json
+import pyaudio
+import speech_recognition as sr
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+import random
+from pydub import AudioSegment
+from pydub.utils import mediainfo
+
+AudioSegment.converter = r"C:\Program Files\ffmpeg-7.0.1"
 
 
 # Create your views here.
@@ -151,63 +160,85 @@ def compare_audio(request, word_id):
     
 
 # AI Assessment on user recordings
-# Audio recording parameters
-
-# import sys
-# Audio recording parameters
 
 client = OpenAI(api_key="sk-proj-8tsKt51ax7c9AoOO3RYST3BlbkFJkVGybZPjPoHTxK1LZXIm")
 
-class SpeechRecognitionView(View):
+class SpeechToTextView(View):
+    template_name = 'speech_to_text.html'
+
     def get(self, request, word_id):
-        # Render the template or return an appropriate response
-        return HttpResponse("Speech to Text page")
+        word = get_object_or_404(Word, id=word_id)
+        next_word = Word.objects.filter(id__gt=word_id).order_by('id').first()
+        previous_word = Word.objects.filter(id__lt=word_id).order_by('-id').first()
+        next_word_id = next_word.id if next_word else None
+        previous_word_id = previous_word.id if previous_word else None
+        return render(request, self.template_name, {
+            'word': word,
+            'next_word_id': next_word_id,
+            'previous_word_id': previous_word_id
+        })
 
     def post(self, request, word_id):
-        if 'media' not in request.FILES:
-            return JsonResponse({"error": "No media file uploaded"}, status=400)
-        
-        audio_file = request.FILES['media']
-        audio_data = BytesIO(audio_file.read())
-        
-        # Convert audio data to WAV format using pydub
-        audio = AudioSegment.from_file(audio_data, format="webm")
-        audio_wav = BytesIO()
-        audio.export(audio_wav, format="wav")
-        audio_wav.seek(0)
-        
-        # Read WAV data using scipy
-        sample_rate, data = wavfile.read(audio_wav)
-        
-        # Analyze the audio using custom criteria (e.g., volume, pitch)
-        analysis_results = self.analyze_audio(data, sample_rate)
-        
-        # Generate feedback based on analysis results
-        feedback = self.generate_feedback(analysis_results)
-        
-        return JsonResponse({
-            "transcript": "Transcription is not required as per your instructions",
-            "analysis": analysis_results,
-            "feedback": feedback
-        })
-    
-    def analyze_audio(self, data, sample_rate):
-        # Example analysis: calculate the RMS volume
-        rms = np.sqrt(np.mean(np.square(data)))
-        
-        # Dummy analysis result (replace with actual analysis)
-        analysis = {'RMS': rms}
-        return analysis
+        word = get_object_or_404(Word, id=word_id)
 
-    def generate_feedback(self, analysis):
-        # Example feedback based on RMS volume
-        rms = analysis['RMS']
-        
-        if rms < 0.1:
-            feedback = 'Try to speak louder!'
-        elif rms > 0.5:
-            feedback = 'You are speaking too loudly!'
-        else:
-            feedback = 'Your volume is perfect!'
-        
-        return feedback
+        if 'media' not in request.FILES:
+            return JsonResponse({"message": "No media file found"}, status=400)
+
+        # Delete the previous recording
+        CustomerRecording.objects.filter(word=word).delete()
+
+        # Save the new recording
+        media_file = request.FILES['media']
+        customer_recording = CustomerRecording.objects.create(
+            audio_file=media_file,
+            word=word
+        )
+
+        # Save the file to a temporary location
+        temp_dir = tempfile.gettempdir()
+        temp_mp3_path = os.path.join(temp_dir, 'temp_audio.mp3')
+        temp_wav_path = os.path.join(temp_dir, 'temp_audio.wav')
+        with open(temp_mp3_path, 'wb') as f:
+            f.write(media_file.read())
+
+        # Convert MP3 to WAV
+        try:
+            audio = AudioSegment.from_mp3(temp_mp3_path)
+            audio.export(temp_wav_path, format='wav')
+        except Exception as e:
+            return JsonResponse({"message": f"Error converting audio file: {str(e)}", "success": False})
+
+        recognizer = sr.Recognizer()
+        response = {"success": False, "error": None, "transcription": None}
+
+        try:
+            with sr.AudioFile(temp_wav_path) as source:
+                recognizer.adjust_for_ambient_noise(source)
+                audio_data = recognizer.record(source)
+                response["transcription"] = recognizer.recognize_google(audio_data)
+                response["success"] = True
+        except sr.RequestError:
+            response["error"] = "API unavailable"
+        except sr.UnknownValueError:
+            response["error"] = "Unable to recognize speech"
+        except Exception as e:
+            response["error"] = f"An unexpected error occurred: {str(e)}"
+
+        # Clean up temporary files
+        if os.path.exists(temp_mp3_path):
+            os.remove(temp_mp3_path)
+        if os.path.exists(temp_wav_path):
+            os.remove(temp_wav_path)
+
+        return JsonResponse(response)
+    
+def assess_audio(request, word_id):
+        word = get_object_or_404(Word, id=word_id)
+        recordings = CustomerRecording.objects.filter(word=word)
+        next_word = Word.objects.filter(id__gt=word_id).order_by('id').first()
+        next_word_id = next_word.id if next_word else None
+        return render(request, 'assess_audio.html', {
+            'word': word,
+            'recordings': recordings,
+            'next_word_id': next_word_id
+        })
