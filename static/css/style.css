@@ -156,6 +156,10 @@ nav {
 
 .app__content {
     grid-area: app__content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .main__content {
@@ -200,7 +204,9 @@ nav {
     background-color: var(--neutral-colors-white);
     border-right: 1px solid #d3dbe8;
     border-radius: 10px;
-    display: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: fixed;
     top: 20%;
     left: 50%;
@@ -364,20 +370,9 @@ nav {
     margin-top: 40px;
 }
 
-
-
-/*-------------------------------------search.html style-------------------------------------*/
-.search {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transform: translateY(120px);
+#widget-1 .pwdby{
+    display: none !important;
 }
-
-#widget-1 {
-    background-color: #F1F1F5 !important;
-}
-
 
 
 /*--------------------------------------register.html style ----------------------------------------*/
@@ -485,6 +480,9 @@ h2 {
     justify-content: center;
 }
 
+.input-group-append{
+    height: 38px !important;
+}
 
 
 /*--------------------------------------profile.html style ----------------------------------------*/
@@ -733,7 +731,7 @@ h2 {
 }
 
 .section__container {
-    margin-top: 30px;
+    margin-top: 15px;
 }
 
 .content__stones {
@@ -780,6 +778,7 @@ h2 {
 .content__stone a img {
     width: 100%;
     border-radius: 50%;
+    border: 7px solid var(--main-colors-blue);
 }
 
 .content__stone:hover a {
@@ -789,32 +788,6 @@ h2 {
 .content__stone:hover img {
     box-shadow: 0 0 10px var(--main-colors-green);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*-------------------------------------word_detail.html style ------------------------------------*/
 .listen__record__container {

@@ -1,15 +1,44 @@
-{% extends "base.html" %}
-{% block nav__title %}Logout{% endblock nav__title %}
-{% block content %}
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-        <h5 class="card-title">You have been logged out</h5>
-        <p class="card-text">
-            Thanks for your time, contact me for any comments or suggestions using my email address.
-        </p>
-        <br><hr><a href="{% url 'login' %}" class="btn btn-primary">Sign in again</a>
-        </div>
-    </div>
+{% extends 'base.html' %}
+{% load static %}
 
-    
-{% endblock content %}
+{% load crispy_forms_tags %}
+
+{% block nav__title %}
+Logout
+{% endblock %}
+
+{% block container_id %}login__page{% endblock container_id %}
+
+{% block content %}
+<div class="register__login__logo">
+  <a href="{% url "modules" %}"><img src="/static/images/Logo_second.svg" alt="Logo" /></a>
+</div>
+  <div class="login">
+    <div class="card shadow-lg border-0 rounded-lg mt-0 mb-3">
+      <div class="card-header justify-content-center">
+        <h3 class="font-weight-light my-1 text-center">Log Out</h3>
+      </div>
+      {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+          <div id="form_errors">
+            {% for key, value in form.errors.items %}
+              <strong>{{ value }}</strong>
+            {% endfor %}
+          </div>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+      {% endif %}
+      <div class="card-body">
+        <div class="container" style="text-align: center;">
+            <div class="card-body">
+                <h5 class="card-title">You have been logged out</h5>
+                <p class="card-text">
+                    Thanks for your time, contact us for any comments or suggestions using our contact detail.
+                </p>
+                <br><hr><a href="{% url 'login' %}" class="btn btn-primary">Sign in again</a>
+                </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

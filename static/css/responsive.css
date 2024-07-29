@@ -1,0 +1,74 @@
+@media only screen and (max-width: 768px) {
+/*     
+    .container__general {
+        display: grid;
+        height: 100vh;
+        grid-template-columns: 0.75fr 3.20fr;
+        grid-template-rows: 1fr;
+        grid-template-areas:
+            "navbar app__content";
+    } */
+    /*----------------------------base.html-------------------------*/
+    .app__content{
+        width: calc(100% - 85px);
+        min-height: 100vh;
+        transition: all .3s;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+  
+    nav{
+        width: 550px;
+        left: 130px;
+    }
+
+    .contact-form-container{
+        width: 350px;
+        height: 500px;
+    }
+
+    /*------------------lesson.html---------------------*/
+
+    .lesson__title{
+        width: 85%;
+        padding: 20px 10px;
+    }
+
+    .lesson__title h3{
+        font-size: 1.2rem;
+    }
+
+    .section__container{
+        margin-top: 0px;
+    }
+
+
+    /*------------------profile.html---------------------*/
+    .profile__general{
+        flex-direction: column;
+        padding-top: 50px;
+    }
+
+    .avatar__image{
+        position: relative;
+    }
+
+    .form-content .round{
+        position: absolute;
+        top: 600px;
+    }
+
+    .btn{
+        width: 140px;
+        padding: 15px;
+        font-size: 14px;
+    }
+
+
+/*--------------------------login.html-----------------------*/
+.login{
+    text-align: center;
+}
+  
+}

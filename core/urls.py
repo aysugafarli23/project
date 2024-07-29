@@ -43,7 +43,6 @@ urlpatterns = [
     path('modules/', include("module.urls")),
     path('modules-api/', include("module.api.urls"), name="modules-api"),
     path('dictionary/', dictPage, name = "dictionary"),
-    path('dictionary/', include("dictionary.urls")),
     path('contact/', include('contact.urls')),
     path("stripe/", include("djstripe.urls", namespace="djstripe")),
 ]
