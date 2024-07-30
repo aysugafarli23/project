@@ -648,6 +648,7 @@ h2 {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 100px;
 }
 
 .module__stones {
@@ -694,6 +695,7 @@ h2 {
 .module__stone a img {
     width: 100%;
     border-radius: 50%;
+    border: 6px solid var(--main-colors-green);
 }
 
 .module__stone:hover a {
@@ -713,6 +715,7 @@ h2 {
     text-align: center;
     gap: 20px;
     padding: 20px 0px;
+    margin-top: 120px;
 }
 
 .lesson__title {
@@ -774,7 +777,7 @@ h2 {
 .content__stone a img {
     width: 100%;
     border-radius: 50%;
-    border: 7px solid var(--main-colors-blue);
+    border: 6px solid var(--main-colors-blue);
 }
 
 .content__stone:hover a {
@@ -782,7 +785,7 @@ h2 {
 }
 
 .content__stone:hover img {
-    box-shadow: 0 0 10px var(--main-colors-green);
+    box-shadow: 0 0 10px var(--main-colors-blue);
 }
 
 /*-------------------------------------word_detail.html style ------------------------------------*/

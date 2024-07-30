@@ -18,11 +18,13 @@
         top: 0;
         right: 0;
         display: flex;
+        align-items: center;
+        flex-direction: column;
     }
 
     nav {
         width: 550px;
-        left: 130px;
+        left: 94px;
     }
 
     .contact-form-container {
@@ -32,6 +34,9 @@
     }
 
     /*------------------lesson.html---------------------*/
+    .lesson__container h1{
+        font-size: 2.1rem;
+    }
 
     .lesson__title {
         width: 85%;
