@@ -73,16 +73,20 @@ body {
 }
 
 
-.nav__item a:focus {
-    color: var(--main-colors-green);
-}
-
 .nav__item {
     width: 72px;
     height: 72px;
     margin: 0 0 10px;
     padding: 17px 0 9px;
     cursor: pointer;
+}
+
+.nav__item a:focus {
+    color: var(--main-colors-green);
+}
+
+.nav__item a i {
+    font-size: 20px;
 }
 
 /* Nav menu style codes */

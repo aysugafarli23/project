@@ -1,4 +1,4 @@
-{% comment %} {% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block nav__title %}
@@ -13,11 +13,11 @@
       </div>
      
       <div class="listen__record__btns">
-        {% if previous_word_id %}
+        {% if assess_previous_word_id %}
           <button class="btn previous__btn" onclick="window.location.href='{% url 'modules:assess_record_audio' assess_previous_word_id %}'"><span><i class="fa-solid fa-chevron-left"></i></span> Previous</button>
         {% endif %}
-        <button class="btn record__btn" id="assessRecordButton" onclick="toggleRecording()"><span><i class="fa-solid fa-microphone"></i></span> Record</button>
-        {% if next_word_id %}
+        <button class="btn record__btn" id="recordButton" onclick="toggleRecording()"><span><i class="fa-solid fa-microphone"></i></span> Record</button>
+        {% if assess_next_word_id %}
           <button class="btn next__btn" onclick="window.location.href='{% url 'modules:assess_record_audio' assess_next_word_id %}'">Next <span><i class="fa-solid fa-chevron-right"></i></span></button>
         {% endif %}
       </div>
@@ -25,102 +25,95 @@
   </div>
 
   <!-- Modal -->
-  <div class="modal fade" id="compareModal" tabindex="-1" aria-labelledby="compareModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+  <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="compareModalLabel">Compare Audio</h5>
+          <h5 class="modal-title" id="feedbackModalLabel">Assessment Feedback</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
-        <div class="modal-body" id="compareModalBody">
-          <!-- Comparison content will be loaded here -->
+        <div class="modal-body">
+          <p id="modalResult"></p>
+          <p id="modalFeedback"></p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal"><span><i class="fa-solid fa-arrow-rotate-left"></i></span> Try Again</button>
-          <button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'modules:assess_record_audio' assess_next_word_id %}'">Next <span><i class="fa-solid fa-chevron-right"></i></span></button>
+          {% if assess_next_word_id %}
+            <button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'modules:assess_record_audio' assess_next_word_id %}'">Next <span><i class="fa-solid fa-chevron-right"></i></span></button>
+          {% endif %}
         </div>
       </div>
     </div>
   </div>
+
 {% endblock %}
 
 {% block js__content %}
-  <script>
-      let assessMediaRecorder;
-      let audioChunks = [];
-      let isRecording = false;
-      const wordId = {{ word.id }};
+<script>
+  let mediaRecorder;
+  let audioChunks = [];
+  let isRecording = false;
 
-      function toggleRecording() {
-          if (isRecording) {
-              stopRecording();
-          } else {
-              startRecording();
-          }
-      }
+  function toggleRecording() {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  }
 
-      function startRecording() {
-        // Clear previous audio chunks
-        audioChunks = [];
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(stream => {
-                assessMediaRecorder = new MediaRecorder(stream);
-                assessMediaRecorder.start();
-                assessMediaRecorder.ondataavailable = event => {
-                    audioChunks.push(event.data);
-                };
-                assessMediaRecorder.onstop = () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
-                    const formData = new FormData();
-                    formData.append('media', audioBlob);
-                    fetch(`/modules/assess_record_audio/${wordId}/`, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRFToken': '{{ csrf_token }}'
-                        }
-                    }).then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            $('#compareModal').modal('show');
-                            loadComparisonData();
-                        } else {
-                            console.error('Error:', data);
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-                };
-                isRecording = true;
-                document.getElementById('assessRecordButton').innerHTML = '<span><i class="fa-solid fa-stop"></i></span> Stop';
-            })
-            .catch(error => console.error('Error accessing media devices.', error));
-      }
-    
-      function stopRecording() {
-          assessMediaRecorder.stop();
-          isRecording = false;
-          document.getElementById('assessRecordButton').innerHTML = '<span><i class="fa-solid fa-microphone"></i></span> Record';
-      }
+  function startRecording() {
+    audioChunks = [];
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.start();
+        mediaRecorder.ondataavailable = event => {
+          audioChunks.push(event.data);
+        };
+        mediaRecorder.onstop = () => {
+          const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+          const formData = new FormData();
+          formData.append('audio_data', audioBlob);
+          fetch(window.location.href, {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'X-CSRFToken': '{{ csrf_token }}'
+            }
+          })
+          .then(response => {
+            console.log('Fetch response status:', response.status);
+            return response.json();
+          })
+          .then(data => {
+            console.log('Response data:', data);
+            if (data.error) {
+              console.error('Server error:', data.error);
+              alert('An error occurred while processing your recording.');
+            } else {
+              document.getElementById('modalResult').textContent = data.transcription ? `You said: ${data.transcription}` : 'Unable to transcribe the audio';
+              if (data.feedback) {
+                document.getElementById('modalFeedback').textContent = data.feedback;
+              }
+              $('#feedbackModal').modal('show');
+            }
+          })
+          .catch(error => {
+            console.error('Fetch error:', error);
+            alert('An error occurred while processing your recording.');
+          });
+        };
+        isRecording = true;
+        document.getElementById('recordButton').innerHTML = '<span><i class="fa-solid fa-stop"></i></span> Stop';
+      })
+      .catch(error => console.error('Error accessing media devices.', error));
+  }
 
-      function loadComparisonData() {
-          fetch(`/modules/assess_audio/${wordId}/`)
-              .then(response => response.text())
-              .then(html => {
-                  document.getElementById('compareModalBody').innerHTML = html;
-              })
-              .catch(error => console.error('Error loading comparison data.', error));
-      }
-
-      function toggleAudio(audio, button) {
-          if (audio.paused) {
-              audio.play();
-              button.innerHTML = '<i class="fa-solid fa-pause"></i>';
-          } else {
-              audio.pause();
-              button.innerHTML = '<i class="fa-solid fa-play"></i>';
-          }
-      }
-
-    
+  function stopRecording() {
+    mediaRecorder.stop();
+    isRecording = false;
+    document.getElementById('recordButton').innerHTML = '<span><i class="fa-solid fa-microphone"></i></span> Record';
+  }
 </script>
-{% endblock %} {% endcomment %}
+{% endblock %}

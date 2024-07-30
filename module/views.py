@@ -23,6 +23,7 @@ from django.core.files.base import ContentFile
 import random
 import speech_recognition as sr
 import openai
+import time
 
 # Create your views here.
 def modulesPage(request):
@@ -156,7 +157,25 @@ def compare_audio(request, word_id):
 
 # AI Assessment on user recordings
 
-client = OpenAI(api_key="sk-proj-8tsKt51ax7c9AoOO3RYST3BlbkFJkVGybZPjPoHTxK1LZXIm")
+# client = OpenAI(api_key="sk-proj-8tsKt51ax7c9AoOO3RYST3BlbkFJkVGybZPjPoHTxK1LZXIm")
+
+AI_FEEDBACK_100 = [
+    "Great job! Your pronunciation of '{word}' sounds just like a native American speaker!",
+    "Excellent! You nailed the American accent for '{word}'. Keep up the good work!",
+    "Fantastic! Your pronunciation of '{word}' was spot on with an American accent. You're making great progress!", 
+    "Awesome work! Your American accent while saying '{word}' is really impressive. Keep practicing, and you'll be fluent in no time!", 
+]
+
+AI_FEEDBACK_50 = [
+    "Good effort! Your pronunciation of '{word}' was very close to native. ",
+    "You're on the right track! Your accent for '{word}' is improving.",
+    "Nice try! Your pronunciation of '{word}' was almost perfect.",
+    "Great job! Your American accent for '{word}' is coming along."
+    "Well done! Your attempt at '{word}' was quite close."
+    "Good attempt! Your pronunciation of '{word}' is getting better. "
+
+
+]
 
 class SpeechToTextView(View):
     def get(self, request, word_id):
@@ -165,13 +184,63 @@ class SpeechToTextView(View):
         assess_previous_word = Word.objects.filter(id__lt=word_id).order_by('-id').first()
         assess_next_word_id = assess_next_word.id if assess_next_word else None
         assess_previous_word_id = assess_previous_word.id if assess_previous_word else None
-
+        
         context = {
             'word': word,
             'assess_next_word_id': assess_next_word_id,
             'assess_previous_word_id': assess_previous_word_id,
         }
+        
         return render(request, 'speech_to_text.html', context)
+
+    def post(self, request, word_id):
+        if 'audio_data' not in request.FILES:
+            return HttpResponseBadRequest('Audio file not found')
+
+        audio_file = request.FILES['audio_data']
+        word = get_object_or_404(Word, id=word_id)
+
+        # Save the uploaded file to a temporary location
+        with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmp_file:
+            for chunk in audio_file.chunks():
+                tmp_file.write(chunk)
+            tmp_file_path = Path(tmp_file.name)
+
+        # Transcribe using OpenAI
+        client = OpenAI(api_key="sk-proj-8tsKt51ax7c9AoOO3RYST3BlbkFJkVGybZPjPoHTxK1LZXIm")
+
+        try:
+            response = client.audio.transcriptions.create(
+                model="whisper-1",
+                file=tmp_file_path,
+                response_format="text"
+            )
+            transcription = response  # response is already a string
+            feedback = None
+            if transcription.lower() == word.text.lower():
+                feedback = f"Great job! Your pronunciation of '{word.text}' sounds just like a native American speaker!"
+
+            # Remove the temporary file
+            os.remove(tmp_file_path)
+
+            return JsonResponse({
+                'transcription': transcription,
+                'feedback': feedback
+            })
+        except openai.error.APIConnectionError as e:
+            return JsonResponse({
+                'error': 'Connection error.'
+            }, status=500)
+        except openai.error.APIError as e:
+            return JsonResponse({
+                'error': str(e)
+            }, status=500)
+        except Exception as e:
+            return JsonResponse({
+                'error': str(e)
+            }, status=500)
+ 
+
 
 class AssessCompareAudioView(View):
     def post(self, request, word_id):
@@ -180,8 +249,7 @@ class AssessCompareAudioView(View):
             
             # Save audio file
             word = get_object_or_404(Word, id=word_id)
-            recording = CustomerRecording(word=word, audio_file=audio_file)
-            recording.save()
+            
             
             # Transcribe using Whisper
             recognizer = sr.Recognizer()
