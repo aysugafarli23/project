@@ -844,7 +844,7 @@ h2 {
     text-align: center;
 }
 
-/*---------------------Audio Player--------------------*/
+/*---------------------Audio Player on the word_detail.html--------------------*/
 .audio-player {
     --player-button-width: 3em;
     --sound-button-width: 2em;

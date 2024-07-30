@@ -11,7 +11,7 @@
       <div class="listen__record__word">
         <h1>{{ word.text }}</h1>
       </div>
-     
+
       <div class="listen__record__btns">
         {% if assess_previous_word_id %}
           <button class="btn previous__btn" onclick="window.location.href='{% url 'modules:assess_record_audio' assess_previous_word_id %}'"><span><i class="fa-solid fa-chevron-left"></i></span> Previous</button>
@@ -35,6 +35,7 @@
         <div class="modal-body">
           <p id="modalResult"></p>
           <p id="modalFeedback"></p>
+          {% comment %} <canvas id="doughnutChart"></canvas> {% endcomment %}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal"><span><i class="fa-solid fa-arrow-rotate-left"></i></span> Try Again</button>
@@ -115,5 +116,6 @@
     isRecording = false;
     document.getElementById('recordButton').innerHTML = '<span><i class="fa-solid fa-microphone"></i></span> Record';
   }
+
 </script>
 {% endblock %}

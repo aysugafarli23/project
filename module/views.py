@@ -160,19 +160,40 @@ def compare_audio(request, word_id):
 # client = OpenAI(api_key="sk-proj-8tsKt51ax7c9AoOO3RYST3BlbkFJkVGybZPjPoHTxK1LZXIm")
 
 AI_FEEDBACK_100 = [
-    "Great job! Your pronunciation of '{word}' sounds just like a native American speaker!",
-    "Excellent! You nailed the American accent for '{word}'. Keep up the good work!",
-    "Fantastic! Your pronunciation of '{word}' was spot on with an American accent. You're making great progress!", 
-    "Awesome work! Your American accent while saying '{word}' is really impressive. Keep practicing, and you'll be fluent in no time!", 
-]
+    "Great job! Your pronunciation of '{word}' sounds just like a native American speaker! 🎉🎤",
+    "Excellent! You nailed the American accent for '{word}'. Keep up the good work! 🌟👏",
+    "Fantastic! Your pronunciation of '{word}' was spot on with an American accent. You're making great progress! 🚀😊",
+    "Awesome work! Your American accent while saying '{word}' is really impressive. Keep practicing, and you'll be fluent in no time! 🎶👍",
+    "Perfect! You pronounced '{word}' perfectly. Keep it up, and you'll master the American accent! 💯🎧",
+    "Amazing! Your pronunciation of '{word}' is flawless. You're doing an incredible job! 🏆🎤",
+    "Impressive! You said '{word}' just like a native speaker. Keep shining! 🌟🎤",
+    "Superb! Your American accent for '{word}' is spot on. Keep practicing, and you'll achieve even greater fluency! 🥇🌟",
+    "Wonderful! Your pronunciation of '{word}' is perfect. You're becoming a pro at this! 👏🎤",
+    "Outstanding! You pronounced '{word}' exactly right. Keep up the fantastic work! 🌟🎉",
+    "Great job! Your pronunciation of '{word}' sounds just like a native American speaker! 👏",
+    "Excellent! You nailed the American accent for '{word}'. Keep up the good work 👌!",
+    "Fantastic! Your pronunciation of '{word}' was spot on with an American accent. You're making great progress! 🌟", 
+    "Awesome work! Your American accent while saying '{word}' is really impressive. Keep practicing, and you'll be fluent in no time! 💯🎧", 
+    ]
 
-AI_FEEDBACK_50 = [
-    "Good effort! Your pronunciation of '{word}' was very close to native. ",
-    "You're on the right track! Your accent for '{word}' is improving.",
-    "Nice try! Your pronunciation of '{word}' was almost perfect.",
-    "Great job! Your American accent for '{word}' is coming along."
-    "Well done! Your attempt at '{word}' was quite close."
-    "Good attempt! Your pronunciation of '{word}' is getting better. "
+AI_FEEDBACK_0 = [
+    "Good effort! Your pronunciation of '{word}' was very close to native. 👌 ",
+    "You're on the right track! Your accent for '{word}' is improving. 🚀",
+    "Nice try! Your pronunciation of '{word}' was almost perfect. 🌟",
+    "Great job! Your American accent for '{word}' is coming along. 👏",
+    "Well done! Your attempt at '{word}' was quite close. 🎵",
+    "Good attempt! Your pronunciation of '{word}' is getting better. 💪 ",
+    "Good effort! Your pronunciation of '{word}' is almost there. Keep practicing, and you'll get it perfect in no time! 👍",
+    "Nice try! You're getting closer with your pronunciation of '{word}'. Focus on the ending sound to make it even better. 💪",
+    "You're doing great! With a bit more practice, your pronunciation of '{word}' will be spot on. Keep it up! 🌟",
+    "Great attempt! Your pronunciation of '{word}' is improving. Pay attention to the vowel sounds for a more accurate accent. 👂",
+    "Well done! Your effort in pronouncing '{word}' is clear. Keep practicing the tricky parts, and you'll master it soon! 👏",
+    "You're making progress! With just a bit more practice, your pronunciation of '{word}' will be excellent. Don't give up! 🚀",
+    "Good job! Your pronunciation of '{word}' is getting better. Keep working on the consonant sounds for a perfect accent. 👌",
+    "Nice effort! You're on the right track with your pronunciation of '{word}'. Focus on the rhythm and stress for an even better result. 🎯",
+    "You're almost there! Keep practicing '{word}' and pay attention to the intonation. You're doing great! 🎵",
+    "Great work! Your pronunciation of '{word}' is coming along nicely. Keep practicing, and you'll sound like a native speaker soon! 🗣️",
+
 
 
 ]
@@ -218,14 +239,16 @@ class SpeechToTextView(View):
             transcription = response  # response is already a string
             feedback = None
             if transcription.lower() == word.text.lower():
-                feedback = f"Great job! Your pronunciation of '{word.text}' sounds just like a native American speaker!"
+                feedback = random.choice([fb.format(word=word.text) for fb in AI_FEEDBACK_100])
+            elif transcription.lower() != word.text.lower():
+                feedback = random.choice([fb.format(word=word.text) for fb in AI_FEEDBACK_0])
 
             # Remove the temporary file
             os.remove(tmp_file_path)
 
             return JsonResponse({
                 'transcription': transcription,
-                'feedback': feedback
+                'feedback': feedback,
             })
         except openai.error.APIConnectionError as e:
             return JsonResponse({
@@ -240,37 +263,3 @@ class SpeechToTextView(View):
                 'error': str(e)
             }, status=500)
  
-
-
-class AssessCompareAudioView(View):
-    def post(self, request, word_id):
-        if request.method == 'POST' and request.FILES.get('media'):
-            audio_file = request.FILES['media']
-            
-            # Save audio file
-            word = get_object_or_404(Word, id=word_id)
-            
-            
-            # Transcribe using Whisper
-            recognizer = sr.Recognizer()
-            with sr.AudioFile(audio_file) as source:
-                audio_data = recognizer.record(source)
-                transcription = recognizer.recognize_whisper(audio_data)
-            
-            # Return JSON response with dummy assessment logic
-            assessment_result = f"Assessed transcription: {transcription}"
-            return JsonResponse({'success': True, 'result': assessment_result})
-        else:
-            return JsonResponse({'success': False}, status=405)
-    
-    def get(self, request, word_id):
-        word = get_object_or_404(Word, id=word_id)
-        recordings = CustomerRecording.objects.filter(word=word)
-        assess_next_word = Word.objects.filter(id__gt=word_id).order_by('id').first()
-        assess_next_word_id = assess_next_word.id if assess_next_word else None
-        
-        return render(request, 'assess_audio.html', {
-            'word': word,
-            'recordings': recordings,
-            'assess_next_word_id': assess_next_word_id
-        })
