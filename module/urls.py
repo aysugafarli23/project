@@ -13,6 +13,6 @@ urlpatterns = [
     # path('assess_audio/<int:word_id>/', assess_audio, name='assess_audio'),
     path('game/', match_voice, name='matchvoice'),
     path('game/gameover/', gameover, name='gameover'),
-    # path('assess_record_audio/<int:word_id>/', SpeechToTextView.as_view(), name='assess_record_audio'),
-    # path('assess_audio/<int:word_id>/', AssessCompareAudioView.as_view(), name='assess_audio'),
+    path('assess_record_audio/<int:word_id>/', SpeechToTextView.as_view(), name='assess_record_audio'),
+    path('assess_audio/<int:word_id>/', AssessCompareAudioView.as_view(), name='assess_audio'),
 ]

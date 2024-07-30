@@ -46,8 +46,7 @@
             {% if user.is_authenticated %}
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
-                    {% comment %} <a href="{% url "logout" %}"><i class="logout fa-solid fa-arrow-right-from-bracket"></i></a> {% endcomment %}
-                    <button class="btn logout" type="submit"><i class="logout fa-solid fa-arrow-right-from-bracket"></i></button>
+                   <button class="btn logout" type="submit"><i class="logout fa-solid fa-arrow-right-from-bracket"></i></button>
                 </form>
             {% else %}
                 <a href="{% url "login" %}">Sign in</a>
@@ -61,14 +60,14 @@
     
     
   
-  <div class="main__content">
+  <div class="main__SpeakEnglishTcontent">
     <div class="contact">
       <button class="contactBtn">Contact Us</button>
     </div>
 
     <div id="contactFormContainer" class="contact-form-container">
       <div class="container mt-3">
-        <div class="form__title">ChatterFox</div>
+        <div class="form__title">SpeakEnglishTodAI</div>
         <form method="post">
           {% csrf_token %}
           <div class="form-row row">

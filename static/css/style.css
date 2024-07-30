@@ -156,10 +156,6 @@ nav {
 
 .app__content {
     grid-area: app__content;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
 }
 
 .main__content {
@@ -174,6 +170,7 @@ nav {
     transform: translateY(-50%);
     z-index: 1000;
 }
+
 
 .contactBtn {
     outline: none;
@@ -197,6 +194,7 @@ nav {
 }
 
 .contact-form-container {
+    display: none;
     float: left;
     width: 40%;
     height: 60%;
@@ -204,9 +202,6 @@ nav {
     background-color: var(--neutral-colors-white);
     border-right: 1px solid #d3dbe8;
     border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     position: fixed;
     top: 20%;
     left: 50%;
@@ -215,6 +210,7 @@ nav {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
 }
+
 
 .form-group {
     margin-bottom: 1rem;
@@ -370,7 +366,7 @@ nav {
     margin-top: 40px;
 }
 
-#widget-1 .pwdby{
+#widget-1 .pwdby {
     display: none !important;
 }
 
@@ -480,7 +476,7 @@ h2 {
     justify-content: center;
 }
 
-.input-group-append{
+.input-group-append {
     height: 38px !important;
 }
 

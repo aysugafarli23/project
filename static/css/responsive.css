@@ -1,5 +1,6 @@
 @media only screen and (max-width: 768px) {
-/*     
+
+    /*     
     .container__general {
         display: grid;
         height: 100vh;
@@ -9,66 +10,68 @@
             "navbar app__content";
     } */
     /*----------------------------base.html-------------------------*/
-    .app__content{
+    .app__content {
         width: calc(100% - 85px);
         min-height: 100vh;
         transition: all .3s;
         position: absolute;
         top: 0;
         right: 0;
+        display: flex;
     }
-  
-    nav{
+
+    nav {
         width: 550px;
         left: 130px;
     }
 
-    .contact-form-container{
+    .contact-form-container {
+        display: none;
         width: 350px;
         height: 500px;
     }
 
     /*------------------lesson.html---------------------*/
 
-    .lesson__title{
+    .lesson__title {
         width: 85%;
         padding: 20px 10px;
     }
 
-    .lesson__title h3{
+    .lesson__title h3 {
         font-size: 1.2rem;
     }
 
-    .section__container{
+    .section__container {
         margin-top: 0px;
     }
 
 
     /*------------------profile.html---------------------*/
-    .profile__general{
+    .profile__general {
         flex-direction: column;
         padding-top: 50px;
     }
 
-    .avatar__image{
+    .avatar__image {
         position: relative;
     }
 
-    .form-content .round{
+    .form-content .round {
         position: absolute;
         top: 600px;
     }
 
-    .btn{
+    .btn {
         width: 140px;
         padding: 15px;
         font-size: 14px;
     }
 
 
-/*--------------------------login.html-----------------------*/
-.login{
-    text-align: center;
-}
-  
+    /*--------------------------login.html-----------------------*/
+    .login {
+        text-align: center;
+    }
+
 }

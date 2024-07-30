@@ -13,7 +13,6 @@ import re, os, tempfile
 from django.views import View
 from django.utils.decorators import method_decorator
 from openai import OpenAI
-from pydub import AudioSegment
 from io import BytesIO
 import numpy as np
 from scipy.io import wavfile
@@ -22,13 +21,8 @@ import pyaudio
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import random
-from pydub import AudioSegment
-from pydub.utils import mediainfo
 import speech_recognition as sr
 import openai
-
-AudioSegment.converter = r"C:\Program Files\ffmpeg-7.0.1"
-
 
 # Create your views here.
 def modulesPage(request):
@@ -164,51 +158,51 @@ def compare_audio(request, word_id):
 
 client = OpenAI(api_key="sk-proj-8tsKt51ax7c9AoOO3RYST3BlbkFJkVGybZPjPoHTxK1LZXIm")
 
-# class SpeechToTextView(View):
-#     def get(self, request, word_id):
-#         word = get_object_or_404(Word, id=word_id)
-#         assess_next_word = Word.objects.filter(id__gt=word_id).order_by('id').first()
-#         assess_previous_word = Word.objects.filter(id__lt=word_id).order_by('-id').first()
-#         assess_next_word_id = assess_next_word.id if assess_next_word else None
-#         assess_previous_word_id = assess_previous_word.id if assess_previous_word else None
+class SpeechToTextView(View):
+    def get(self, request, word_id):
+        word = get_object_or_404(Word, id=word_id)
+        assess_next_word = Word.objects.filter(id__gt=word_id).order_by('id').first()
+        assess_previous_word = Word.objects.filter(id__lt=word_id).order_by('-id').first()
+        assess_next_word_id = assess_next_word.id if assess_next_word else None
+        assess_previous_word_id = assess_previous_word.id if assess_previous_word else None
 
-#         context = {
-#             'word': word,
-#             'assess_next_word_id': assess_next_word_id,
-#             'assess_previous_word_id': assess_previous_word_id,
-#         }
-#         return render(request, 'speech_to_text.html', context)
+        context = {
+            'word': word,
+            'assess_next_word_id': assess_next_word_id,
+            'assess_previous_word_id': assess_previous_word_id,
+        }
+        return render(request, 'speech_to_text.html', context)
 
-# class AssessCompareAudioView(View):
-#     def post(self, request, word_id):
-#         if request.method == 'POST' and request.FILES.get('media'):
-#             audio_file = request.FILES['media']
+class AssessCompareAudioView(View):
+    def post(self, request, word_id):
+        if request.method == 'POST' and request.FILES.get('media'):
+            audio_file = request.FILES['media']
             
-#             # Save audio file
-#             word = get_object_or_404(Word, id=word_id)
-#             recording = CustomerRecording(word=word, audio_file=audio_file)
-#             recording.save()
+            # Save audio file
+            word = get_object_or_404(Word, id=word_id)
+            recording = CustomerRecording(word=word, audio_file=audio_file)
+            recording.save()
             
-#             # Transcribe using Whisper
-#             recognizer = sr.Recognizer()
-#             with sr.AudioFile(audio_file) as source:
-#                 audio_data = recognizer.record(source)
-#                 transcription = recognizer.recognize_whisper(audio_data)
+            # Transcribe using Whisper
+            recognizer = sr.Recognizer()
+            with sr.AudioFile(audio_file) as source:
+                audio_data = recognizer.record(source)
+                transcription = recognizer.recognize_whisper(audio_data)
             
-#             # Return JSON response with dummy assessment logic
-#             assessment_result = f"Assessed transcription: {transcription}"
-#             return JsonResponse({'success': True, 'result': assessment_result})
-#         else:
-#             return JsonResponse({'success': False}, status=405)
+            # Return JSON response with dummy assessment logic
+            assessment_result = f"Assessed transcription: {transcription}"
+            return JsonResponse({'success': True, 'result': assessment_result})
+        else:
+            return JsonResponse({'success': False}, status=405)
     
-#     def get(self, request, word_id):
-#         word = get_object_or_404(Word, id=word_id)
-#         recordings = CustomerRecording.objects.filter(word=word)
-#         next_word = Word.objects.filter(id__gt=word_id).order_by('id').first()
-#         next_word_id = next_word.id if next_word else None
+    def get(self, request, word_id):
+        word = get_object_or_404(Word, id=word_id)
+        recordings = CustomerRecording.objects.filter(word=word)
+        assess_next_word = Word.objects.filter(id__gt=word_id).order_by('id').first()
+        assess_next_word_id = assess_next_word.id if assess_next_word else None
         
-#         return render(request, 'assess_audio.html', {
-#             'word': word,
-#             'recordings': recordings,
-#             'next_word_id': next_word_id
-#         })
+        return render(request, 'assess_audio.html', {
+            'word': word,
+            'recordings': recordings,
+            'assess_next_word_id': assess_next_word_id
+        })
