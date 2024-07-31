@@ -14,9 +14,20 @@ from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()  # loads the configs from .env
 import os
+import sys
+
+# For Deployment
+sys.path.insert(0, os.path.dirname(__file__))
+
+def application(environ, start_response):
+    start_response('200 OK', [('Content-Type', 'text/plain')])
+    message = 'It works!\n'
+    version = 'Python %s\n' % sys.version.split()[0]
+    response = '\n'.join([message, version])
+    return [response.encode()]
 
 
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000/login/', 'https://www.your-domain.com']
+CSRF_TRUSTED_ORIGINS = ['speakenglishtodai.com', 'www.speakenglishtodai.com']
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,9 +40,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = str(os.getenv('django-insecure-*4ok4##@f5zp6^1toj$uy_#tdf%2sy65g8c9(i55+*lzv_dj50'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['speakenglishtodai.com', 'www.speakenglishtodai.com']
 
 
 # Application definition

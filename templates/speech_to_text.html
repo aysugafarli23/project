@@ -29,7 +29,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="feedbackModalLabel">Assessment Feedback</h5>
+          <h5 class="modal-title" id="feedbackModalLabel">AI Assessment Feedback</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body">
@@ -46,76 +46,75 @@
       </div>
     </div>
   </div>
-
 {% endblock %}
 
 {% block js__content %}
-<script>
-  let mediaRecorder;
-  let audioChunks = [];
-  let isRecording = false;
-
-  function toggleRecording() {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      startRecording();
+  <script>
+    let mediaRecorder
+    let audioChunks = []
+    let isRecording = false
+    
+    function toggleRecording() {
+      if (isRecording) {
+        stopRecording()
+      } else {
+        startRecording()
+      }
     }
-  }
-
-  function startRecording() {
-    audioChunks = [];
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
-        mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.start();
-        mediaRecorder.ondataavailable = event => {
-          audioChunks.push(event.data);
-        };
-        mediaRecorder.onstop = () => {
-          const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-          const formData = new FormData();
-          formData.append('audio_data', audioBlob);
-          fetch(window.location.href, {
-            method: 'POST',
-            body: formData,
-            headers: {
-              'X-CSRFToken': '{{ csrf_token }}'
-            }
-          })
-          .then(response => {
-            console.log('Fetch response status:', response.status);
-            return response.json();
-          })
-          .then(data => {
-            console.log('Response data:', data);
-            if (data.error) {
-              console.error('Server error:', data.error);
-              alert('An error occurred while processing your recording.');
-            } else {
-              document.getElementById('modalResult').textContent = data.transcription ? `You said: ${data.transcription}` : 'Unable to transcribe the audio';
-              if (data.feedback) {
-                document.getElementById('modalFeedback').textContent = data.feedback;
+    
+    function startRecording() {
+      audioChunks = []
+      navigator.mediaDevices
+        .getUserMedia({ audio: true })
+        .then((stream) => {
+          mediaRecorder = new MediaRecorder(stream)
+          mediaRecorder.start()
+          mediaRecorder.ondataavailable = (event) => {
+            audioChunks.push(event.data)
+          }
+          mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' })
+            const formData = new FormData()
+            formData.append('audio_data', audioBlob)
+            fetch(window.location.href, {
+              method: 'POST',
+              body: formData,
+              headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
               }
-              $('#feedbackModal').modal('show');
-            }
-          })
-          .catch(error => {
-            console.error('Fetch error:', error);
-            alert('An error occurred while processing your recording.');
-          });
-        };
-        isRecording = true;
-        document.getElementById('recordButton').innerHTML = '<span><i class="fa-solid fa-stop"></i></span> Stop';
-      })
-      .catch(error => console.error('Error accessing media devices.', error));
-  }
-
-  function stopRecording() {
-    mediaRecorder.stop();
-    isRecording = false;
-    document.getElementById('recordButton').innerHTML = '<span><i class="fa-solid fa-microphone"></i></span> Record';
-  }
-
-</script>
+            })
+              .then((response) => {
+                console.log('Fetch response status:', response.status)
+                return response.json()
+              })
+              .then((data) => {
+                console.log('Response data:', data)
+                if (data.error) {
+                  console.error('Server error:', data.error)
+                  alert('An error occurred while processing your recording.')
+                } else {
+                  document.getElementById('modalResult').textContent = data.transcription ? `You said: ${data.transcription}` : 'Unable to transcribe the audio'
+                  if (data.feedback) {
+                    document.getElementById('modalFeedback').textContent = data.feedback
+                  }
+                  $('#feedbackModal').modal('show')
+                }
+              })
+              .catch((error) => {
+                console.error('Fetch error:', error)
+                alert('An error occurred while processing your recording.')
+              })
+          }
+          isRecording = true
+          document.getElementById('recordButton').innerHTML = '<span><i class="fa-solid fa-stop"></i></span> Stop'
+        })
+        .catch((error) => console.error('Error accessing media devices.', error))
+    }
+    
+    function stopRecording() {
+      mediaRecorder.stop()
+      isRecording = false
+      document.getElementById('recordButton').innerHTML = '<span><i class="fa-solid fa-microphone"></i></span> Record'
+    }
+  </script>
 {% endblock %}
