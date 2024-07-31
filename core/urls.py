@@ -36,7 +36,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'),
     path('password-change/', ChangePasswordView.as_view(), name='password_change'),
     #new url entry to include the social auth's urls
-    re_path(r'^oauth/', include('social_django.urls', namespace='social')),
+    # re_path(r'^oauth/', include('social_django.urls', namespace='social')),
     path('profile/', profile, name="profile"),
     path('users/', include("users.urls")),
     path('modules/', modulesPage, name="modules"),

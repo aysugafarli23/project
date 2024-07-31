@@ -2,7 +2,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import ContactForm
+from django.contrib.auth.decorators import login_required
 
+@login_required(login_url="login")
 def contact_view(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)

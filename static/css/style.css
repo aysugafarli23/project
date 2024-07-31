@@ -490,6 +490,8 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 80px 0px;
+    padding: 40px 0px;
 }
 
 .profile_menuCol {
@@ -604,13 +606,20 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
+    flex-direction: column;
+
+}
+
+.avatar__image img{
+    border-radius: 50%;
+    border: 5px solid var(--main-colors-sapphire);
+    outline: 0;
 }
 
 .form-content .round {
     position: absolute;
     top: 225px;
-    transform: translateX(230px);
+    transform: translateX(225px);
     background-color: var(--main-colors-sapphire);
     width: 32px;
     height: 32px;
@@ -625,6 +634,7 @@ h2 {
 }
 
 #div_id_avatar>div>input[type='file'] {
+    display: inline-flex;
     position: absolute;
     transform: scale(2);
     opacity: 0;

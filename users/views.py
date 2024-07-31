@@ -14,6 +14,7 @@ from .models import *
 from formtools.wizard.views import SessionWizardView
 from django.http import  HttpResponse,HttpResponseRedirect
 from django.db.utils import IntegrityError
+from django.views.decorators.csrf import csrf_protect
 
 
 
@@ -94,7 +95,7 @@ class CustomLoginView(LoginView):
         return super(CustomLoginView, self).form_valid(form)
     
 
-@login_required
+# @login_required(login_url="login")
 def profile(request):
     # Handle ContactForm submission
     if request.method == 'POST':

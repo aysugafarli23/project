@@ -54,8 +54,8 @@
 
     /*------------------profile.html---------------------*/
     .profile__general {
-        flex-direction: column;
-        padding-top: 50px;
+        flex-direction: column-reverse;
+        gap: 30px;
     }
 
     .avatar__image {
@@ -64,7 +64,7 @@
 
     .form-content .round {
         position: absolute;
-        top: 600px;
+        top: 100px;
     }
 
     .btn {

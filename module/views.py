@@ -23,9 +23,11 @@ from django.core.files.base import ContentFile
 import random
 import speech_recognition as sr
 import openai
-import time
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+
+@login_required(login_url="login")
 def modulesPage(request):
      # Contact form logic
     if request.method == 'POST':
@@ -46,7 +48,7 @@ def modulesPage(request):
     }
     return render(request, 'module.html', context)
 
-
+@login_required(login_url="login")
 def lessonsPage(request, pk):
     module = get_object_or_404(Module, pk=pk)
     lessons = Lesson.objects.filter(lesson_module=module)
@@ -75,6 +77,7 @@ def lessonsPage(request, pk):
 
 
 # a view to generate the audio files for each word using OpenAI
+@login_required(login_url="login")
 def generate_speech(request):
     words = Word.objects.all()
     client = Client(api_key="sk-proj-8tsKt51ax7c9AoOO3RYST3BlbkFJkVGybZPjPoHTxK1LZXIm")
@@ -110,10 +113,12 @@ def generate_speech(request):
     return render(request, 'words.html', {'words': words})
 
 
+
 @method_decorator(csrf_exempt, name='dispatch')
 class WordView(View):
     template_name = 'word_detail.html'
-
+    
+    @login_required(login_url="login")
     def get(self, request, word_id):
         word = get_object_or_404(Word, id=word_id)
         next_word = Word.objects.filter(id__gt=word_id).order_by('id').first()
@@ -125,8 +130,6 @@ class WordView(View):
             'next_word_id': next_word_id,
             'previous_word_id': previous_word_id
         })
-
-
 
     def post(self, request, word_id):
         word = get_object_or_404(Word, id=word_id)
@@ -142,6 +145,7 @@ class WordView(View):
             )
             return JsonResponse({'success': True, 'recording_id': customer_recording.id})
         return JsonResponse({'success': False, 'error': 'No media file found'}, status=400)
+
 
 def compare_audio(request, word_id):
     word = get_object_or_404(Word, id=word_id)
@@ -198,7 +202,9 @@ AI_FEEDBACK_0 = [
 
 ]
 
+
 class SpeechToTextView(View):
+
     def get(self, request, word_id):
         word = get_object_or_404(Word, id=word_id)
         assess_next_word = Word.objects.filter(id__gt=word_id).order_by('id').first()
@@ -213,7 +219,8 @@ class SpeechToTextView(View):
         }
         
         return render(request, 'speech_to_text.html', context)
-
+    
+  
     def post(self, request, word_id):
         if 'audio_data' not in request.FILES:
             return HttpResponseBadRequest('Audio file not found')
